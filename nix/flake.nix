@@ -161,6 +161,7 @@
     };
     nixosConfigurations.kitsune = nixpkgs.lib.nixosSystem {
       specialArgs = {
+        inherit inputs outputs;
         meta = { hostname = "kitsune"; };
       };
       system = "x86_64-linux";
@@ -173,13 +174,12 @@
         # General
         ./configuration.nix
         # Home Manager
-        # Home Manager
         ({ config, pkgs, ...}: {
           nixpkgs.overlays = [
             self.overlays.unstable
+            self.overlays.additions
             alacritty-theme.overlays.default
             inputs.templ.overlays.default
-            inputs.ags.overlays.default
           ];
         })
         home-manager.nixosModules.home-manager

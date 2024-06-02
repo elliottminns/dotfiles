@@ -156,6 +156,8 @@
     kanata
     sassc
     dotool
+    obs-studio
+    hyprpicker
   ];
 
   virtualisation.docker.enable = true;
@@ -178,7 +180,7 @@
 
   programs.hyprland.enable = true;
 
-  programs.fish.enable = true;
+  programs.zsh.enable = true;
 
   # List services that you want to enable:
 

@@ -3,6 +3,10 @@
   enable = true;
   settings = {
     "$mod" = "SUPER";
+    input = {
+      monitor = [
+      ]
+    };
     bind =
     [
       "$mod, Q, exec, alacritty"
@@ -54,6 +58,8 @@
   xwayland {
     force_zero_scaling = true
   }
+
+  monitor=HDMI-A-1,3840x2160,1920x0,1
 
   input {
     follow_mouse = 1

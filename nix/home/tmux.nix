@@ -41,7 +41,7 @@ in
   keyMode = "vi";
   newSession = true;
   secureSocket = true;
-  shell = "${pkgs.fish}/bin/fish";
+  shell = "${pkgs.zsh}/bin/zsh";
   shortcut = "a";
   terminal = "screen-256color";
 
