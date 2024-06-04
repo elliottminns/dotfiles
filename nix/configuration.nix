@@ -158,6 +158,7 @@
     dotool
     obs-studio
     hyprpicker
+    pop-gtk-theme
   ];
 
   virtualisation.docker.enable = true;

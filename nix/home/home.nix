@@ -39,21 +39,12 @@ in
     fzf = (import ./fzf.nix { inherit pkgs; });
   };
 
-  # gtk = {
-  #   enable = true;
-    # gtk3.extraConfig.gtk-decoration-layout = "menu:";
-    # theme = {
-    #   name = "Tokyonight-Dark-B";
-    #   package = pkgs.tokyo-night-gtk;
-    # };
-    # iconTheme = {
-    #   name = "Tokyonight-Dark";
-    # };
-  #   # cursorTheme = {
-  #   #   name = gtkCursorTheme;
-  #   #   package = pkgs.bibata-cursors;
-  #   # };
-  # };
+  gtk = {
+    enable = true;
+    gtk3.extraConfig = {
+      gtk-application-prefer-dark-theme = true;
+    };
+  };
 
   wayland.windowManager = {
     hyprland = (import ./hyprland.nix { inherit pkgs; });

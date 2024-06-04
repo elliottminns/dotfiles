@@ -29,7 +29,7 @@
     zstyle ':fzf-tab:*' switch-group '<' '>'
   '';
   oh-my-zsh = {
-    enable = false;
+    enable = true;
     plugins = [
        "git" "sudo" "golang" "kubectl" "kubectx" "rust" "command-not-found" "pass"
     ];

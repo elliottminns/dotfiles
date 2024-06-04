@@ -5,7 +5,7 @@
     "$mod" = "SUPER";
     input = {
       monitor = [
-      ]
+      ];
     };
     bind =
     [
@@ -44,6 +44,10 @@
 
   extraConfig = ''
   exec-once = ags
+  exec = gsettings set org.gnome.desktop.interface gtk-theme "Adwaita"   # for GTK3 apps
+  exec = gsettings set org.gnome.desktop.interface color-scheme "prefer-dark"   # for GTK4 apps
+
+  env = QT_QPA_PLATFORMTHEME,qt6ct   # for Qt apps
 
   bezier=easeOutBack,0.34,1.56,0.64,1
   bezier=easeInBack,0.36,0,0.66,-0.56
@@ -59,7 +63,8 @@
     force_zero_scaling = true
   }
 
-  monitor=HDMI-A-1,3840x2160,1920x0,1
+  monitor=HDMI-A-1,3840x2160,1920x0,2
+  monitor=eDP-1,2256x1504,0x0,1.5
 
   input {
     follow_mouse = 1
