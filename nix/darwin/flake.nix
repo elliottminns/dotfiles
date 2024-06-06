@@ -11,14 +11,20 @@
     home-manager.inputs.nixpkgs.follows = "nixpkgs-unstable";
   };
 
-  outputs = { self, nix-darwin, nixpkgs, templ, home-manager, ... }@inputs:
+  outputs = { self, nix-darwin, nixpkgs, nixpkgs-unstable, templ, home-manager, ... }@inputs:
   let
+    add-unstable-packages = final: _prev: {
+      unstable = import inputs.nixpkgs-unstable {
+        system = "aarch64-darwin";
+      };
+    };
     configuration = { pkgs, ... }: {
       # List packages installed in system profile. To search by name, run:
       # $ nix-env -qaP | grep wget
       nixpkgs.config.allowUnfree = true;
       nixpkgs.overlays = [
         inputs.templ.overlays.default
+        add-unstable-packages
       ];
       environment.systemPackages =
         [
@@ -26,6 +32,7 @@
           pkgs.neovim
           pkgs.ffmpeg
           pkgs.ripgrep
+          pkgs.unstable.amber-lang
           pkgs.rustup
           pkgs.obsidian
           pkgs.tailwindcss
