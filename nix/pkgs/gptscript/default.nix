@@ -1,10 +1,10 @@
 { stdenv, fetchurl }:
 stdenv.mkDerivation rec {
   name = "gptscript";
-  version = "0.6.0";
+  version = "0.8.2";
   src = fetchurl {
-      url = "https://github.com/gptscript-ai/gptscript/releases/download/v0.6.0/gptscript-v0.6.0-linux-amd64.tar.gz";
-      sha256 = "+5dnyf+zF/tDyPxJsKeCzF64HKu9FmOqIsR8hbg14FE=";
+      url = "https://github.com/gptscript-ai/gptscript/releases/download/v0.8.2/gptscript-v0.8.2-linux-amd64.tar.gz";
+      sha256 = "sha256-rz1SagY7lTVpbdK/iIFxI2OhMyQNFTxJGPy3itXy4ek=";
   };
 
   sourceRoot = ".";

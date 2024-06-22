@@ -1,0 +1,24 @@
+* Host google.com:80 was resolved.
+* IPv6: 2607:f8b0:4001:c00::71, 2607:f8b0:4001:c00::64, 2607:f8b0:4001:c00::8a, 2607:f8b0:4001:c00::66
+* IPv4: 173.194.195.100, 173.194.195.102, 173.194.195.138, 173.194.195.101, 173.194.195.139, 173.194.195.113
+*   Trying 173.194.195.100:80...
+* Connected to google.com (173.194.195.100) port 80
+> GET / HTTP/1.1
+> Host: google.com
+> User-Agent: curl/8.7.1
+> Accept: */*
+> 
+* Request completely sent off
+< HTTP/1.1 301 Moved Permanently
+< Location: http://www.google.com/
+< Content-Type: text/html; charset=UTF-8
+< Content-Security-Policy-Report-Only: object-src 'none';base-uri 'self';script-src 'nonce-WmhYRUsA0U9I_kCdU09Y8g' 'strict-dynamic' 'report-sample' 'unsafe-eval' 'unsafe-inline' https: http:;report-uri https://csp.withgoogle.com/csp/gws/other-hp
+< Date: Wed, 12 Jun 2024 21:58:17 GMT
+< Expires: Fri, 12 Jul 2024 21:58:17 GMT
+< Cache-Control: public, max-age=2592000
+< Server: gws
+< Content-Length: 219
+< X-XSS-Protection: 0
+< X-Frame-Options: SAMEORIGIN
+< 
+* Connection #0 to host google.com left intact

@@ -58,6 +58,16 @@
       };
     };
 
+    overlays.davinci-resolve = old: prev: {
+      davinci-resolve = prev.davinci-resolve.override (old: {
+          buildFHSEnv = a: (old.buildFHSEnv (a // {
+            extraBwrapArgs = a.extraBwrapArgs ++ [
+                "--bind /run/opengl-driver/etc/OpenCL /etc/OpenCL"
+            ];
+          }));
+      });
+    };
+
     nixpkgs.overlays = [
       self.overlays.unstable
       alacritty-theme.overlays.default
@@ -178,6 +188,39 @@
           nixpkgs.overlays = [
             self.overlays.unstable
             self.overlays.additions
+            alacritty-theme.overlays.default
+            inputs.templ.overlays.default
+          ];
+        })
+        home-manager.nixosModules.home-manager
+        {
+          home-manager.useGlobalPkgs = true;
+          home-manager.useUserPackages = true;
+          home-manager.users.elliott = import ./home/home.nix;
+          home-manager.extraSpecialArgs = { inherit inputs; };
+        }
+      ];
+    };
+    nixosConfigurations.chidori = nixpkgs.lib.nixosSystem {
+      specialArgs = {
+        inherit inputs outputs;
+        meta = { hostname = "chidori"; };
+      };
+      system = "x86_64-linux";
+      modules = [
+        # Modules
+        disko.nixosModules.disko
+      	# System Specific
+      	./machines/chidori/hardware-configuration.nix
+        ./machines/chidori/disko-config.nix
+        # General
+        ./configuration.nix
+        # Home Manager
+        ({ config, pkgs, ...}: {
+          nixpkgs.overlays = [
+            self.overlays.unstable
+            self.overlays.additions
+            self.overlays.davinci-resolve
             alacritty-theme.overlays.default
             inputs.templ.overlays.default
           ];

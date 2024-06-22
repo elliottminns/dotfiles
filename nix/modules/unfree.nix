@@ -18,7 +18,7 @@
   nixpkgs.config.allowUnfree = true;
 
   environment.systemPackages = with pkgs; [
-    davinci-resolve
+#    davinci-resolve
     discord
     unstable.keymapp
     obsidian

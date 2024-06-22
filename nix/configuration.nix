@@ -159,9 +159,14 @@
     obs-studio
     hyprpicker
     pop-gtk-theme
+    qemu
+    #unstable.amber-lang
   ];
 
+  # Virtualisation
   virtualisation.docker.enable = true;
+  virtualisation.libvirtd.enable = true;
+  programs.virt-manager.enable = true;
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
@@ -173,7 +178,7 @@
 
   # enable sway window manager
   programs.sway = {
-    enable = true;
+    enable = false;
     wrapperFeatures.gtk = true;
   };
 
@@ -198,6 +203,8 @@
       internalKeyboard = {
         devices = [
           "/dev/input/by-path/platform-i8042-serio-0-event-kbd"
+          "/dev/input/by-id/usb-Framework_Laptop_16_Keyboard_Module_-_ANSI_FRAKDKEN0100000000-event-kbd"
+          "/dev/input/by-id/usb-Framework_Laptop_16_Keyboard_Module_-_ANSI_FRAKDKEN0100000000-if02-event-kbd"
         ];
         extraDefCfg = "process-unmapped-keys yes";
         config = ''

@@ -1,6 +1,6 @@
 { config, pkgs, ... }:
 {
-  enable = true;
+  enable = false;
   config = rec {
     modifier = "Mod4";
     terminal = "alacritty";

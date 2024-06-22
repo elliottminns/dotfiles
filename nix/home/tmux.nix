@@ -75,6 +75,9 @@ in
     set-window-option -g pane-base-index 1
     set-option -g renumber-windows on
 
+    # Bind clearing the screen
+    bind L send-keys '^L'
+
     # Use Alt-arrow keys without prefix key to switch panes
     bind -n M-Left select-pane -L
     bind -n M-Right select-pane -R
