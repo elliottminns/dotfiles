@@ -123,6 +123,7 @@
     git
     gleam
     kubectl
+    kubectx
     fzf
     lua-language-server
     jq

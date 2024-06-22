@@ -6,6 +6,9 @@
   shellAliases = {
     vim = "nvim";
     ls = "ls --color";
+    ctrl-l = "clear";
+    C-l = "ctrl-l";
+    control-l = "clear";
   };
   initExtra = ''
     bindkey -e
