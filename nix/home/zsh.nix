@@ -9,6 +9,7 @@
     ctrl-l = "clear";
     C-l = "ctrl-l";
     control-l = "clear";
+    clean = "clear";
   };
   initExtra = ''
     bindkey -e
@@ -27,9 +28,8 @@
     # preview directory's content with eza when completing cd
     zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'eza -1 --color=always $realpath'
     zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza -1 --color=always $realpath'
-    zstyle ':fzf-tab:complete:ls:*' fzf-preview 'cat $realpath'
-    # switch group using `<` and `>`
-    zstyle ':fzf-tab:*' switch-group '<' '>'
+    #alias Z='cd "$(${pkgs.zoxide}/bin/zoxide query --interactive)"'
+    #bindkey -s '^f' 'Z^M'
   '';
   oh-my-zsh = {
     enable = true;
@@ -54,11 +54,11 @@
       src = pkgs.zsh-syntax-highlighting;
       file = "share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh";
     }
-    {
-      name = "powerlevel10k";
-      src = pkgs.zsh-powerlevel10k;
-      file = "share/zsh-powerlevel10k/powerlevel10k.zsh-theme";
-    }
+    # {
+    #   name = "powerlevel10k";
+    #   src = pkgs.zsh-powerlevel10k;
+    #   file = "share/zsh-powerlevel10k/powerlevel10k.zsh-theme";
+    # }
     {
       name = "fzf-tab";
       src = pkgs.zsh-fzf-tab;

@@ -37,6 +37,7 @@ in
     zoxide = (import ./zoxide.nix { inherit pkgs; });
     password-store = (import ./pass.nix { inherit pkgs; });
     fzf = (import ./fzf.nix { inherit pkgs; });
+    oh-my-posh = (import ./oh-my-posh.nix { inherit pkgs; });
   };
 
   gtk = {
