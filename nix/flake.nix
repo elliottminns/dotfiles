@@ -36,6 +36,12 @@
       "x86_64-linux"
     ];
 
+    hosts = [
+      "itachi"
+      "karasu"
+      "chidori"
+    ];
+
     pkgs = import nixpkgs {
       system = "x86_64-linux";
       config = {
@@ -58,16 +64,6 @@
       };
     };
 
-    overlays.davinci-resolve = old: prev: {
-      davinci-resolve = prev.davinci-resolve.override (old: {
-          buildFHSEnv = a: (old.buildFHSEnv (a // {
-            extraBwrapArgs = a.extraBwrapArgs ++ [
-                "--bind /run/opengl-driver/etc/OpenCL /etc/OpenCL"
-            ];
-          }));
-      });
-    };
-
     nixpkgs.overlays = [
       self.overlays.unstable
       alacritty-theme.overlays.default
@@ -76,47 +72,20 @@
 
     packages = forAllSystems (system: import ./pkgs nixpkgs.legacyPackages.${system});
 
-    nixosConfigurations.itachi = nixpkgs.lib.nixosSystem {
-      specialArgs = {
-        meta = { hostname = "itachi"; };
-      };
-      system = "x86_64-linux";
-      modules = [
-        # Modules
-        disko.nixosModules.disko
-      	# System Specific
-      	./machines/itachi/hardware-configuration.nix
-        ./machines/itachi/disko-config.nix
-        # General
-        ./configuration.nix
-        # Home Manager
-        ({ config, pkgs, ...}: {
-          nixpkgs.overlays = [
-            self.overlays.unstable
-            alacritty-theme.overlays.default
-            inputs.templ.overlays.default
-          ];
-        })
-        home-manager.nixosModules.home-manager
-        {
-          home-manager.useGlobalPkgs = true;
-          home-manager.useUserPackages = true;
-          home-manager.users.elliott = import ./home/home.nix;
-        }
-      ];
-    };
-    nixosConfigurations.amaterasu = nixpkgs.lib.nixosSystem {
+    nixosConfigurations = builtins.listToAttrs (map (name: {
+      name = name;
+      value = nixpkgs.lib.nixosSystem {
       specialArgs = {
         inherit inputs outputs;
-        meta = { hostname = "amaterasu"; };
+        meta = { hostname = name; };
       };
       system = "x86_64-linux";
       modules = [
         # Modules
         disko.nixosModules.disko
       	# System Specific
-      	./machines/amaterasu/hardware-configuration.nix
-        ./machines/amaterasu/disko-config.nix
+      	./machines/${name}/hardware-configuration.nix
+        ./machines/${name}/disko-config.nix
         # General
         ./configuration.nix
         # Home Manager
@@ -137,134 +106,6 @@
         }
       ];
     };
-    nixosConfigurations.karasu = nixpkgs.lib.nixosSystem {
-      specialArgs = {
-        inherit inputs outputs;
-        meta = { hostname = "karasu"; };
-      };
-      system = "x86_64-linux";
-      modules = [
-        # Modules
-        disko.nixosModules.disko
-      	# System Specific
-      	./machines/karasu/hardware-configuration.nix
-        ./machines/karasu/disko-config.nix
-        # General
-        ./configuration.nix
-        # Home Manager
-        ({ config, pkgs, ...}: {
-          nixpkgs.overlays = [
-            self.overlays.unstable
-            self.overlays.additions
-            alacritty-theme.overlays.default
-            inputs.templ.overlays.default
-          ];
-        })
-        home-manager.nixosModules.home-manager
-        {
-           home-manager.useGlobalPkgs = true;
-           home-manager.useUserPackages = true;
-           home-manager.users.elliott = import ./home/home.nix;
-           home-manager.extraSpecialArgs = {inherit inputs; };
-        }
-      ];
-    };
-    nixosConfigurations.kitsune = nixpkgs.lib.nixosSystem {
-      specialArgs = {
-        inherit inputs outputs;
-        meta = { hostname = "kitsune"; };
-      };
-      system = "x86_64-linux";
-      modules = [
-        # Modules
-        disko.nixosModules.disko
-      	# System Specific
-      	./machines/kitsune/hardware-configuration.nix
-        ./machines/kitsune/disko-config.nix
-        # General
-        ./configuration.nix
-        # Home Manager
-        ({ config, pkgs, ...}: {
-          nixpkgs.overlays = [
-            self.overlays.unstable
-            self.overlays.additions
-            alacritty-theme.overlays.default
-            inputs.templ.overlays.default
-          ];
-        })
-        home-manager.nixosModules.home-manager
-        {
-          home-manager.useGlobalPkgs = true;
-          home-manager.useUserPackages = true;
-          home-manager.users.elliott = import ./home/home.nix;
-          home-manager.extraSpecialArgs = { inherit inputs; };
-        }
-      ];
-    };
-    nixosConfigurations.chidori = nixpkgs.lib.nixosSystem {
-      specialArgs = {
-        inherit inputs outputs;
-        meta = { hostname = "chidori"; };
-      };
-      system = "x86_64-linux";
-      modules = [
-        # Modules
-        disko.nixosModules.disko
-      	# System Specific
-      	./machines/chidori/hardware-configuration.nix
-        ./machines/chidori/disko-config.nix
-        # General
-        ./configuration.nix
-        # Home Manager
-        ({ config, pkgs, ...}: {
-          nixpkgs.overlays = [
-            self.overlays.unstable
-            self.overlays.additions
-            self.overlays.davinci-resolve
-            alacritty-theme.overlays.default
-            inputs.templ.overlays.default
-          ];
-        })
-        home-manager.nixosModules.home-manager
-        {
-          home-manager.useGlobalPkgs = true;
-          home-manager.useUserPackages = true;
-          home-manager.users.elliott = import ./home/home.nix;
-          home-manager.extraSpecialArgs = { inherit inputs; };
-        }
-      ];
-    };
-    nixosConfigurations.sasuke = nixpkgs.lib.nixosSystem {
-      specialArgs = {
-        meta = { hostname = "sasuke"; };
-      };
-      system = "x86_64-linux";
-      modules = [
-        # Modules
-        disko.nixosModules.disko
-      	# System Specific
-      	./machines/sasuke/hardware-configuration.nix
-        ./machines/sasuke/disko-config.nix
-        ./machines/sasuke/hardware.nix
-        # General
-        ./configuration.nix
-        # Home Manager
-        home-manager.nixosModules.home-manager
-        {
-          home-manager.useGlobalPkgs = true;
-          home-manager.useUserPackages = true;
-          home-manager.users.elliott = import ./home/home.nix;
-        }
-      ];
-    };
-
-    homeConfigurations.elliott = home-manager.lib.homeManagerConfiguration {
-      inherit pkgs;
-      extraSpecialArgs = { inherit inputs; };
-
-      modules = [
-	      ./home.nix
-      ];
-    };
+    }) hosts);
   };
 }

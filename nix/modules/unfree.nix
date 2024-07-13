@@ -3,7 +3,6 @@
   nixpkgs.config.allowUnfreePredicate = pkg:
     builtins.elem (lib.getName pkg) (
       map lib.getName [
-        pkgs.davinci-resolve
         pkgs.discord
         pkgs.unstable.keymapp
         pkgs.signal-desktop
@@ -18,7 +17,6 @@
   nixpkgs.config.allowUnfree = true;
 
   environment.systemPackages = with pkgs; [
-#    davinci-resolve
     discord
     unstable.keymapp
     obsidian

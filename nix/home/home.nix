@@ -21,9 +21,6 @@ in
     settings."org/gnome/desktop/interface".color-scheme = "prefer-dark";
   };
 
-  home.packages = with pkgs; [
-  ];
-
   home.stateVersion = "23.11";
 
   programs = {
@@ -39,6 +36,8 @@ in
     fzf = (import ./fzf.nix { inherit pkgs; });
     oh-my-posh = (import ./oh-my-posh.nix { inherit pkgs; });
   };
+
+  programs.atuin.enable = true;
 
   gtk = {
     enable = true;
