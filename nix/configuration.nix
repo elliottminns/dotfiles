@@ -1,8 +1,20 @@
 # Edit this configuration file to define what should be installed onconfig
 # your system. Help is available in the configuration.nix(5) man page, on
 # https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
-{ inputs, outputs, config, lib, pkgs, meta, ... }:
+{ inputs, outputs, config, lib, pkgs, meta, ... }: let
+  my-kubernetes-helm = with pkgs; wrapHelm kubernetes-helm {
+    plugins = with pkgs.kubernetes-helmPlugins; [
+      helm-secrets
+      helm-diff
+      helm-s3
+      helm-git
+    ];
+  };
 
+  my-helmfile = pkgs.helmfile-wrapped.override {
+    inherit (my-kubernetes-helm) pluginsDir;
+  };
+in
 {
   imports = [
     ./modules/languages.nix
@@ -161,6 +173,10 @@
     hyprpicker
     pop-gtk-theme
     qemu
+    my-kubernetes-helm
+    my-helmfile
+    argocd
+    kustomize
     #unstable.amber-lang
   ];
 
