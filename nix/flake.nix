@@ -4,6 +4,7 @@
   inputs = {
     # Nixpkgs
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    #nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.05";
 
     # Unstable Packages
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
@@ -33,7 +34,11 @@
     inherit (self) outputs;
 
     systems = [
+      "aarch64-linux"
+      "i686-linux"
       "x86_64-linux"
+      "aarch64-darwin"
+      "x86_64-darwin"
     ];
 
     hosts = [
@@ -42,33 +47,9 @@
       "chidori"
     ];
 
-    pkgs = import nixpkgs {
-      system = "x86_64-linux";
-      config = {
-        allowUnfree = true;
-        permittedInsecurePackages = [
-          "electron-25.9.0"
-        ];
-      };
-    };
-
     forAllSystems = nixpkgs.lib.genAttrs systems;
   in  {
-
-    overlays.additions = final: _prev: import ./pkgs final.pkgs;
-
-    overlays.unstable = final: prev: {
-      unstable = import nixpkgs-unstable {
-        system = prev.system;
-        config.allowUnfree = prev.config.allowUnfree;
-      };
-    };
-
-    nixpkgs.overlays = [
-      self.overlays.unstable
-      alacritty-theme.overlays.default
-      templ.overlays.default
-    ];
+    overlays = import ./overlays {inherit inputs;};
 
     packages = forAllSystems (system: import ./pkgs nixpkgs.legacyPackages.${system});
 
@@ -89,14 +70,6 @@
         # General
         ./configuration.nix
         # Home Manager
-        ({ config, pkgs, ...}: {
-          nixpkgs.overlays = [
-            self.overlays.unstable
-            self.overlays.additions
-            alacritty-theme.overlays.default
-            inputs.templ.overlays.default
-          ];
-        })
         home-manager.nixosModules.home-manager
         {
           home-manager.useGlobalPkgs = true;
