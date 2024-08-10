@@ -130,58 +130,57 @@ in
 
   # $ nix search wget
   environment.systemPackages = with pkgs; [
+    argocd
+    awscli
     calibre
-    firefox
     chromium
-    erlang
-    rebar3
-    git
-    gleam
-    kubectl
-    kubectx
-    fzf
-    lua-language-server
-    jq
-    neovim
-    pika-backup
-    ripgrep
-    protonvpn-cli
-    tmux
-    wl-clipboard
-    stow
-    glib
-    gtk3
-    gio-sharp
-    mm-common
-    pkg-config
-    stylua
-    unzip
-    transmission_4-gtk
-    qemu
-    templ
-    gopls
-    go-migrate
+    dotool
     eza
+    firefox
+    fzf
+    gio-sharp
+    git
+    glib
+    go-migrate
+    gopls
     gptscript
     grim # screenshot functionality
-    slurp # screenshot functionality
-    wl-clipboard # wl-copy and wl-paste for copy/paste from stdin / stdout
-    mako # notification system developed by swaywm maintainer
-    wofi
-    nwg-look
-    kanata
-    sassc
-    dotool
-    obs-studio
+    gtk3
+    hyprpaper
     hyprpicker
-    pop-gtk-theme
-    qemu
-    my-kubernetes-helm
-    my-helmfile
-    argocd
+    jq
+    kanata
+    kubectl
+    kubectx
     kustomize
+    lua-language-server
+    mako # notification system developed by swaywm maintainer
+    mm-common
+    my-helmfile
+    my-kubernetes-helm
+    neovim
     nil
-    #unstable.amber-lang
+    nwg-look
+    obs-studio
+    pika-backup
+    pkg-config
+    pop-gtk-theme
+    postgresql
+    protonvpn-cli
+    qemu
+    ripgrep
+    sassc
+    slurp # screenshot functionality
+    stow
+    stylua
+    templ
+    tmux
+    transmission_4-gtk
+    typescript-language-server
+    unzip
+    wl-clipboard # wl-copy and wl-paste for copy/paste from stdin / stdout
+    wofi
+    zenity
   ];
 
   # Virtualisation

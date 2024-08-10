@@ -5,6 +5,5 @@
     gnome.gnome-shell-extensions
     gnomeExtensions.tiling-assistant
     gnomeExtensions.window-calls
-    gnome.zenity
   ];
 }

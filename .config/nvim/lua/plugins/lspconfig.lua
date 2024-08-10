@@ -43,6 +43,8 @@ return {
 			lspconfig.templ.setup({})
 
 			lspconfig.nil_ls.setup({})
+
+			lspconfig.tsserver.setup({})
 		end,
 	},
 }

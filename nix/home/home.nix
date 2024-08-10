@@ -39,6 +39,22 @@ in
 
   programs.atuin.enable = true;
 
+  services = {
+    hyprpaper = {
+      enable = true;
+      settings = {
+        preload = [
+          "$HOME/.dotfiles/wallpapers/purple-bokah.jpg"
+        ];
+
+        wallpaper = [
+          "eDP-2,$HOME/.dotfiles/wallpapers/purple-bokah.jpg"
+          "DP-1,$HOME/.dotfiles/wallpapers/purple-bokah.jpg"
+        ];
+      };
+    };
+  };
+
   gtk = {
     enable = true;
     gtk3.extraConfig = {

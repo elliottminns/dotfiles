@@ -6,6 +6,7 @@ return {
 		"rust",
 		"gleam",
 		"templ",
+		"svelte",
 	},
 	highlight = {
 		enable = true,

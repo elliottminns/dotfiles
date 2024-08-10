@@ -63,8 +63,8 @@
     force_zero_scaling = true
   }
 
-  monitor=DP-1,3840x2160,1600x0,2
-  monitor=eDP-2,2560x1600,0x0,1.6
+  monitor=DP-1,3840x2160,0x0,2
+  monitor=eDP-2,2560x1600,2160x0,1.6
 
   input {
     follow_mouse = 1
