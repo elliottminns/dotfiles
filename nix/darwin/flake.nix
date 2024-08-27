@@ -32,6 +32,7 @@
           pkgs.neovim
           pkgs.ffmpeg
           pkgs.ripgrep
+          pkgs.rclone
           pkgs.unstable.amber-lang
           pkgs.rustup
           pkgs.obsidian
@@ -44,11 +45,35 @@
           pkgs.iperf
           pkgs.air
           pkgs.templ
+          pkgs.bun
+          pkgs.opentofu
+          pkgs.gh
+          pkgs.nil
         ];
 
       users.users.elliott = {
         name = "elliott";
         home = "/Users/elliott";
+      };
+
+      homebrew = {
+        enable = true;
+        brews = [
+          "stripe"
+        ];
+        casks = [
+          "alacritty"
+          "hammerspoon"
+          "amethyst"
+          "alfred"
+          "logseq"
+          "notion"
+          "discord"
+          "iina"
+        ];
+        taps = [
+          "stripe/stripe-cli"
+        ];
       };
 
 
@@ -68,6 +93,12 @@
       # Used for backwards compatibility, please read the changelog before changing.
       # $ darwin-rebuild changelog
       system.stateVersion = 4;
+
+      system.defaults = {
+        NSGlobalDomain.AppleICUForce24HourTime = true;
+        NSGlobalDomain.AppleShowAllExtensions = true;
+        loginwindow.GuestEnabled = false;
+      };
 
       # The platform the configuration will be used on.
       nixpkgs.hostPlatform = "aarch64-darwin";
