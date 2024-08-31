@@ -1,4 +1,4 @@
-{pkgs, ...}:
+{...}:
 {
   enable = true;
   settings = {
@@ -9,8 +9,8 @@
     };
     bind =
     [
-      "$mod, Q, exec, alacritty"
-      "$mod, C, killactive"
+      "$mod, Return, exec, alacritty"
+      "$mod, Q, killactive"
       "$mod, M, exit"
       "$mod, F, exec, firefox"
       "$mod, E, exec, nautilus"
@@ -48,6 +48,8 @@
   exec = gsettings set org.gnome.desktop.interface color-scheme "prefer-dark"   # for GTK4 apps
 
   env = QT_QPA_PLATFORMTHEME,qt6ct   # for Qt apps
+  env = HYPRCURSOR_SIZE,64
+  env = XCURSOR_SIZE,64
 
   bezier=easeOutBack,0.34,1.56,0.64,1
   bezier=easeInBack,0.36,0,0.66,-0.56
@@ -63,8 +65,8 @@
     force_zero_scaling = true
   }
 
-  monitor=DP-1,3840x2160,0x0,2
-  monitor=eDP-2,2560x1600,2160x0,1.6
+  monitor=DP-1,3840x2160,1600x0,2
+    monitor=eDP-2,2560x1600,0x0,1.6
 
   input {
     follow_mouse = 1

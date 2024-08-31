@@ -11,6 +11,14 @@ in
 
   home.username = "elliott";
   home.homeDirectory = "/home/elliott";
+  home.pointerCursor = {
+    x11.enable = true;
+    gtk.enable = true;
+    package = pkgs.banana-cursor;
+    size = 128;
+    name = "Banana";
+  };
+
   xdg.enable = true;
 
   xdg.configFile.nvim.source = mkOutOfStoreSymlink "/home/elliott/.dotfiles/.config/nvim";

@@ -132,6 +132,7 @@ in
   environment.systemPackages = with pkgs; [
     argocd
     awscli
+    banana-cursor
     calibre
     chromium
     dotool

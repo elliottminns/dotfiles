@@ -28,6 +28,10 @@
 
     # Matugen
     matugen.url = "github:InioX/matugen?ref=v2.2.0";
+
+    # NixVim
+    nixvim.url = "github:nix-community/nixvim";
+    nixvim.inputs.nixpkgs.follows = "nixpkgs";
   };
 
   outputs = { self, nixpkgs, disko, home-manager, alacritty-theme, templ, nixpkgs-unstable, ags, ... }@inputs: let
