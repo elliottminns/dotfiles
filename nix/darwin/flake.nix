@@ -18,7 +18,8 @@
         system = "aarch64-darwin";
       };
     };
-    configuration = { pkgs, ... }: {
+    username = "elliott";
+    configuration = { pkgs, lib, config, ... }: {
       # List packages installed in system profile. To search by name, run:
       # $ nix-env -qaP | grep wget
       nixpkgs.config.allowUnfree = true;
@@ -28,41 +29,46 @@
       ];
       environment.systemPackages =
         [
+          pkgs.alacritty
+          pkgs.air
           pkgs.awscli
-          pkgs.neovim
+          pkgs.bun
           pkgs.ffmpeg
-          pkgs.ripgrep
-          pkgs.rclone
-          pkgs.unstable.amber-lang
-          pkgs.rustup
+          pkgs.git
+          pkgs.gh
+          pkgs.iperf
+          pkgs.lua-language-server
+          pkgs.mkalias
+          pkgs.neovim
+          pkgs.nil
           pkgs.obsidian
+          pkgs.opentofu
+          pkgs.pass
+          pkgs.postgresql_16
+          pkgs.rclone
+          pkgs.ripgrep
+          pkgs.rustup
+          pkgs.stylua
+          pkgs.stripe-cli
           pkgs.tailwindcss
           pkgs.tailwindcss-language-server
-          pkgs.pass
-          pkgs.lua-language-server
-          pkgs.stylua
-          pkgs.zoxide
-          pkgs.iperf
-          pkgs.air
           pkgs.templ
-          pkgs.bun
-          pkgs.opentofu
-          pkgs.gh
-          pkgs.nil
+          pkgs.tmux
+          pkgs.unstable.amber-lang
+          pkgs.zoxide
         ];
 
       users.users.elliott = {
-        name = "elliott";
+        name = username;
         home = "/Users/elliott";
       };
 
       homebrew = {
         enable = true;
         brews = [
-          "stripe"
+          "mas"
         ];
         casks = [
-          "alacritty"
           "hammerspoon"
           "amethyst"
           "alfred"
@@ -70,16 +76,43 @@
           "notion"
           "discord"
           "iina"
+          "the-unarchiver"
         ];
         taps = [
-          "stripe/stripe-cli"
         ];
+        masApps = {
+          #Yoink = 457622435
+        };
       };
 
+      system.activationScripts.applications.text = let
+        env = pkgs.buildEnv {
+          name = "system-applications";
+          paths = config.environment.systemPackages;
+          pathsToLink = "/Applications";
+        };
+      in
+        pkgs.lib.mkForce ''
+        # Set up applications.
+        echo "setting up /Applications..." >&2
+        rm -rf /Applications/Nix\ Apps
+        mkdir -p /Applications/Nix\ Apps
+        find ${env}/Applications -maxdepth 1 -type l -exec readlink '{}' + |
+        while read src; do
+          app_name=$(basename "$src")
+          echo "copying $src" >&2
+          ${pkgs.mkalias}/bin/mkalias "$src" "/Applications/Nix Apps/$app_name"
+        done
+            '';
 
       # Auto upgrade nix package and the daemon service.
       services.nix-daemon.enable = true;
       # nix.package = pkgs.nix;
+
+      services.postgresql = {
+        enable = true;
+        package = pkgs.postgresql_16;
+      };
 
       # Necessary for using flakes on this system.
       nix.settings.experimental-features = "nix-command flakes";
@@ -98,6 +131,7 @@
         NSGlobalDomain.AppleICUForce24HourTime = true;
         NSGlobalDomain.AppleShowAllExtensions = true;
         loginwindow.GuestEnabled = false;
+        finder.FXPreferredViewStyle = "clmv";
       };
 
       # The platform the configuration will be used on.
