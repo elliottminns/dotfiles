@@ -36,6 +36,7 @@
           pkgs.ffmpeg
           pkgs.git
           pkgs.gh
+          pkgs.gnupg
           pkgs.iperf
           pkgs.lua-language-server
           pkgs.mkalias
@@ -74,6 +75,7 @@
           "alfred"
           "logseq"
           "notion"
+          "firefox"
           "discord"
           "iina"
           "the-unarchiver"
@@ -81,7 +83,7 @@
         taps = [
         ];
         masApps = {
-          #Yoink = 457622435
+          Yoink = 457622435;
         };
       };
 
