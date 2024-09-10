@@ -14,7 +14,7 @@
     alacritty-theme.url = "github:alexghr/alacritty-theme.nix";
   };
 
-  outputs = { self, nix-darwin, nixpkgs, nixpkgs-unstable, templ, home-manager, nix-homebrew, ... }@inputs:
+  outputs = { self, nix-darwin, nixpkgs, nixpkgs-unstable, templ, home-manager, nix-homebrew, alacritty-theme, ... }@inputs:
   let
     add-unstable-packages = final: _prev: {
       unstable = import inputs.nixpkgs-unstable {
@@ -161,6 +161,10 @@
     darwinConfigurations."tsukuyomi" = nix-darwin.lib.darwinSystem {
       modules = [
         configuration
+        ({ config, pkgs, ...}: {
+          # install the overlay
+          nixpkgs.overlays = [ alacritty-theme.overlays.default ];
+        })
         home-manager.darwinModules.home-manager
         {
             # `home-manager` config
