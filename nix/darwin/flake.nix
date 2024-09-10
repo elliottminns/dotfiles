@@ -12,7 +12,7 @@
     nix-homebrew.url = "github:zhaofengli-wip/nix-homebrew";
   };
 
-  outputs = { self, nix-darwin, nixpkgs, nixpkgs-unstable, templ, home-manager, ... }@inputs:
+  outputs = { self, nix-darwin, nixpkgs, nixpkgs-unstable, templ, home-manager, nix-homebrew, ... }@inputs:
   let
     add-unstable-packages = final: _prev: {
       unstable = import inputs.nixpkgs-unstable {
@@ -165,6 +165,16 @@
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
             home-manager.users.elliott = import ./home.nix;
+        }
+        nix-homebrew.darwinModules.nix-homebrew
+        {
+          nix-homebrew = {
+            enable = true;
+            # Apple Silicon Only
+            enableRosetta = true;
+            # User owning the Homebrew prefix
+            user = "elliott";
+          };
         }
       ];
     };
