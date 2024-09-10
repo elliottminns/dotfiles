@@ -1,4 +1,4 @@
-{ config, pkgs, ... }:
+{ pkgs, ... }:
 {
   enable = true;
   package = pkgs.unstable.alacritty;
@@ -22,7 +22,7 @@
       family = "JetBrainsMono Nerd Font";
       inherit style;
     }; in {
-      size = 16;
+      size = 26;
       normal = jetbrainsMono "Regular";
       bold = jetbrainsMono "Bold";
       italic = jetbrainsMono "Italic";
