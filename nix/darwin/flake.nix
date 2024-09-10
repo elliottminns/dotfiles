@@ -9,6 +9,7 @@
     templ.url = "github:a-h/templ";
     home-manager.url = "github:nix-community/home-manager/release-24.05";
     home-manager.inputs.nixpkgs.follows = "nixpkgs-unstable";
+    nix-homebrew.url = "github:zhaofengli-wip/nix-homebrew";
   };
 
   outputs = { self, nix-darwin, nixpkgs, nixpkgs-unstable, templ, home-manager, ... }@inputs:
@@ -26,6 +27,9 @@
       nixpkgs.overlays = [
         inputs.templ.overlays.default
         add-unstable-packages
+      ];
+      fonts.packages = [
+        (pkgs.nerdfonts.override { fonts = [ "JetBrainsMono" ]; })
       ];
       environment.systemPackages =
         [
@@ -130,10 +134,19 @@
       system.stateVersion = 4;
 
       system.defaults = {
-        NSGlobalDomain.AppleICUForce24HourTime = true;
-        NSGlobalDomain.AppleShowAllExtensions = true;
-        loginwindow.GuestEnabled = false;
+        dock.autohide  = true;
+        dock.persistent-apps = [
+          "${pkgs.alacritty}/Applications/Alacritty.app"
+          "/Applications/Firefox.app"
+          "${pkgs.obsidian}/Applications/Obsidian.app"
+          "/System/Applications/Mail.app"
+          "/System/Applications/Calendar.app"
+        ];
         finder.FXPreferredViewStyle = "clmv";
+        loginwindow.GuestEnabled  = false;
+        NSGlobalDomain.AppleICUForce24HourTime = true;
+        NSGlobalDomain.AppleInterfaceStyle = "Dark";
+        NSGlobalDomain.KeyRepeat = 2;
       };
 
       # The platform the configuration will be used on.
