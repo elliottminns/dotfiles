@@ -10,6 +10,8 @@
     home-manager.url = "github:nix-community/home-manager/release-24.05";
     home-manager.inputs.nixpkgs.follows = "nixpkgs-unstable";
     nix-homebrew.url = "github:zhaofengli-wip/nix-homebrew";
+    # Alacritty theme
+    alacritty-theme.url = "github:alexghr/alacritty-theme.nix";
   };
 
   outputs = { self, nix-darwin, nixpkgs, nixpkgs-unstable, templ, home-manager, nix-homebrew, ... }@inputs:
@@ -165,6 +167,7 @@
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
             home-manager.users.elliott = import ./home.nix;
+            home-manager.extraSpecialArgs = { inherit inputs; };
         }
         nix-homebrew.darwinModules.nix-homebrew
         {
