@@ -31,6 +31,7 @@ in
     extraOptions = ''
       experimental-features = nix-command flakes
     '';
+    settings.warn-dirty = false;
   };
 
 
@@ -133,8 +134,10 @@ in
     argocd
     awscli
     banana-cursor
+    banana-cursor-dreams
     calibre
     chromium
+    clickgen
     dotool
     eza
     firefox
@@ -182,6 +185,7 @@ in
     wl-clipboard # wl-copy and wl-paste for copy/paste from stdin / stdout
     wofi
     zenity
+    zip
   ];
 
   # Virtualisation

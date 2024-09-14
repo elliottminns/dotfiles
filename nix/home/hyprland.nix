@@ -25,6 +25,10 @@
       "$mod, right, movefocus, r"
       "$mod, up, movefocus, u"
       "$mod, down, movefocus, d"
+      "$mod, h, movefocus, l"
+      "$mod, l, movefocus, r"
+      "$mod, k, movefocus, u"
+      "$mod, j, movefocus, d"
     ]
     ++ (
       builtins.concatLists (builtins.genList (
@@ -46,10 +50,12 @@
   exec-once = ags
   exec = gsettings set org.gnome.desktop.interface gtk-theme "Adwaita"   # for GTK3 apps
   exec = gsettings set org.gnome.desktop.interface color-scheme "prefer-dark"   # for GTK4 apps
+  exec = gsettings set org.gnome.desktop.interface cursor-theme "Banana-Catppuccin-Mocha"
+  exec = gsettings set org.gnome.desktop.interface cursor-size 128
 
   env = QT_QPA_PLATFORMTHEME,qt6ct   # for Qt apps
-  env = HYPRCURSOR_SIZE,64
-  env = XCURSOR_SIZE,64
+  env = HYPRCURSOR_SIZE,128
+  env = XCURSOR_SIZE,128
 
   bezier=easeOutBack,0.34,1.56,0.64,1
   bezier=easeInBack,0.36,0,0.66,-0.56
@@ -66,7 +72,7 @@
   }
 
   monitor=DP-1,3840x2160,1600x0,2
-    monitor=eDP-2,2560x1600,0x0,1.6
+  monitor=eDP-2,2560x1600,0x0,1.6
 
   input {
     follow_mouse = 1

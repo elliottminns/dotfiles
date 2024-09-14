@@ -14,9 +14,9 @@ in
   home.pointerCursor = {
     x11.enable = true;
     gtk.enable = true;
-    package = pkgs.banana-cursor;
+    package = pkgs.banana-cursor-dreams;
     size = 128;
-    name = "Banana";
+    name = "Banana-Catppuccin-Mocha";
   };
 
   xdg.enable = true;
