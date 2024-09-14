@@ -1,5 +1,4 @@
-{ lib, ... }:
-{
+{lib, ...}: {
   disko.devices = {
     disk = {
       main = {
@@ -18,7 +17,7 @@
               content = {
                 type = "filesystem";
                 format = "vfat";
-		mountpoint = "/boot";
+                mountpoint = "/boot";
               };
             };
             luks = {
@@ -26,14 +25,14 @@
               content = {
                 type = "luks";
                 name = "luks_lvm";
-		passwordFile = "/tmp/secret.key";
-		settings = {
-		  allowDiscards = true;
-		};
-		content = {
-		  type = "lvm_pv";
-		  vg = "nix";
-		};
+                passwordFile = "/tmp/secret.key";
+                settings = {
+                  allowDiscards = true;
+                };
+                content = {
+                  type = "lvm_pv";
+                  vg = "nix";
+                };
               };
             };
           };
@@ -50,17 +49,17 @@
               content = {
                 type = "luks";
                 name = "nix-home";
-		passwordFile = "/tmp/secret.key";
+                passwordFile = "/tmp/secret.key";
                 settings = {
                   allowDiscards = true;
                 };
                 content = {
                   type = "btrfs";
-                  extraArgs = [ "-f" ];
+                  extraArgs = ["-f"];
                   subvolumes = {
                     "/home" = {
                       mountpoint = "/home";
-                      mountOptions = [ "compress=zstd" "noatime" ];
+                      mountOptions = ["compress=zstd" "noatime"];
                     };
                   };
                 };
@@ -89,11 +88,11 @@
               subvolumes = {
                 "/root" = {
                   mountpoint = "/";
-                  mountOptions = [ "compress=zstd" "noatime" ];
+                  mountOptions = ["compress=zstd" "noatime"];
                 };
                 "/nix" = {
                   mountpoint = "/nix";
-                  mountOptions = [ "compress=zstd" "noatime" ];
+                  mountOptions = ["compress=zstd" "noatime"];
                 };
               };
             };

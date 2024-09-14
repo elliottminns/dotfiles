@@ -1,21 +1,29 @@
 # Edit this configuration file to define what should be installed onconfig
 # your system. Help is available in the configuration.nix(5) man page, on
 # https://search.nixos.org/options and in the NixOS manual (`nixos-help`).
-{ inputs, outputs, config, lib, pkgs, meta, ... }: let
-  my-kubernetes-helm = with pkgs; wrapHelm kubernetes-helm {
-    plugins = with pkgs.kubernetes-helmPlugins; [
-      helm-secrets
-      helm-diff
-      helm-s3
-      helm-git
-    ];
-  };
+{
+  inputs,
+  outputs,
+  config,
+  lib,
+  pkgs,
+  meta,
+  ...
+}: let
+  my-kubernetes-helm = with pkgs;
+    wrapHelm kubernetes-helm {
+      plugins = with pkgs.kubernetes-helmPlugins; [
+        helm-secrets
+        helm-diff
+        helm-s3
+        helm-git
+      ];
+    };
 
   my-helmfile = pkgs.helmfile-wrapped.override {
     inherit (my-kubernetes-helm) pluginsDir;
   };
-in
-{
+in {
   imports = [
     ./modules/languages.nix
     ./modules/gnome.nix
@@ -33,7 +41,6 @@ in
     '';
     settings.warn-dirty = false;
   };
-
 
   nixpkgs = {
     # You can add overlays here
@@ -72,7 +79,7 @@ in
 
   # Pick only one of the below networking options.
   #networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
-  networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
+  networking.networkmanager.enable = true; # Easiest to use and most distros use this by default.
 
   # Set your time zone.
   time.timeZone = "America/Chicago";
@@ -86,11 +93,11 @@ in
   console = {
     font = "Lat2-Terminus16";
     keyMap = "us";
-  #   useXkbConfig = true; # use xkb.options in tty.
+    #   useXkbConfig = true; # use xkb.options in tty.
   };
 
   fonts.packages = with pkgs; [
-    (nerdfonts.override { fonts = [ "JetBrainsMono" ]; })
+    (nerdfonts.override {fonts = ["JetBrainsMono"];})
     openmoji-color
   ];
 
@@ -112,10 +119,10 @@ in
   users.users.elliott = {
     isNormalUser = true;
     extraGroups = [
-    "wheel" # Enable ‘sudo’ for the user.
-    "docker"
-    "input"
-    "uinput"
+      "wheel" # Enable ‘sudo’ for the user.
+      "docker"
+      "input"
+      "uinput"
     ];
     shell = pkgs.zsh;
     packages = with pkgs; [
@@ -219,7 +226,8 @@ in
   services.openssh.enable = true;
 
   # gnome
-  services.xserver.enable = true; services.xserver.displayManager.gdm.enable = true;
+  services.xserver.enable = true;
+  services.xserver.displayManager.gdm.enable = true;
   services.xserver.desktopManager.gnome.enable = true;
 
   services.kanata = {
@@ -233,28 +241,28 @@ in
         ];
         extraDefCfg = "process-unmapped-keys yes";
         config = ''
-        (defsrc
-         caps a s d f j k l ;
-        )
-        (defvar
-         tap-time 150
-         hold-time 200
-        )
-        (defalias
-         caps (tap-hold 100 100 esc lctl)
-         a (tap-hold $tap-time $hold-time a lmet)
-         s (tap-hold $tap-time $hold-time s lalt)
-         d (tap-hold $tap-time $hold-time d lsft)
-         f (tap-hold $tap-time $hold-time f lctl)
-         j (tap-hold $tap-time $hold-time j rctl)
-         k (tap-hold $tap-time $hold-time k rsft)
-         l (tap-hold $tap-time $hold-time l ralt)
-         ; (tap-hold $tap-time $hold-time ; rmet)
-        )
+          (defsrc
+           caps a s d f j k l ;
+          )
+          (defvar
+           tap-time 150
+           hold-time 200
+          )
+          (defalias
+           caps (tap-hold 100 100 esc lctl)
+           a (tap-hold $tap-time $hold-time a lmet)
+           s (tap-hold $tap-time $hold-time s lalt)
+           d (tap-hold $tap-time $hold-time d lsft)
+           f (tap-hold $tap-time $hold-time f lctl)
+           j (tap-hold $tap-time $hold-time j rctl)
+           k (tap-hold $tap-time $hold-time k rsft)
+           l (tap-hold $tap-time $hold-time l ralt)
+           ; (tap-hold $tap-time $hold-time ; rmet)
+          )
 
-        (deflayer base
-         @caps @a  @s  @d  @f  @j  @k  @l  @;
-        )
+          (deflayer base
+           @caps @a  @s  @d  @f  @j  @k  @l  @;
+          )
         '';
       };
     };
@@ -288,5 +296,4 @@ in
   #
   # For more information, see `man configuration.nix` or https://nixos.org/manual/nixos/stable/options#opt-system.stateVersion .
   system.stateVersion = "23.11"; # Did you read the comment?
-
 }

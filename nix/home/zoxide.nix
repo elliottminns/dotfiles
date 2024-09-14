@@ -1,5 +1,4 @@
-{ pkgs, ... }:
-{
+{pkgs, ...}: {
   enable = true;
   enableZshIntegration = true;
   enableFishIntegration = true;

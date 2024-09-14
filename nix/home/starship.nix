@@ -1,12 +1,11 @@
-{ pkgs, ... }:
-{
+{pkgs, ...}: {
   enable = true;
   enableZshIntegration = true;
   enableFishIntegration = true;
   settings = {
     format = ''
-    $directory
-    $character
+      $directory
+      $character
     '';
     add_newline = true;
     package = {

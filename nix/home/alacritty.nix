@@ -1,11 +1,17 @@
-{ config, pkgs, ... }:
 {
+  config,
+  pkgs,
+  ...
+}: {
   enable = true;
   package = pkgs.unstable.alacritty;
 
   settings = {
     window = {
-      padding = { x = 4; y = 8; };
+      padding = {
+        x = 4;
+        y = 8;
+      };
       decorations = "full";
       opacity = 1;
       startup_mode = "Windowed";
@@ -18,10 +24,12 @@
       pkgs.alacritty-theme.tokyo-night
     ];
 
-    font = let jetbrainsMono = style: {
-      family = "JetBrainsMono Nerd Font";
-      inherit style;
-    }; in {
+    font = let
+      jetbrainsMono = style: {
+        family = "JetBrainsMono Nerd Font";
+        inherit style;
+      };
+    in {
       size = 16;
       normal = jetbrainsMono "Regular";
       bold = jetbrainsMono "Bold";

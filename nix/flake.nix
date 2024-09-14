@@ -34,7 +34,17 @@
     nixvim.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = { self, nixpkgs, disko, home-manager, alacritty-theme, templ, nixpkgs-unstable, ags, ... }@inputs: let
+  outputs = {
+    self,
+    nixpkgs,
+    disko,
+    home-manager,
+    alacritty-theme,
+    templ,
+    nixpkgs-unstable,
+    ags,
+    ...
+  } @ inputs: let
     inherit (self) outputs;
 
     systems = [
@@ -52,37 +62,38 @@
     ];
 
     forAllSystems = nixpkgs.lib.genAttrs systems;
-  in  {
+  in {
     overlays = import ./overlays {inherit inputs;};
 
     packages = forAllSystems (system: import ./pkgs nixpkgs.legacyPackages.${system});
 
     nixosConfigurations = builtins.listToAttrs (map (name: {
-      name = name;
-      value = nixpkgs.lib.nixosSystem {
-      specialArgs = {
-        inherit inputs outputs;
-        meta = { hostname = name; };
-      };
-      system = "x86_64-linux";
-      modules = [
-        # Modules
-        disko.nixosModules.disko
-      	# System Specific
-      	./machines/${name}/hardware-configuration.nix
-        ./machines/${name}/disko-config.nix
-        # General
-        ./configuration.nix
-        # Home Manager
-        home-manager.nixosModules.home-manager
-        {
-          home-manager.useGlobalPkgs = true;
-          home-manager.useUserPackages = true;
-          home-manager.users.elliott = import ./home/home.nix;
-          home-manager.extraSpecialArgs = { inherit inputs; };
-        }
-      ];
-    };
-    }) hosts);
+        name = name;
+        value = nixpkgs.lib.nixosSystem {
+          specialArgs = {
+            inherit inputs outputs;
+            meta = {hostname = name;};
+          };
+          system = "x86_64-linux";
+          modules = [
+            # Modules
+            disko.nixosModules.disko
+            # System Specific
+            ./machines/${name}/hardware-configuration.nix
+            ./machines/${name}/disko-config.nix
+            # General
+            ./configuration.nix
+            # Home Manager
+            home-manager.nixosModules.home-manager
+            {
+              home-manager.useGlobalPkgs = true;
+              home-manager.useUserPackages = true;
+              home-manager.users.elliott = import ./home/home.nix;
+              home-manager.extraSpecialArgs = {inherit inputs;};
+            }
+          ];
+        };
+      })
+      hosts);
   };
 }

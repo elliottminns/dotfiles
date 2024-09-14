@@ -1,5 +1,8 @@
-{ config, pkgs, ... }:
 {
+  config,
+  pkgs,
+  ...
+}: {
   enable = true;
   history.size = 10000;
   history.path = "${config.xdg.dataHome}/zsh/history";
@@ -61,7 +64,15 @@
   oh-my-zsh = {
     enable = true;
     plugins = [
-       "git" "sudo" "golang" "kubectl" "kubectx" "rust" "command-not-found" "pass" "helm"
+      "git"
+      "sudo"
+      "golang"
+      "kubectl"
+      "kubectx"
+      "rust"
+      "command-not-found"
+      "pass"
+      "helm"
     ];
   };
   plugins = [

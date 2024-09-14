@@ -1,5 +1,4 @@
-{ pkgs, ... }:
-{
+{pkgs, ...}: {
   environment.systemPackages = with pkgs; [
     ffmpeg
     # Video/Audio data composition framework tools like "gst-inspect", "gst-launch" ...

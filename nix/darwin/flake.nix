@@ -11,15 +11,27 @@
     home-manager.inputs.nixpkgs.follows = "nixpkgs-unstable";
   };
 
-  outputs = { self, nix-darwin, nixpkgs, nixpkgs-unstable, templ, home-manager, ... }@inputs:
-  let
+  outputs = {
+    self,
+    nix-darwin,
+    nixpkgs,
+    nixpkgs-unstable,
+    templ,
+    home-manager,
+    ...
+  } @ inputs: let
     add-unstable-packages = final: _prev: {
       unstable = import inputs.nixpkgs-unstable {
         system = "aarch64-darwin";
       };
     };
     username = "elliott";
-    configuration = { pkgs, lib, config, ... }: {
+    configuration = {
+      pkgs,
+      lib,
+      config,
+      ...
+    }: {
       # List packages installed in system profile. To search by name, run:
       # $ nix-env -qaP | grep wget
       nixpkgs.config.allowUnfree = true;
@@ -27,37 +39,36 @@
         inputs.templ.overlays.default
         add-unstable-packages
       ];
-      environment.systemPackages =
-        [
-          pkgs.alacritty
-          pkgs.air
-          pkgs.awscli
-          pkgs.bun
-          pkgs.ffmpeg
-          pkgs.git
-          pkgs.gh
-          pkgs.gnupg
-          pkgs.iperf
-          pkgs.lua-language-server
-          pkgs.mkalias
-          pkgs.neovim
-          pkgs.nil
-          pkgs.obsidian
-          pkgs.opentofu
-          pkgs.pass
-          pkgs.postgresql_16
-          pkgs.rclone
-          pkgs.ripgrep
-          pkgs.rustup
-          pkgs.stylua
-          pkgs.unstable.stripe-cli
-          pkgs.tailwindcss
-          pkgs.tailwindcss-language-server
-          pkgs.templ
-          pkgs.tmux
-          pkgs.unstable.amber-lang
-          pkgs.zoxide
-        ];
+      environment.systemPackages = [
+        pkgs.alacritty
+        pkgs.air
+        pkgs.awscli
+        pkgs.bun
+        pkgs.ffmpeg
+        pkgs.git
+        pkgs.gh
+        pkgs.gnupg
+        pkgs.iperf
+        pkgs.lua-language-server
+        pkgs.mkalias
+        pkgs.neovim
+        pkgs.nil
+        pkgs.obsidian
+        pkgs.opentofu
+        pkgs.pass
+        pkgs.postgresql_16
+        pkgs.rclone
+        pkgs.ripgrep
+        pkgs.rustup
+        pkgs.stylua
+        pkgs.unstable.stripe-cli
+        pkgs.tailwindcss
+        pkgs.tailwindcss-language-server
+        pkgs.templ
+        pkgs.tmux
+        pkgs.unstable.amber-lang
+        pkgs.zoxide
+      ];
 
       users.users.elliott = {
         name = username;
@@ -95,17 +106,17 @@
         };
       in
         pkgs.lib.mkForce ''
-        # Set up applications.
-        echo "setting up /Applications..." >&2
-        rm -rf /Applications/Nix\ Apps
-        mkdir -p /Applications/Nix\ Apps
-        find ${env}/Applications -maxdepth 1 -type l -exec readlink '{}' + |
-        while read src; do
-          app_name=$(basename "$src")
-          echo "copying $src" >&2
-          ${pkgs.mkalias}/bin/mkalias "$src" "/Applications/Nix Apps/$app_name"
-        done
-            '';
+          # Set up applications.
+          echo "setting up /Applications..." >&2
+          rm -rf /Applications/Nix\ Apps
+          mkdir -p /Applications/Nix\ Apps
+          find ${env}/Applications -maxdepth 1 -type l -exec readlink '{}' + |
+          while read src; do
+            app_name=$(basename "$src")
+            echo "copying $src" >&2
+            ${pkgs.mkalias}/bin/mkalias "$src" "/Applications/Nix Apps/$app_name"
+          done
+        '';
 
       # Auto upgrade nix package and the daemon service.
       services.nix-daemon.enable = true;
@@ -120,7 +131,7 @@
       nix.settings.experimental-features = "nix-command flakes";
 
       # Create /etc/zshrc that loads the nix-darwin environment.
-      programs.zsh.enable = true;  # default shell on catalina
+      programs.zsh.enable = true; # default shell on catalina
 
       # Set Git commit hash for darwin-version.
       system.configurationRevision = self.rev or self.dirtyRev or null;
@@ -139,8 +150,7 @@
       # The platform the configuration will be used on.
       nixpkgs.hostPlatform = "aarch64-darwin";
     };
-  in
-  {
+  in {
     # Build darwin flake using:
     # $ darwin-rebuild build --flake .#simple
     darwinConfigurations."tsukuyomi" = nix-darwin.lib.darwinSystem {
@@ -148,10 +158,10 @@
         configuration
         home-manager.darwinModules.home-manager
         {
-            # `home-manager` config
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-            home-manager.users.elliott = import ./home.nix;
+          # `home-manager` config
+          home-manager.useGlobalPkgs = true;
+          home-manager.useUserPackages = true;
+          home-manager.users.elliott = import ./home.nix;
         }
       ];
     };

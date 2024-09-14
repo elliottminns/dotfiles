@@ -1,5 +1,4 @@
-{ pkgs, ... }:
-{
+{pkgs, ...}: {
   environment.systemPackages = with pkgs; [
     gnome.networkmanager-openvpn
     gnome.gnome-shell-extensions
