@@ -1,5 +1,4 @@
 {
-  inputs,
   config,
   pkgs,
   ...
@@ -18,7 +17,7 @@ in {
     x11.enable = true;
     gtk.enable = true;
     package = pkgs.banana-cursor-dreams;
-    size = 128;
+    size = 96;
     name = "Banana-Catppuccin-Mocha";
   };
 

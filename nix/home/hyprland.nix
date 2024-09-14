@@ -7,7 +7,7 @@
       ''gsettings set org.gnome.desktop.interface gtk-theme "Adwaita"   # for GTK3 apps''
       ''gsettings set org.gnome.desktop.interface color-scheme "prefer-dark"   # for GTK4 apps''
       ''gsettings set org.gnome.desktop.interface cursor-theme "Banana-Catppuccin-Mocha"''
-      ''gsettings set org.gnome.desktop.interface cursor-size 128''
+      ''gsettings set org.gnome.desktop.interface cursor-size 96''
     ];
     xwayland = {
       force_zero_scaling = true;
@@ -27,8 +27,8 @@
     };
     env = [
       "QT_QPA_PLATFORMTHEME,qt6ct"
-      "HYPRCURSOR_SIZE,128"
-      "XCURSOR_SIZE,128"
+      "HYPRCURSOR_SIZE,96"
+      "XCURSOR_SIZE,96"
     ];
     monitor = [
       "DP-1,3840x2160,1600x0,2"

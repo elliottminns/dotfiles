@@ -3,8 +3,9 @@ local null_ls = require("null-ls")
 
 return {
   sources = {
-    null_ls.builtins.formatting.golines,
+    null_ls.builtins.formatting.alejandra,
     null_ls.builtins.formatting.goimports,
+    null_ls.builtins.formatting.golines,
     null_ls.builtins.formatting.stylua,
   },
   on_attach = function(client, bufnr)

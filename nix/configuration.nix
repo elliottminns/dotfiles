@@ -4,8 +4,6 @@
 {
   inputs,
   outputs,
-  config,
-  lib,
   pkgs,
   meta,
   ...
@@ -160,6 +158,7 @@ in {
     gtk3
     hyprpaper
     hyprpicker
+    inputs.zen-browser.packages."${system}".specific
     jq
     kanata
     kubectl
