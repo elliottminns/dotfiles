@@ -138,6 +138,7 @@ in {
 
   # $ nix search wget
   environment.systemPackages = with pkgs; [
+    alejandra
     argocd
     awscli
     banana-cursor

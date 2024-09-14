@@ -61,9 +61,11 @@
       "chidori"
     ];
 
-    forAllSystems = nixpkgs.lib.genAttrs systems;
+    forAllSystems = fn: nixpkgs.lib.genAttrs systems (system: fn {pkgs = import nixpkgs {inherit system;};});
   in {
     overlays = import ./overlays {inherit inputs;};
+
+    formatter = forAllSystems ({pkgs}: pkgs.alejandra);
 
     packages = forAllSystems (system: import ./pkgs nixpkgs.legacyPackages.${system});
 
