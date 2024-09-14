@@ -50,7 +50,7 @@
           pkgs.ripgrep
           pkgs.rustup
           pkgs.stylua
-          pkgs.stripe-cli
+          pkgs.unstable.stripe-cli
           pkgs.tailwindcss
           pkgs.tailwindcss-language-server
           pkgs.templ
