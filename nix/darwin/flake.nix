@@ -79,17 +79,13 @@
           "hammerspoon"
           "amethyst"
           "alfred"
-          "logseq"
-          "notion"
           "firefox"
           "discord"
-          "iina"
           "the-unarchiver"
-        ];
-        taps = [
         ];
         masApps = {
           Yoink = 457622435;
+          Wireguard = 1451685025;
         };
       };
 
