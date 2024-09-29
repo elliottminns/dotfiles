@@ -59,9 +59,22 @@
     ];
 
     hosts = [
-      "itachi"
-      "karasu"
-      "chidori"
+      {name = "itachi";}
+      {
+        name = "karasu";
+        monitors = [
+          {
+            internal = true;
+            name = "eDP-1";
+            width = "2256";
+            height = "1504";
+            scale = 1.566667;
+            framerate = 144;
+          }
+        ];
+        cursor = 64;
+      }
+      {name = "chidori";}
     ];
 
     forAllSystems = fn: nixpkgs.lib.genAttrs systems (system: fn {pkgs = import nixpkgs {inherit system;};});
@@ -72,20 +85,22 @@
 
     packages = forAllSystems (system: import ./pkgs nixpkgs.legacyPackages.${system});
 
-    nixosConfigurations = builtins.listToAttrs (map (name: {
-        name = name;
+    nixosConfigurations = builtins.listToAttrs (map (host: {
+        name = host.name;
         value = nixpkgs.lib.nixosSystem {
           specialArgs = {
             inherit inputs outputs;
-            meta = {hostname = name;};
+            meta = {
+              hostname = host.name;
+            };
           };
           system = "x86_64-linux";
           modules = [
             # Modules
             disko.nixosModules.disko
             # System Specific
-            ./machines/${name}/hardware-configuration.nix
-            ./machines/${name}/disko-config.nix
+            ./machines/${host.name}/hardware-configuration.nix
+            ./machines/${host.name}/disko-config.nix
             # General
             ./configuration.nix
             # Home Manager
@@ -94,7 +109,10 @@
               home-manager.useGlobalPkgs = true;
               home-manager.useUserPackages = true;
               home-manager.users.elliott = import ./home/home.nix;
-              home-manager.extraSpecialArgs = {inherit inputs;};
+              home-manager.extraSpecialArgs = {
+                inherit inputs;
+                meta = host;
+              };
             }
           ];
         };

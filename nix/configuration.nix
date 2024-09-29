@@ -173,6 +173,7 @@ in {
     nil
     nwg-look
     obs-studio
+    oh-my-posh
     pika-backup
     pkg-config
     pop-gtk-theme
@@ -192,7 +193,10 @@ in {
     wl-clipboard # wl-copy and wl-paste for copy/paste from stdin / stdout
     wofi
     zenity
+    zellij
     zip
+    avahi
+    nssmdns
   ];
 
   # Virtualisation
@@ -224,6 +228,10 @@ in {
 
   # Enable the OpenSSH daemon.
   services.openssh.enable = true;
+
+  # Enable Bonjour
+  services.avahi.enable = true;
+  services.avahi.nssmdns4 = true;
 
   # gnome
   services.xserver.enable = true;

@@ -1,6 +1,7 @@
 {
   config,
   pkgs,
+  meta,
   ...
 }: let
   inherit (config.lib.file) mkOutOfStoreSymlink;
@@ -17,7 +18,7 @@ in {
     x11.enable = true;
     gtk.enable = true;
     package = pkgs.banana-cursor-dreams;
-    size = 96;
+    size = meta.cursor;
     name = "Banana-Catppuccin-Mocha";
   };
 
@@ -38,7 +39,7 @@ in {
     zsh = import ./zsh.nix {inherit config pkgs;};
     neovim = import ./neovim.nix {inherit config pkgs;};
     git = import ./git.nix {inherit config pkgs;};
-    alacritty = import ./alacritty.nix {inherit config pkgs;};
+    alacritty = import ./alacritty.nix {inherit config pkgs meta;};
     gpg = import ./gpg.nix {inherit config pkgs;};
     firefox = import ./firefox.nix {inherit pkgs;};
     zoxide = import ./zoxide.nix {inherit pkgs;};
@@ -73,6 +74,6 @@ in {
   };
 
   wayland.windowManager = {
-    hyprland = import ./hyprland.nix {inherit pkgs;};
+    hyprland = import ./hyprland.nix {inherit pkgs meta config;};
   };
 }

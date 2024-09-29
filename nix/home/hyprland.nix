@@ -1,4 +1,32 @@
-{...}: {
+{
+  pkgs,
+  meta,
+  ...
+}: let
+  monitorLine = monitor:
+    builtins.concatStringsSep "," [
+      monitor.name
+      "${monitor.width}x${monitor.height}@${builtins.toString monitor.framerate}"
+      "0x0"
+      (builtins.toString monitor.scale)
+    ];
+
+  lidScript = let
+    monitor = builtins.elemAt meta.monitors 0;
+  in
+    pkgs.writeShellScript "lidswitch.sh"
+    ''
+      if grep open /proc/acpi/button/lid/LID0/state; then
+          hyprctl keyword monitor "${monitorLine monitor}"
+      else
+          if [[ `hyprctl monitors | grep "Monitor" | wc -l` != 1 ]]; then
+              hyprctl keyword monitor "${monitor.name}, disable"
+          else
+            systemctl suspend
+          fi
+      fi
+    '';
+in {
   enable = true;
   settings = {
     "$mod" = "SUPER";
@@ -7,13 +35,16 @@
       ''gsettings set org.gnome.desktop.interface gtk-theme "Adwaita"   # for GTK3 apps''
       ''gsettings set org.gnome.desktop.interface color-scheme "prefer-dark"   # for GTK4 apps''
       ''gsettings set org.gnome.desktop.interface cursor-theme "Banana-Catppuccin-Mocha"''
-      ''gsettings set org.gnome.desktop.interface cursor-size 96''
+      ''gsettings set org.gnome.desktop.interface cursor-size 64''
     ];
     xwayland = {
       force_zero_scaling = true;
     };
     general = {
-      gaps_out = 30;
+      gaps_out =
+        if meta.name == "karasu"
+        then 0
+        else 30;
     };
     input = {
       follow_mouse = 1;
@@ -25,15 +56,13 @@
       };
       sensitivity = 0;
     };
+    "misc:middle_click_paste" = false;
     env = [
       "QT_QPA_PLATFORMTHEME,qt6ct"
-      "HYPRCURSOR_SIZE,96"
-      "XCURSOR_SIZE,96"
+      "HYPRCURSOR_SIZE,${builtins.toString meta.cursor}"
+      "XCURSOR_SIZE,${builtins.toString meta.cursor}"
     ];
-    monitor = [
-      "DP-1,3840x2160,1600x0,2"
-      "eDP-2,2560x1600,0x0,1.6"
-    ];
+    monitor = map monitorLine meta.monitors;
     bezier = [
       "easeOutBack,0.34,1.56,0.64,1"
       "easeInBack,0.36,0,0.66,-0.56"
@@ -52,6 +81,7 @@
         "$mod, Return, exec, alacritty"
         "$mod, Q, killactive"
         "$mod, M, exit"
+        "$mod, S, exec, grim"
         "$mod, F, exec, firefox"
         "$mod, E, exec, nautilus"
         "$mod, V, togglefloating"
@@ -84,6 +114,9 @@
           )
           10)
       );
+    bindl = [
+      '', switch:Lid Switch, exec, ${lidScript}''
+    ];
   };
   extraConfig = ''
   '';
