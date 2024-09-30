@@ -13,7 +13,7 @@
   ];
 
   boot.initrd.availableKernelModules = ["nvme" "xhci_pci" "ahci" "usb_storage" "usbhid" "sd_mod"];
-  boot.initrd.kernelModules = ["dm-snapshot"];
+  boot.initrd.kernelModules = ["dm-snapshot" "amdgpu"];
   boot.kernelModules = ["kvm-amd"];
   boot.extraModulePackages = [];
 
@@ -28,4 +28,18 @@
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
+
+  hardware.graphics = {
+    enable = true;
+    extraPackages = with pkgs; [
+      amdvlk
+      rocmPackages.clr.icd
+    ];
+  };
+
+  services.xserver.videoDrivers = ["amdgpu"];
+
+  environment.systemPackages = [
+    pkgs.clinfo
+  ];
 }

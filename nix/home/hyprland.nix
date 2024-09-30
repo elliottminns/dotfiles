@@ -44,7 +44,15 @@ in {
       gaps_out =
         if meta.name == "karasu"
         then 0
-        else 30;
+        else "27,48,27,48";
+      border_size = 2;
+      "col.active_border" = "rgba(33ccffee) rgba(00ff99ee) 45deg";
+      "col.inactive_border" = "rgba(595959aa)";
+      # Set to true enable resizing windows by clicking and dragging on borders and gaps
+      resize_on_border = false;
+      # Please see https://wiki.hyprland.org/Configuring/Tearing/ before you turn this on
+      allow_tearing = false;
+      layout = "dwindle";
     };
     input = {
       follow_mouse = 1;
@@ -69,6 +77,25 @@ in {
       "easeInCubic,0.32,0,0.67,0"
       "easeInOutCubic,0.65,0,0.35,1"
     ];
+    decoration = {
+      rounding = 16;
+
+      # Change transparency of focused and unfocused windows
+      active_opacity = 1.0;
+      inactive_opacity = 1.0;
+
+      drop_shadow = true;
+      shadow_range = 4;
+      shadow_render_power = 3;
+      "col.shadow" = "rgba(1a1a1aee)";
+
+      blur = {
+        enabled = true;
+        size = 3;
+        passes = 1;
+        vibrancy = 0.1696;
+      };
+    };
     animation = [
       "windowsIn,1,5,easeOutBack,popin"
       "windowsOut,1,5,easeInBack,popin"
@@ -85,6 +112,7 @@ in {
         "$mod, F, exec, firefox"
         "$mod, E, exec, nautilus"
         "$mod, V, togglefloating"
+        "$mod+SHIFT, F, fullscreen, 0"
         "$mod, R, exec, wofi --show drun"
         "$mod, P, pseudo"
         "$mod, J, togglesplit"

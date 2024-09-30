@@ -7,6 +7,7 @@
     builtins.elem (lib.getName pkg) (
       map lib.getName [
         pkgs.discord
+        pkgs.davinci-resolve
         pkgs.unstable.keymapp
         pkgs.signal-desktop
         pkgs.steam
@@ -21,6 +22,7 @@
 
   environment.systemPackages = with pkgs; [
     discord
+    davinci-resolve
     unstable.keymapp
     obsidian
     signal-desktop

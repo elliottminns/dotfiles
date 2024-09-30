@@ -75,6 +75,19 @@
         cursor = 64;
       }
       {name = "chidori";}
+      {
+        name = "amaterasu";
+        monitors = [
+          {
+            name = "DP-2";
+            width = "3840";
+            height = "2160";
+            scale = 2;
+            framerate = 60;
+          }
+        ];
+        cursor = 64;
+      }
     ];
 
     forAllSystems = fn: nixpkgs.lib.genAttrs systems (system: fn {pkgs = import nixpkgs {inherit system;};});

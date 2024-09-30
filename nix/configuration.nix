@@ -151,7 +151,9 @@ in {
     gio-sharp
     git
     glib
+    go_1_23
     go-migrate
+    goimports-reviser
     gopls
     gptscript
     grim # screenshot functionality
@@ -161,6 +163,7 @@ in {
     inputs.zen-browser.packages."${system}".specific
     jq
     kanata
+    keylight-controller-mschneider82
     kubectl
     kubectx
     kustomize
@@ -172,7 +175,15 @@ in {
     neovim
     nil
     nwg-look
-    obs-studio
+    (wrapOBS {
+      plugins = with pkgs.obs-studio-plugins; [
+        wlrobs
+        obs-backgroundremoval
+        obs-pipewire-audio-capture
+        obs-gstreamer
+        obs-vaapi
+      ];
+    })
     oh-my-posh
     pika-backup
     pkg-config
@@ -183,6 +194,7 @@ in {
     ripgrep
     sassc
     slurp # screenshot functionality
+    streamcontroller
     stow
     stylua
     templ
@@ -232,6 +244,14 @@ in {
   # Enable Bonjour
   services.avahi.enable = true;
   services.avahi.nssmdns4 = true;
+
+  services.postgresql = {
+    enable = true;
+    authentication = pkgs.lib.mkOverride 10 ''
+      #type database  DBuser  auth-method
+      local all       all     trust
+    '';
+  };
 
   # gnome
   services.xserver.enable = true;
