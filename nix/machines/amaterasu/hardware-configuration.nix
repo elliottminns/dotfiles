@@ -34,12 +34,25 @@
     extraPackages = with pkgs; [
       amdvlk
       rocmPackages.clr.icd
+      libva
+      libvdpau-va-gl
     ];
   };
 
-  services.xserver.videoDrivers = ["amdgpu"];
+  services.xserver.videoDrivers = [
+    "amdgpu"
+    "displaylink"
+    "modesetting"
+  ];
+
+  fileSystems."/mnt/video-assets" = {
+    device = "truenas:/video-assets";
+    fsType = "nfs";
+    options = ["x-systemd.automount" "noauto"];
+  };
 
   environment.systemPackages = [
     pkgs.clinfo
+    pkgs.displaylink
   ];
 }

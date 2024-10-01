@@ -154,6 +154,7 @@ in {
     go_1_23
     go-migrate
     goimports-reviser
+    golines
     gopls
     gptscript
     grim # screenshot functionality
@@ -194,6 +195,7 @@ in {
     ripgrep
     sassc
     slurp # screenshot functionality
+    sqlc
     streamcontroller
     stow
     stylua
@@ -250,6 +252,7 @@ in {
     authentication = pkgs.lib.mkOverride 10 ''
       #type database  DBuser  auth-method
       local all       all     trust
+      host  all       all     127.0.0.1/32 trust
     '';
   };
 

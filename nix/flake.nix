@@ -77,15 +77,15 @@
       {name = "chidori";}
       {
         name = "amaterasu";
-        monitors = [
-          {
-            name = "DP-2";
+        monitors = map (
+          name: {
+            name = name;
             width = "3840";
             height = "2160";
             scale = 2;
             framerate = 60;
           }
-        ];
+        ) ["DP-3"];
         cursor = 64;
       }
     ];

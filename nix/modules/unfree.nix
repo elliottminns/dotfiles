@@ -15,6 +15,7 @@
         pkgs.steam-original
         pkgs.obsidian
         pkgs.slack
+        pkgs.displaylink
       ]
     );
 
