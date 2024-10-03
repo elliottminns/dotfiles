@@ -22,6 +22,8 @@
   # with explicit per-interface declarations with `networking.interfaces.<interface>.useDHCP`.
   networking.useDHCP = lib.mkDefault true;
   # networking.interfaces.wlp5s0.useDHCP = lib.mkDefault true;
+  services.xserver.enable = true;
+  services.xserver.videoDrivers = ["amdgpu"];
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
@@ -32,4 +34,8 @@
       rocmPackages.clr.icd
     ];
   };
+
+  environment.systemPackages = [
+    pkgs.clinfo
+  ];
 }

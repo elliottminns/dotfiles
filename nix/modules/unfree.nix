@@ -1,6 +1,7 @@
 {
   pkgs,
   lib,
+  meta,
   ...
 }: {
   nixpkgs.config.allowUnfreePredicate = pkg:
@@ -16,6 +17,8 @@
         pkgs.obsidian
         pkgs.slack
         pkgs.displaylink
+        pkgs.davinci-resolve-studio
+        pkgs.davinci-resolve
       ]
     );
 
@@ -23,7 +26,7 @@
 
   environment.systemPackages = with pkgs; [
     discord
-    davinci-resolve
+    unstable.davinci-resolve
     unstable.keymapp
     obsidian
     signal-desktop

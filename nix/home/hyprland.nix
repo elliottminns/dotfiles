@@ -43,7 +43,7 @@ in {
     general = {
       gaps_out =
         if meta.name == "karasu"
-        then 0
+        then ""
         else "27,48,27,48";
       border_size = 2;
       "col.active_border" = "rgba(33ccffee) rgba(00ff99ee) 45deg";
@@ -114,6 +114,7 @@ in {
         "$mod, V, togglefloating"
         "$mod+SHIFT, F, fullscreen, 0"
         "$mod, R, exec, wofi --show drun"
+        "$mod, S, exec, grim"
         "$mod, P, pseudo"
         "$mod, J, togglesplit"
         "$mod, T, togglegroup"

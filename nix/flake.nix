@@ -74,7 +74,19 @@
         ];
         cursor = 64;
       }
-      {name = "chidori";}
+      {
+        name = "chidori";
+        monitors = [
+          {
+            name = "eDP-2";
+            width = "2560";
+            height = "1600";
+            scale = 1.6;
+            internal = true;
+          }
+        ];
+        curor = 64;
+      }
       {
         name = "amaterasu";
         monitors = map (
