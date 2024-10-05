@@ -6,8 +6,12 @@
   monitorLine = monitor:
     builtins.concatStringsSep "," [
       monitor.name
-      "${monitor.width}x${monitor.height}@${builtins.toString monitor.framerate}"
-      "0x0"
+      "${
+        if monitor ? dimensions
+        then monitor.dimensions
+        else "${monitor.width}x${monitor.height}"
+      }@${builtins.toString monitor.framerate}"
+      monitor.position
       (builtins.toString monitor.scale)
     ];
 

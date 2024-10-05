@@ -1,6 +1,7 @@
 {
   config,
   pkgs,
+  lib,
   ...
 }: {
   enable = true;
@@ -15,6 +16,7 @@
     clean = "clear";
   };
   initExtra = ''
+    ZSH_DISABLE_COMPFIX=true
     export EDITOR=nvim
     if [ -n "$TTY" ]; then
       export GPG_TTY=$(tty)
@@ -92,11 +94,16 @@
       src = pkgs.zsh-syntax-highlighting;
       file = "share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh";
     }
-    # {
-    #   name = "powerlevel10k";
-    #   src = pkgs.zsh-powerlevel10k;
-    #   file = "share/zsh-powerlevel10k/powerlevel10k.zsh-theme";
-    # }
+    {
+      name = "powerlevel10k";
+      src = pkgs.zsh-powerlevel10k;
+      file = "share/zsh-powerlevel10k/powerlevel10k.zsh-theme";
+    }
+    {
+      name = "powerlevel10k-config";
+      src = lib.cleanSource ../../.p10k.zsh;
+      file = "p10k.zsh";
+    }
     {
       name = "fzf-tab";
       src = pkgs.zsh-fzf-tab;

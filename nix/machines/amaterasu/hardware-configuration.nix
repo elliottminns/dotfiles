@@ -46,7 +46,7 @@
   ];
 
   fileSystems."/mnt/video-assets" = {
-    device = "truenas:/video-assets";
+    device = "truenas:/mnt/main/enc/video-assets";
     fsType = "nfs";
     options = ["x-systemd.automount" "noauto"];
   };

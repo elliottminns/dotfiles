@@ -6,6 +6,7 @@
   outputs,
   pkgs,
   meta,
+  lib,
   ...
 }: let
   my-kubernetes-helm = with pkgs;
@@ -141,9 +142,11 @@ in {
     awscli
     banana-cursor
     banana-cursor-dreams
+    bubblewrap
     calibre
     chromium
     clickgen
+    distrobox
     dotool
     eza
     firefox
@@ -162,6 +165,7 @@ in {
     hyprpaper
     hyprpicker
     inputs.zen-browser.packages."${system}".specific
+    imagemagick
     jq
     kanata
     keylight-controller-mschneider82
@@ -194,7 +198,7 @@ in {
     qemu
     ripgrep
     sassc
-    slurp # screenshot functionality
+    slurp
     sqlc
     streamcontroller
     stow
@@ -204,7 +208,7 @@ in {
     transmission_4-gtk
     typescript-language-server
     unzip
-    wl-clipboard # wl-copy and wl-paste for copy/paste from stdin / stdout
+    wl-clipboard
     wofi
     zenity
     zellij
@@ -216,7 +220,24 @@ in {
   # Virtualisation
   virtualisation.docker.enable = true;
   virtualisation.libvirtd.enable = true;
+  virtualisation.podman = {
+    enable = true;
+  };
+
   programs.virt-manager.enable = true;
+
+  # Steam
+  programs.steam = {
+    enable = true;
+    extraCompatPackages = [
+      pkgs.proton-ge-bin
+    ];
+    gamescopeSession = {
+      enable = true;
+    };
+  };
+
+  programs.gamemode.enable = true;
 
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
@@ -260,6 +281,15 @@ in {
   services.xserver.enable = true;
   services.xserver.displayManager.gdm.enable = true;
   services.xserver.desktopManager.gnome.enable = true;
+
+  xdg.portal = {
+    enable = true;
+    extraPortals = lib.mkForce [
+      pkgs.xdg-desktop-portal-gtk # For both
+      pkgs.xdg-desktop-portal-hyprland # For Hyprland
+      pkgs.xdg-desktop-portal-gnome # For GNOME
+    ];
+  };
 
   services.kanata = {
     enable = true;

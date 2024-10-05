@@ -89,15 +89,22 @@
       }
       {
         name = "amaterasu";
-        monitors = map (
-          name: {
-            name = name;
-            width = "3840";
-            height = "2160";
+        monitors = [
+          {
+            name = "desc:IDI Elgato Prom. 0x01348D27";
+            dimensions = "1024x600";
+            position = "-1024x0";
+            scale = 1;
+            framerate = 60;
+          }
+          {
+            name = "desc:BNQ BenQ RD320UA 49R01325019";
+            dimensions = "3840x2160";
+            position = "0x0";
             scale = 2;
             framerate = 60;
           }
-        ) ["DP-3"];
+        ];
         cursor = 64;
       }
     ];

@@ -2,6 +2,7 @@
   config,
   pkgs,
   meta,
+  lib,
   ...
 }: let
   inherit (config.lib.file) mkOutOfStoreSymlink;
@@ -36,7 +37,7 @@ in {
 
   programs = {
     tmux = import ./tmux.nix {inherit pkgs;};
-    zsh = import ./zsh.nix {inherit config pkgs;};
+    zsh = import ./zsh.nix {inherit config pkgs lib;};
     neovim = import ./neovim.nix {inherit config pkgs;};
     git = import ./git.nix {inherit config pkgs;};
     alacritty = import ./alacritty.nix {inherit config pkgs meta;};
@@ -45,10 +46,10 @@ in {
     zoxide = import ./zoxide.nix {inherit pkgs;};
     password-store = import ./pass.nix {inherit pkgs;};
     fzf = import ./fzf.nix {inherit pkgs;};
-    oh-my-posh = import ./oh-my-posh.nix {inherit pkgs;};
+    #oh-my-posh = import ./oh-my-posh.nix {inherit pkgs;};
   };
 
-  programs.atuin.enable = true;
+  #programs.atuin.enable = true;
 
   services = {
     hyprpaper = {
