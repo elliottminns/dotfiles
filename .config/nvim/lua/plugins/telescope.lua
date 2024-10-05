@@ -1,17 +1,17 @@
 return {
   {
     "nvim-telescope/telescope.nvim",
-    dependencies = { "nvim-treesitter/nvim-treesitter" },
+    dependencies = { "nvim-treesitter/nvim-treesitter", "nvim-lua/plenary.nvim" },
     cmd = "Telescope",
     init = function()
-      local builtin = require('telescope.builtin')
-      local wk = require('which-key')
+      local builtin = require("telescope.builtin")
+      local wk = require("which-key")
       wk.register({
-        ['ff'] = { builtin.find_files, "Find File" },
-        ['fb'] = { builtin.buffers, "Find Buffer" },
-        ['fg'] = { builtin.live_grep, "Find with Grep" },
-        ['fh'] = { builtin.help_tags, "Find Help" },
-        ['fn'] = { ":Telescope file_browser path=%:p:h select_buffer=true<CR>", "File Browser" },
+        ["ff"] = { builtin.find_files, "Find File" },
+        ["fb"] = { builtin.buffers, "Find Buffer" },
+        ["fg"] = { builtin.live_grep, "Find with Grep" },
+        ["fh"] = { builtin.help_tags, "Find Help" },
+        ["fn"] = { ":Telescope file_browser path=%:p:h select_buffer=true<CR>", "File Browser" },
       }, { prefix = "<leader>" })
     end,
     opts = function()
@@ -28,9 +28,9 @@ return {
             "--smart-case",
           },
           previewer = true,
-          file_previewer = require 'telescope.previewers'.vim_buffer_cat.new,
-          grep_previewer = require 'telescope.previewers'.vim_buffer_vimgrep.new,
-          qflist_previewer = require 'telescope.previewers'.vim_buffer_qflist.new,
+          file_previewer = require("telescope.previewers").vim_buffer_cat.new,
+          grep_previewer = require("telescope.previewers").vim_buffer_vimgrep.new,
+          qflist_previewer = require("telescope.previewers").vim_buffer_qflist.new,
         },
         extensions = {
           file_browser = {
@@ -39,12 +39,12 @@ return {
           },
         },
         extensions_list = {
-          "file_browser",
+         -- "file_browser",
         },
       }
     end,
     config = function(_, opts)
-      local telescope = require "telescope"
+      local telescope = require("telescope")
       telescope.setup(opts)
 
       -- load extensions
@@ -53,8 +53,8 @@ return {
       end
     end,
   },
-  {
-    "nvim-telescope/telescope-file-browser.nvim",
-    dependencies = { "nvim-telescope/telescope.nvim", "nvim-lua/plenary.nvim" }
-  },
+  --{
+  --   "nvim-telescope/telescope-file-browser.nvim",
+  --   dependencies = { "nvim-telescope/telescope.nvim", "nvim-lua/plenary.nvim" }
+  -- },
 }
