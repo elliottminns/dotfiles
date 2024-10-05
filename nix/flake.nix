@@ -70,6 +70,7 @@
             height = "1504";
             scale = 1.566667;
             framerate = 144;
+            transform = 0;
           }
         ];
         cursor = 64;
@@ -83,6 +84,7 @@
             height = "1600";
             scale = 1.6;
             internal = true;
+            transform = 0;
           }
         ];
         curor = 64;
@@ -96,6 +98,7 @@
             position = "-1024x0";
             scale = 1;
             framerate = 60;
+            transform = 0;
           }
           {
             name = "desc:BNQ BenQ RD320UA 49R01325019";
@@ -103,6 +106,15 @@
             position = "0x0";
             scale = 2;
             framerate = 60;
+            transform = 0;
+          }
+          {
+            name = "HDMI-A-1";
+            dimensions = "3840x2160";
+            position = "auto-right";
+            scale = 2;
+            framerate = 60;
+            transform = 1;
           }
         ];
         cursor = 64;

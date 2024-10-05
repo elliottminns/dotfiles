@@ -199,6 +199,7 @@ in {
     ripgrep
     sassc
     slurp
+    spotify
     sqlc
     streamcontroller
     stow

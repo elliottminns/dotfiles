@@ -13,6 +13,8 @@
       }@${builtins.toString monitor.framerate}"
       monitor.position
       (builtins.toString monitor.scale)
+      "transform"
+      (builtins.toString monitor.transform)
     ];
 
   lidScript = let
