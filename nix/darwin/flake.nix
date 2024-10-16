@@ -6,9 +6,16 @@
     nix-darwin.url = "github:LnL7/nix-darwin";
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
     nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
+
+    #Templ
     templ.url = "github:a-h/templ";
+
+    # Home Manager
     home-manager.url = "github:nix-community/home-manager/release-24.05";
     home-manager.inputs.nixpkgs.follows = "nixpkgs-unstable";
+
+    # Zen browser
+    zen-browser.url = "github:MarceColl/zen-browser-flake";
   };
 
   outputs = {
@@ -46,12 +53,14 @@
           pkgs.awscli
           pkgs.bun
           pkgs.ffmpeg
+          pkgs.jujutsu
           pkgs.git
           pkgs.gh
           pkgs.gnupg
           pkgs.unstable.go_1_23
           pkgs.iperf
           pkgs.lua-language-server
+          inputs.zen-browser.packages."aarch64-darwin".specific
           pkgs.mkalias
           pkgs.neovim
           pkgs.nil
@@ -67,6 +76,7 @@
           pkgs.unstable.stripe-cli
           pkgs.tailwindcss
           pkgs.tailwindcss-language-server
+          pkgs.qmk
           pkgs.templ
           pkgs.tmux
           pkgs.unstable.amber-lang
