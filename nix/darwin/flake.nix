@@ -13,9 +13,6 @@
     # Home Manager
     home-manager.url = "github:nix-community/home-manager/release-24.05";
     home-manager.inputs.nixpkgs.follows = "nixpkgs-unstable";
-
-    # Zen browser
-    zen-browser.url = "github:MarceColl/zen-browser-flake";
   };
 
   outputs = {
@@ -60,7 +57,6 @@
           pkgs.unstable.go_1_23
           pkgs.iperf
           pkgs.lua-language-server
-          inputs.zen-browser.packages."aarch64-darwin".specific
           pkgs.mkalias
           pkgs.neovim
           pkgs.nil
