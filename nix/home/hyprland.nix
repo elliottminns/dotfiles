@@ -32,6 +32,14 @@
           fi
       fi
     '';
+
+  exitScript =
+    pkgs.writeShellScript "exit.sh"
+    ''
+      if zenity --question --text="Do you wish to exit?"; then
+        hyprctl dispatch exit
+      fi
+    '';
 in {
   enable = true;
   settings = {
@@ -55,7 +63,7 @@ in {
       "col.active_border" = "rgba(33ccffee) rgba(00ff99ee) 45deg";
       "col.inactive_border" = "rgba(595959aa)";
       # Set to true enable resizing windows by clicking and dragging on borders and gaps
-      resize_on_border = false;
+      resize_on_border = true;
       # Please see https://wiki.hyprland.org/Configuring/Tearing/ before you turn this on
       allow_tearing = false;
       layout = "dwindle";
@@ -113,7 +121,7 @@ in {
       [
         "$mod, Return, exec, alacritty"
         "$mod, Q, killactive"
-        "$mod, M, exit"
+        "$mod, M, exec, ${exitScript}"
         "$mod, S, exec, grim"
         "$mod, F, exec, firefox"
         "$mod, E, exec, nautilus"
@@ -121,9 +129,10 @@ in {
         "$mod+SHIFT, F, fullscreen, 0"
         "$mod, R, exec, wofi --show drun"
         "$mod, S, exec, grim"
-        "$mod, P, pseudo"
+        "$mod, P, pin"
         "$mod, J, togglesplit"
         "$mod, T, togglegroup"
+        "$mod+ALT, R, resizeactive,"
         "$mod+ALT, J, changegroupactive, f"
         "$mod+ALT, K, changegroupactive, f"
         "$mod, left, movefocus, l"
