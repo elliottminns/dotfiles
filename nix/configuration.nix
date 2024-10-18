@@ -69,6 +69,9 @@ in {
     };
   };
 
+  services.mullvad-vpn.enable = true;
+  services.systembus-notify.enable = true;
+
   # List packages installed in system profile. To search, run:
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
@@ -135,6 +138,8 @@ in {
 
   security.sudo.wheelNeedsPassword = false;
 
+  hardware.keyboard.qmk.enable = true;
+
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     alejandra
@@ -147,7 +152,9 @@ in {
     chromium
     clickgen
     distrobox
+    dfu-programmer
     dotool
+    emacs
     eza
     firefox
     fzf
@@ -174,6 +181,7 @@ in {
     kustomize
     lua-language-server
     mako # notification system developed by swaywm maintainer
+    mullvad-vpn
     mm-common
     my-helmfile
     my-kubernetes-helm
@@ -191,11 +199,14 @@ in {
     })
     oh-my-posh
     pika-backup
+    python3
     pkg-config
     pop-gtk-theme
     postgresql
     protonvpn-cli
+    protonvpn-gui
     qemu
+    qmk
     ripgrep
     sassc
     slurp
@@ -209,8 +220,12 @@ in {
     transmission_4-gtk
     typescript-language-server
     unzip
+    wvkbd
+    wl-screenrec
+    wf-recorder
     wl-clipboard
     wofi
+    vlc
     zenity
     zellij
     zip
