@@ -40,6 +40,8 @@
       bold_italic = jetbrainsMono "Bold Italic";
     };
 
+    mouse.hide_when_typing = true;
+
     cursor = {
       style = "Block";
     };
