@@ -15,7 +15,7 @@
   boot.initrd.availableKernelModules = ["nvme" "xhci_pci" "ahci" "usb_storage" "usbhid" "sd_mod"];
   boot.initrd.kernelModules = ["dm-snapshot" "amdgpu"];
   boot.kernelModules = ["kvm-amd"];
-  boot.extraModulePackages = [];
+  boot.extraModulePackages = [pkgs.avc12-4k-capture];
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
   # (the default) this is the recommended approach. When using systemd-networkd it's
@@ -54,5 +54,6 @@
   environment.systemPackages = [
     pkgs.clinfo
     pkgs.displaylink
+    pkgs.rocmPackages.rocminfo
   ];
 }
