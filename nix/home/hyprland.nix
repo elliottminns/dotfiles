@@ -57,7 +57,7 @@ in {
     general = {
       gaps_out =
         if meta.name == "karasu"
-        then ""
+        then "0,0,0,0"
         else "27,48,27,48";
       border_size = 2;
       "col.active_border" = "rgba(33ccffee) rgba(00ff99ee) 45deg";
@@ -92,7 +92,10 @@ in {
       "easeInOutCubic,0.65,0,0.35,1"
     ];
     decoration = {
-      rounding = 16;
+      rounding =
+        if meta.name == "karasu"
+        then 0
+        else 16;
 
       # Change transparency of focused and unfocused windows
       active_opacity = 1.0;

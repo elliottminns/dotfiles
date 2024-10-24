@@ -64,11 +64,12 @@
         name = "karasu";
         monitors = [
           {
-            internal = true;
             name = "eDP-1";
             width = "2256";
             height = "1504";
+            position = "0x0";
             scale = 1.566667;
+            internal = true;
             framerate = 144;
             transform = 0;
           }
@@ -82,6 +83,7 @@
             name = "eDP-2";
             width = "2560";
             height = "1600";
+            position = "0x0";
             scale = 1.6;
             internal = true;
             transform = 0;
