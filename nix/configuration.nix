@@ -145,7 +145,7 @@ in {
     alejandra
     argocd
     awscli
-    banana-cursor
+    #banana-cursor
     banana-cursor-dreams
     bubblewrap
     calibre
@@ -169,10 +169,12 @@ in {
     gptscript
     grim # screenshot functionality
     gtk3
+    k6
     hyprpaper
     hyprpicker
     inputs.zen-browser.packages."${system}".specific
     imagemagick
+    iredis
     jq
     kanata
     keylight-controller-mschneider82
@@ -221,6 +223,8 @@ in {
     typescript-language-server
     unzip
     wvkbd
+    showmethekey
+    wshowkeys
     wl-screenrec
     wf-recorder
     wl-clipboard

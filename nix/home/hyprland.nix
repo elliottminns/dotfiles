@@ -10,7 +10,11 @@
         if monitor ? dimensions
         then monitor.dimensions
         else "${monitor.width}x${monitor.height}"
-      }@${builtins.toString monitor.framerate}"
+      }${
+        if monitor.dimensions == "preferred"
+        then ""
+        else "@${builtins.toString monitor.framerate}"
+      }"
       monitor.position
       (builtins.toString monitor.scale)
       "transform"
@@ -58,12 +62,12 @@ in {
       gaps_out =
         if meta.name == "karasu"
         then "0,0,0,0"
-        else "27,48,27,48";
+        else "27,27,27,27";
       border_size = 2;
       "col.active_border" = "rgba(33ccffee) rgba(00ff99ee) 45deg";
       "col.inactive_border" = "rgba(595959aa)";
       # Set to true enable resizing windows by clicking and dragging on borders and gaps
-      resize_on_border = true;
+      resize_on_border = false;
       # Please see https://wiki.hyprland.org/Configuring/Tearing/ before you turn this on
       allow_tearing = false;
       layout = "dwindle";
@@ -126,7 +130,7 @@ in {
         "$mod, Q, killactive"
         "$mod, M, exec, ${exitScript}"
         "$mod, S, exec, grim"
-        "$mod, F, exec, firefox"
+        "$mod, F, exec, zen"
         "$mod, E, exec, nautilus"
         "$mod, V, togglefloating"
         "$mod+SHIFT, F, fullscreen, 0"
@@ -163,6 +167,10 @@ in {
       );
     bindl = [
       '', switch:Lid Switch, exec, ${lidScript}''
+    ];
+    bindm = [
+      "$mod CTRL, mouse:272, resizewindow"
+      "$mod ALT, mouse:272, movewindow"
     ];
   };
   extraConfig = ''

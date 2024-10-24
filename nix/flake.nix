@@ -104,7 +104,7 @@
           }
           {
             name = "desc:BNQ BenQ RD320UA 49R01325019";
-            dimensions = "3840x2160";
+            dimensions = "preferred";
             position = "0x0";
             scale = 2;
             framerate = 60;
@@ -116,7 +116,7 @@
             position = "auto-right";
             scale = 2;
             framerate = 60;
-            transform = 1;
+            transform = 0;
           }
         ];
         cursor = 64;
