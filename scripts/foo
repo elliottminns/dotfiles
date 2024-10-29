@@ -1,0 +1,58 @@
+ffmpeg version 6.0 Copyright (c) 2000-2023 the FFmpeg developers
+  built with clang version 11.1.0
+  configuration: --disable-static --prefix=/nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-ffmpeg-6.0 --target_os=darwin --arch=aarch64 --pkg-config=pkg-config --enable-gpl --enable-version3 --disable-nonfree --enable-shared --enable-pic --disable-small --enable-runtime-cpudetect --disable-lto --disable-gray --enable-swscale-alpha --enable-hardcoded-tables --enable-safe-bitstream-reader --enable-pthreads --disable-w32threads --disable-os2threads --enable-network --enable-pixelutils --datadir=/nix/store/17lx3mpv240kg9xbfmq714q39a8wj64i-ffmpeg-6.0-data/share/ffmpeg --enable-ffmpeg --disable-ffplay --enable-ffprobe --bindir=/nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-ffmpeg-6.0-bin/bin --enable-avcodec --enable-avdevice --enable-avfilter --enable-avformat --enable-avutil --enable-postproc --enable-swresample --enable-swscale --libdir=/nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-ffmpeg-6.0-lib/lib --incdir=/nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-ffmpeg-6.0-dev/include --enable-doc --enable-htmlpages --enable-manpages --mandir=/nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-ffmpeg-6.0-man/share/man --enable-podpages --enable-txtpages --docdir=/nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-ffmpeg-6.0-doc/share/doc/ffmpeg --disable-alsa --enable-bzlib --disable-libcelt --disable-cuda --disable-cuda-llvm --enable-libdav1d --disable-libfdk-aac --disable-libflite --enable-fontconfig --enable-libfreetype --disable-frei0r --disable-libfribidi --disable-libgme --enable-gnutls --disable-libgsm --disable-ladspa --enable-libmp3lame --disable-libaom --enable-libass --disable-libbluray --disable-libbs2b --disable-libdc1394 --disable-libdrm --enable-iconv --disable-libjack --disable-libmfx --disable-libmodplug --disable-libmysofa --enable-libopus --disable-librsvg --enable-libsrt --enable-libssh --enable-libtheora --disable-libv4l2 --disable-v4l2-m2m --disable-vaapi --enable-vdpau --enable-libvorbis --disable-libvmaf --enable-libvpx --disable-libwebp --disable-xlib --disable-libxcb --disable-libxcb-shm --disable-libxcb-xfixes --disable-libxcb-shape --disable-libxml2 --enable-lzma --disable-cuvid --disable-nvdec --disable-nvenc --disable-openal --disable-opencl --disable-libopencore-amrnb --disable-opengl --disable-libopenh264 --disable-libopenjpeg --disable-libopenmpt --disable-libpulse --disable-librav1e --disable-libsvtav1 --disable-librtmp --enable-sdl2 --enable-libsoxr --enable-libspeex --disable-libvidstab --disable-libvo-amrwbenc --enable-libx264 --enable-libx265 --disable-libxavs --enable-libxvid --disable-libzmq --enable-libzimg --enable-zlib --disable-vulkan --disable-libglslang --disable-libsmbclient --disable-debug --enable-optimizations --disable-extra-warnings --disable-stripping --cc=clang --cxx=clang++
+  libavutil      58.  2.100 / 58.  2.100
+  libavcodec     60.  3.100 / 60.  3.100
+  libavformat    60.  3.100 / 60.  3.100
+  libavdevice    60.  1.100 / 60.  1.100
+  libavfilter     9.  3.100 /  9.  3.100
+  libswscale      7.  1.100 /  7.  1.100
+  libswresample   4. 10.100 /  4. 10.100
+  libpostproc    57.  1.100 / 57.  1.100
+ffmpeg version 6.0 Copyright (c) 2000-2023 the FFmpeg developers
+  built with clang version 11.1.0
+  configuration: --disable-static --prefix=/nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-ffmpeg-6.0 --target_os=darwin --arch=aarch64 --pkg-config=pkg-config --enable-gpl --enable-version3 --disable-nonfree --enable-shared --enable-pic --disable-small --enable-runtime-cpudetect --disable-lto --disable-gray --enable-swscale-alpha --enable-hardcoded-tables --enable-safe-bitstream-reader --enable-pthreads --disable-w32threads --disable-os2threads --enable-network --enable-pixelutils --datadir=/nix/store/17lx3mpv240kg9xbfmq714q39a8wj64i-ffmpeg-6.0-data/share/ffmpeg --enable-ffmpeg --disable-ffplay --enable-ffprobe --bindir=/nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-ffmpeg-6.0-bin/bin --enable-avcodec --enable-avdevice --enable-avfilter --enable-avformat --enable-avutil --enable-postproc --enable-swresample --enable-swscale --libdir=/nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-ffmpeg-6.0-lib/lib --incdir=/nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-ffmpeg-6.0-dev/include --enable-doc --enable-htmlpages --enable-manpages --mandir=/nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-ffmpeg-6.0-man/share/man --enable-podpages --enable-txtpages --docdir=/nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-ffmpeg-6.0-doc/share/doc/ffmpeg --disable-alsa --enable-bzlib --disable-libcelt --disable-cuda --disable-cuda-llvm --enable-libdav1d --disable-libfdk-aac --disable-libflite --enable-fontconfig --enable-libfreetype --disable-frei0r --disable-libfribidi --disable-libgme --enable-gnutls --disable-libgsm --disable-ladspa --enable-libmp3lame --disable-libaom --enable-libass --disable-libbluray --disable-libbs2b --disable-libdc1394 --disable-libdrm --enable-iconv --disable-libjack --disable-libmfx --disable-libmodplug --disable-libmysofa --enable-libopus --disable-librsvg --enable-libsrt --enable-libssh --enable-libtheora --disable-libv4l2 --disable-v4l2-m2m --disable-vaapi --enable-vdpau --enable-libvorbis --disable-libvmaf --enable-libvpx --disable-libwebp --disable-xlib --disable-libxcb --disable-libxcb-shm --disable-libxcb-xfixes --disable-libxcb-shape --disable-libxml2 --enable-lzma --disable-cuvid --disable-nvdec --disable-nvenc --disable-openal --disable-opencl --disable-libopencore-amrnb --disable-opengl --disable-libopenh264 --disable-libopenjpeg --disable-libopenmpt --disable-libpulse --disable-librav1e --disable-libsvtav1 --disable-librtmp --enable-sdl2 --enable-libsoxr --enable-libspeex --disable-libvidstab --disable-libvo-amrwbenc --enable-libx264 --enable-libx265 --disable-libxavs --enable-libxvid --disable-libzmq --enable-libzimg --enable-zlib --disable-vulkan --disable-libglslang --disable-libsmbclient --disable-debug --enable-optimizations --disable-extra-warnings --disable-stripping --cc=clang --cxx=clang++
+  libavutil      58.  2.100 / 58.  2.100
+  libavcodec     60.  3.100 / 60.  3.100
+  libavformat    60.  3.100 / 60.  3.100
+  libavdevice    60.  1.100 / 60.  1.100
+  libavfilter     9.  3.100 /  9.  3.100
+  libswscale      7.  1.100 /  7.  1.100
+  libswresample   4. 10.100 /  4. 10.100
+  libpostproc    57.  1.100 / 57.  1.100
+objc[3960]: class `NSKVONotifying_AVCaptureScreenInput' not linked into application
+objc[3960]: class `NSKVONotifying_AVCaptureScreenInput' not linked into application
+objc[3960]: class `NSKVONotifying_AVCaptureScreenInput' not linked into application
+[AVFoundation indev @ 0x12ef04bc0] Configuration of video device failed, falling back to default.
+[avfoundation @ 0x12ef04950] Selected pixel format (yuv420p) is not supported by the input device.
+[avfoundation @ 0x12ef04950] Supported pixel formats:
+[avfoundation @ 0x12ef04950]   uyvy422
+[avfoundation @ 0x12ef04950]   yuyv422
+[avfoundation @ 0x12ef04950]   nv12
+[avfoundation @ 0x12ef04950]   0rgb
+[avfoundation @ 0x12ef04950]   bgr0
+[avfoundation @ 0x12ef04950] Overriding selected pixel format to use uyvy422 instead.
+ffmpeg version 6.0 Copyright (c) 2000-2023 the FFmpeg developers
+  built with clang version 11.1.0
+  configuration: --disable-static --prefix=/nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-ffmpeg-6.0 --target_os=darwin --arch=aarch64 --pkg-config=pkg-config --enable-gpl --enable-version3 --disable-nonfree --enable-shared --enable-pic --disable-small --enable-runtime-cpudetect --disable-lto --disable-gray --enable-swscale-alpha --enable-hardcoded-tables --enable-safe-bitstream-reader --enable-pthreads --disable-w32threads --disable-os2threads --enable-network --enable-pixelutils --datadir=/nix/store/17lx3mpv240kg9xbfmq714q39a8wj64i-ffmpeg-6.0-data/share/ffmpeg --enable-ffmpeg --disable-ffplay --enable-ffprobe --bindir=/nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-ffmpeg-6.0-bin/bin --enable-avcodec --enable-avdevice --enable-avfilter --enable-avformat --enable-avutil --enable-postproc --enable-swresample --enable-swscale --libdir=/nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-ffmpeg-6.0-lib/lib --incdir=/nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-ffmpeg-6.0-dev/include --enable-doc --enable-htmlpages --enable-manpages --mandir=/nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-ffmpeg-6.0-man/share/man --enable-podpages --enable-txtpages --docdir=/nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-ffmpeg-6.0-doc/share/doc/ffmpeg --disable-alsa --enable-bzlib --disable-libcelt --disable-cuda --disable-cuda-llvm --enable-libdav1d --disable-libfdk-aac --disable-libflite --enable-fontconfig --enable-libfreetype --disable-frei0r --disable-libfribidi --disable-libgme --enable-gnutls --disable-libgsm --disable-ladspa --enable-libmp3lame --disable-libaom --enable-libass --disable-libbluray --disable-libbs2b --disable-libdc1394 --disable-libdrm --enable-iconv --disable-libjack --disable-libmfx --disable-libmodplug --disable-libmysofa --enable-libopus --disable-librsvg --enable-libsrt --enable-libssh --enable-libtheora --disable-libv4l2 --disable-v4l2-m2m --disable-vaapi --enable-vdpau --enable-libvorbis --disable-libvmaf --enable-libvpx --disable-libwebp --disable-xlib --disable-libxcb --disable-libxcb-shm --disable-libxcb-xfixes --disable-libxcb-shape --disable-libxml2 --enable-lzma --disable-cuvid --disable-nvdec --disable-nvenc --disable-openal --disable-opencl --disable-libopencore-amrnb --disable-opengl --disable-libopenh264 --disable-libopenjpeg --disable-libopenmpt --disable-libpulse --disable-librav1e --disable-libsvtav1 --disable-librtmp --enable-sdl2 --enable-libsoxr --enable-libspeex --disable-libvidstab --disable-libvo-amrwbenc --enable-libx264 --enable-libx265 --disable-libxavs --enable-libxvid --disable-libzmq --enable-libzimg --enable-zlib --disable-vulkan --disable-libglslang --disable-libsmbclient --disable-debug --enable-optimizations --disable-extra-warnings --disable-stripping --cc=clang --cxx=clang++
+  libavutil      58.  2.100 / 58.  2.100
+  libavcodec     60.  3.100 / 60.  3.100
+  libavformat    60.  3.100 / 60.  3.100
+  libavdevice    60.  1.100 / 60.  1.100
+  libavfilter     9.  3.100 /  9.  3.100
+  libswscale      7.  1.100 /  7.  1.100
+  libswresample   4. 10.100 /  4. 10.100
+  libpostproc    57.  1.100 / 57.  1.100
+objc[4639]: class `NSKVONotifying_AVCaptureScreenInput' not linked into application
+objc[4639]: class `NSKVONotifying_AVCaptureScreenInput' not linked into application
+objc[4639]: class `NSKVONotifying_AVCaptureScreenInput' not linked into application
+[AVFoundation indev @ 0x13b605dd0] Configuration of video device failed, falling back to default.
+[avfoundation @ 0x13b605b60] Selected pixel format (yuv420p) is not supported by the input device.
+[avfoundation @ 0x13b605b60] Supported pixel formats:
+[avfoundation @ 0x13b605b60]   uyvy422
+[avfoundation @ 0x13b605b60]   yuyv422
+[avfoundation @ 0x13b605b60]   nv12
+[avfoundation @ 0x13b605b60]   0rgb
+[avfoundation @ 0x13b605b60]   bgr0
+[avfoundation @ 0x13b605b60] Overriding selected pixel format to use uyvy422 instead.
+Received > 3 system signals, hard exiting
