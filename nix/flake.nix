@@ -83,13 +83,15 @@
             name = "eDP-2";
             width = "2560";
             height = "1600";
+            dimensions = "2560x1600";
             position = "0x0";
             scale = 1.6;
+            framerate = 60;
             internal = true;
             transform = 0;
           }
         ];
-        curor = 64;
+        cursor = 64;
       }
       {
         name = "amaterasu";
