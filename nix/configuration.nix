@@ -196,6 +196,7 @@ in {
     protonvpn-gui
     qemu
     qmk
+    rclone
     ripgrep
     sassc
     slurp
