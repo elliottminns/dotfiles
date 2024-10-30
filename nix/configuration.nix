@@ -47,6 +47,7 @@ in {
       # Add overlays your own flake exports (from overlays and pkgs dir):
       outputs.overlays.additions
       outputs.overlays.unstable
+      outputs.overlays.modifications
       inputs.templ.overlays.default
       inputs.alacritty-theme.overlays.default
 
@@ -103,20 +104,6 @@ in {
     openmoji-color
   ];
 
-  # Configure keymap in X11
-  # services.xserver.xkb.layout = "us";
-  # services.xserver.xkb.options = "eurosign:e,caps:escape";
-
-  # Enable CUPS to print documents.
-  # services.printing.enable = true;
-
-  # Enable sound.
-  # sound.enable = true;
-  # hardware.pulseaudio.enable = true;
-
-  # Enable touchpad support (enabled default in most desktopManager).
-  # services.xserver.libinput.enable = true;
-
   # Define a user account. Don't forget to set a password with ‘passwd’.
   users.users.elliott = {
     isNormalUser = true;
@@ -161,7 +148,7 @@ in {
     gio-sharp
     git
     glib
-    go_1_23
+    unstable.go_1_23
     go-migrate
     goimports-reviser
     golines

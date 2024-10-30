@@ -90,6 +90,8 @@ in {
       "QT_QPA_PLATFORMTHEME,qt6ct"
       "HYPRCURSOR_SIZE,${builtins.toString meta.cursor}"
       "XCURSOR_SIZE,${builtins.toString meta.cursor}"
+      "QT_QPA_PLATFORM,wayland"
+      "MOZ_ENABLE_WAYLAND,1"
     ];
     monitor = map monitorLine meta.monitors;
     bezier = [
