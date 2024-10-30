@@ -112,7 +112,7 @@
             transform = 0;
           }
           {
-            name = "HDMI-A-1";
+            name = "desc:Invalid Vendor Codename - RTK J584T05 0x20231127";
             dimensions = "3840x2160";
             position = "auto-right";
             scale = 2;
