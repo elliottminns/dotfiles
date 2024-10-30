@@ -20,9 +20,13 @@
       decorations_theme_variant = "None";
     };
 
-    import = [
-      pkgs.alacritty-theme.tokyo-night
-    ];
+    general = {
+      import = [
+        pkgs.alacritty-theme.tokyo-night
+      ];
+
+      live_config_reload = true;
+    };
 
     font = let
       jetbrainsMono = style: {
@@ -49,7 +53,5 @@
     env = {
       TERM = "xterm-256color";
     };
-
-    live_config_reload = true;
   };
 }
