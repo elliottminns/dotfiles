@@ -25,7 +25,7 @@
 
   environment.systemPackages = with pkgs; [
     discord
-    unstable.davinci-resolve-studio
+    unstable.davinci-resolve
     unstable.keymapp
     obsidian
     signal-desktop

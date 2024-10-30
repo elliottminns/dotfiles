@@ -23,7 +23,10 @@
   networking.useDHCP = lib.mkDefault true;
   # networking.interfaces.wlp5s0.useDHCP = lib.mkDefault true;
   services.xserver.enable = true;
-  services.xserver.videoDrivers = ["amdgpu"];
+  services.xserver.videoDrivers = [
+    "amdgpu"
+    "modesetting"
+  ];
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
@@ -32,10 +35,13 @@
     extraPackages = with pkgs; [
       amdvlk
       rocmPackages.clr.icd
+      libva
+      libvdpau-va-gl
     ];
   };
 
   environment.systemPackages = [
     pkgs.clinfo
+    pkgs.rocmPackages.rocminfo
   ];
 }

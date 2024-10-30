@@ -6,7 +6,7 @@
 }: {
   environment.systemPackages = with pkgs; [
     mangohud
-    retroarchFull
+    #retroarchFull
     protonup
     lutris
   ];
