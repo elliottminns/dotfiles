@@ -65,8 +65,7 @@
         monitors = [
           {
             name = "eDP-1";
-            width = "2256";
-            height = "1504";
+            dimensions = "preferred";
             position = "0x0";
             scale = 1.566667;
             internal = true;

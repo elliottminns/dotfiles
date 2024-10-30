@@ -63,7 +63,10 @@ in {
         if meta.name == "karasu"
         then "0,0,0,0"
         else "27,27,27,27";
-      border_size = 2;
+      border_size =
+        if meta.name == "karasu"
+        then 0
+        else 2;
       "col.active_border" = "rgba(33ccffee) rgba(00ff99ee) 45deg";
       "col.inactive_border" = "rgba(595959aa)";
       # Set to true enable resizing windows by clicking and dragging on borders and gaps

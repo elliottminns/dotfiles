@@ -57,12 +57,10 @@ in {
       settings = {
         preload = [
           "$HOME/.dotfiles/wallpapers/purple-bokah.jpg"
+          "$HOME/.dotfiles/wallpapers/abstract.png"
         ];
 
-        wallpaper = [
-          "eDP-2,$HOME/.dotfiles/wallpapers/purple-bokah.jpg"
-          "DP-1,$HOME/.dotfiles/wallpapers/purple-bokah.jpg"
-        ];
+        wallpaper = map (monitor: "${monitor.name},$HOME/.dotfiles/wallpapers/abstract.png") meta.monitors;
       };
     };
   };
