@@ -60,13 +60,13 @@ in {
     };
     general = {
       gaps_out =
-        if meta.name == "karasu"
-        then "0,0,0,0"
-        else "27,27,27,27";
+        if meta.gaps
+        then "27,27,27,27"
+        else "0,0,0,0";
       border_size =
-        if meta.name == "karasu"
-        then 0
-        else 2;
+        if meta.gaps
+        then 2
+        else 0;
       "col.active_border" = "rgba(33ccffee) rgba(00ff99ee) 45deg";
       "col.inactive_border" = "rgba(595959aa)";
       # Set to true enable resizing windows by clicking and dragging on borders and gaps
@@ -102,9 +102,9 @@ in {
     ];
     decoration = {
       rounding =
-        if meta.name == "karasu"
-        then 0
-        else 16;
+        if meta.gaps
+        then 16
+        else 0;
 
       # Change transparency of focused and unfocused windows
       active_opacity = 1.0;

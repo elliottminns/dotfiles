@@ -148,7 +148,6 @@ in {
     gio-sharp
     git
     glib
-    unstable.go_1_23
     go-migrate
     goimports-reviser
     golines

@@ -2,7 +2,7 @@
   environment.systemPackages = with pkgs; [
     elixir
     gcc
-    unstable.go_1_22
+    unstable.go_1_23
     nodejs
     rustup
     yarn

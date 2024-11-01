@@ -62,6 +62,7 @@
       {name = "itachi";}
       {
         name = "karasu";
+        gaps = false;
         monitors = [
           {
             name = "eDP-1";
@@ -77,6 +78,7 @@
       }
       {
         name = "chidori";
+        gaps = false;
         monitors = [
           {
             name = "eDP-2";
@@ -94,6 +96,7 @@
       }
       {
         name = "amaterasu";
+        gaps = true;
         monitors = [
           {
             name = "desc:IDI Elgato Prom. 0x01348D27";
