@@ -215,7 +215,6 @@ in {
     showmethekey
     wshowkeys
     wl-screenrec
-    unstable.wf-recorder
     wl-clipboard
     wofi
     vlc

@@ -21,7 +21,7 @@ class Recorder extends Service {
     timer = 0
 
     async start() {
-        if (!dependencies("slurp", "wf-recorder"))
+        if (!dependencies("slurp", "wl-screenrecord"))
             return
 
         if (this.recording)
@@ -29,7 +29,7 @@ class Recorder extends Service {
 
         Utils.ensureDirectory(this.#recordings)
         this.#file = `${this.#recordings}/${now()}.mp4`
-        sh(`wf-recorder -g "${await sh("slurp")}" -f ${this.#file} --pixel-format yuv420p`)
+        sh(`$HOME/scripts/screenrecord-start.sh`)
 
         this.recording = true
         this.changed("recording")
@@ -45,7 +45,7 @@ class Recorder extends Service {
         if (!this.recording)
             return
 
-        await bash("killall -INT wf-recorder")
+        await sh(`$HOME/scripts/screenrecord-end.sh`)
         this.recording = false
         this.changed("recording")
         GLib.source_remove(this.#interval)
