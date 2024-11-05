@@ -73,6 +73,9 @@ in {
   services.mullvad-vpn.enable = true;
   services.systembus-notify.enable = true;
 
+  # Use the latest linux kernel.
+  boot.kernelPackages = pkgs.linuxPackages_latest;
+
   # List packages installed in system profile. To search, run:
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
@@ -160,7 +163,6 @@ in {
     hyprpicker
     inputs.zen-browser.packages."${system}".specific
     imagemagick
-    iredis
     jq
     kanata
     keylight-controller-mschneider82
@@ -213,7 +215,7 @@ in {
     showmethekey
     wshowkeys
     wl-screenrec
-    wf-recorder
+    unstable.wf-recorder
     wl-clipboard
     wofi
     vlc

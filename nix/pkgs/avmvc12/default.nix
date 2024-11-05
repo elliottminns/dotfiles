@@ -6,7 +6,7 @@
   nukeReferences,
 }:
 stdenv.mkDerivation rec {
-  pname = "avmvc12-${version}-${pkgs.linuxPackages.kernel.version}";
+  pname = "avmvc12-${version}-${pkgs.linuxPackages_latest.kernel.version}";
   version = "1.0";
 
   src = fetchFromGitHub {
@@ -20,19 +20,19 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = ["pic"];
 
-  nativeBuildInputs = [nukeReferences] ++ [pkgs.linuxPackages.kernel.moduleBuildDependencies];
+  nativeBuildInputs = [nukeReferences] ++ [pkgs.linuxPackages_latest.kernel.moduleBuildDependencies];
 
   makeFlags = [
-    "KERNELRELEASE=${pkgs.linuxPackages.kernel.modDirVersion}"
-    "KERNELDIR=${pkgs.linuxPackages.kernel.dev}/lib/modules/${pkgs.linuxPackages.kernel.modDirVersion}/build"
+    "KERNELRELEASE=${pkgs.linuxPackages_latest.kernel.modDirVersion}"
+    "KERNELDIR=${pkgs.linuxPackages_latest.kernel.dev}/lib/modules/${pkgs.linuxPackages_latest.kernel.modDirVersion}/build"
     "INSTALL_MOD_PATH=$(out)"
   ];
 
   installPhase = ''
-    mkdir -p $out/lib/modules/${pkgs.linuxPackages.kernel.modDirVersion}/drivers/misc
+    mkdir -p $out/lib/modules/${pkgs.linuxPackages_latest.kernel.modDirVersion}/drivers/misc
     for x in $(find . -name '*.ko'); do
       nuke-refs $x
-      cp $x $out/lib/modules/${pkgs.linuxPackages.kernel.modDirVersion}/drivers/misc/
+      cp $x $out/lib/modules/${pkgs.linuxPackages_latest.kernel.modDirVersion}/drivers/misc/
     done
   '';
 
