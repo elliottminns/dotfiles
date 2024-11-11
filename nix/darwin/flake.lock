@@ -165,30 +165,13 @@
         "type": "github"
       }
     },
-    "nixpkgs_3": {
-      "locked": {
-        "lastModified": 1727348695,
-        "narHash": "sha256-J+PeFKSDV+pHL7ukkfpVzCOO7mBSrrpJ3svwBFABbhI=",
-        "owner": "nixos",
-        "repo": "nixpkgs",
-        "rev": "1925c603f17fc89f4c8f6bf6f631a802ad85d784",
-        "type": "github"
-      },
-      "original": {
-        "owner": "nixos",
-        "ref": "nixos-unstable",
-        "repo": "nixpkgs",
-        "type": "github"
-      }
-    },
     "root": {
       "inputs": {
         "home-manager": "home-manager",
         "nix-darwin": "nix-darwin",
         "nixpkgs": "nixpkgs",
         "nixpkgs-unstable": "nixpkgs-unstable",
-        "templ": "templ",
-        "zen-browser": "zen-browser"
+        "templ": "templ"
       }
     },
     "systems": {
@@ -246,24 +229,6 @@
       "original": {
         "owner": "joerdav",
         "repo": "xc",
-        "type": "github"
-      }
-    },
-    "zen-browser": {
-      "inputs": {
-        "nixpkgs": "nixpkgs_3"
-      },
-      "locked": {
-        "lastModified": 1729027079,
-        "narHash": "sha256-jxzVFcZybNHBnWZtuhPVubxw+qS17L63Y7hUGoitiVk=",
-        "owner": "0xc000022070",
-        "repo": "zen-browser-flake",
-        "rev": "c484b49834b8f7f275a3005bd63ae9113ea37ab6",
-        "type": "github"
-      },
-      "original": {
-        "owner": "0xc000022070",
-        "repo": "zen-browser-flake",
         "type": "github"
       }
     }
