@@ -1,7 +1,7 @@
 return {
 	ensure_installed = {
 		"gofumpt",
-		"goimports",
+		"goimports-reviser",
 		"golines",
 		"gopls",
 		"lua-language-server",

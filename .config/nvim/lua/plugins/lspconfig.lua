@@ -7,6 +7,14 @@ return {
 			local capabilities = vim.lsp.protocol.make_client_capabilities()
 			capabilities = vim.tbl_deep_extend("force", capabilities, require("cmp_nvim_lsp").default_capabilities())
 
+			local on_attach = function(client, bufnr)
+				-- other configuration options
+				vim.api.nvim_create_autocmd(
+					{ "BufWritePre" },
+					{ pattern = { "*.templ" }, callback = vim.lsp.buf.format }
+				)
+			end
+
 			lspconfig.lua_ls.setup({
 				settings = {
 					Lua = {
@@ -33,18 +41,39 @@ return {
 			})
 
 			lspconfig.tailwindcss.setup({
+				on_attach = on_attach,
+				capabilities = capabilities,
+				filetypes = { "templ", "astro", "javascript", "typescript", "react" },
 				settings = {
-					includeLanguages = {
-						templ = "html",
+					tailwindCSS = {
+						includeLanguages = {
+							templ = "html",
+						},
 					},
 				},
 			})
 
-			lspconfig.templ.setup({})
+			lspconfig.templ.setup({
+				on_attach = on_attach,
+				capabilities = capabilities,
+			})
 
-			lspconfig.nil_ls.setup({})
+			lspconfig.nil_ls.setup({
+				on_attach = on_attach,
+				capabilities = capabilities,
+			})
 
-			lspconfig.tsserver.setup({})
+			lspconfig.ts_ls.setup({})
+
+			lspconfig.html.setup({
+				capabilities = capabilities,
+				filetypes = { "html", "templ" },
+			})
+
+			lspconfig.htmx.setup({
+				capabilities = capabilities,
+				filetypes = { "html", "templ" },
+			})
 		end,
 	},
 }
