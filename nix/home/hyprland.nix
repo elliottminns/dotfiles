@@ -62,7 +62,7 @@ in {
       gaps_out =
         if meta.gaps
         then "27,27,27,27"
-        else "0,0,0,0";
+        else 0;
       border_size =
         if meta.gaps
         then 2
