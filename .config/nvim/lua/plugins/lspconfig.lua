@@ -7,12 +7,10 @@ return {
 			local capabilities = vim.lsp.protocol.make_client_capabilities()
 			capabilities = vim.tbl_deep_extend("force", capabilities, require("cmp_nvim_lsp").default_capabilities())
 
-			local on_attach = function(client, bufnr)
+			vim.api.nvim_create_autocmd({ "BufWritePre" }, { pattern = { "*.templ" }, callback = vim.lsp.buf.format })
+
+			local on_attach = function(_client, _bufnr)
 				-- other configuration options
-				vim.api.nvim_create_autocmd(
-					{ "BufWritePre" },
-					{ pattern = { "*.templ" }, callback = vim.lsp.buf.format }
-				)
 			end
 
 			lspconfig.lua_ls.setup({
