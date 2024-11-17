@@ -3,7 +3,7 @@
     air
     elixir
     gcc
-    laravel
+    #laravel
     htmx-lsp
     unstable.go_1_23
     nodejs
