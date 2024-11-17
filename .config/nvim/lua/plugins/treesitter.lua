@@ -26,7 +26,7 @@ return {
 			}
 			parser_config.templ = {
 				install_info = {
-					url = "https://github.com/tree-sitter-templ",
+					url = "https://github.com/vrischmann/tree-sitter-templ",
 					files = { "src/parser.c" },
 					branch = "master",
 				},
@@ -49,8 +49,8 @@ return {
 			require("nvim-ts-autotag").setup({
 				opts = {
 					-- Defaults
-					enable_close = true, -- Auto close tags
-					enable_rename = true, -- Auto rename pairs of tags
+					enable_close = true,      -- Auto close tags
+					enable_rename = true,     -- Auto rename pairs of tags
 					enable_close_on_slash = false, -- Auto close on trailing </
 				},
 				-- Also override individual filetype configs, these take priority.

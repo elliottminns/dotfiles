@@ -5,7 +5,6 @@ return {
     "pkl",
     "rust",
     "gleam",
-    "templ",
     "svelte",
     "typescript",
     "javascript",
