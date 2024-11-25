@@ -15,6 +15,7 @@ if not vim.loop.fs_stat(lazypath) then
 	})
 end
 
+vim.g.lua_snippets_path = vim.fn.stdpath("config") .. "/lua/snippets/"
 vim.cmd("au BufRead,BufNewFile *.templ setfiletype templ")
 local autocmd = vim.api.nvim_create_autocmd
 

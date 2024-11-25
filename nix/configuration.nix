@@ -155,7 +155,6 @@ in {
     go-migrate
     goimports-reviser
     golines
-    gopls
     gptscript
     grim # screenshot functionality
     gtk3

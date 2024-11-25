@@ -5,7 +5,8 @@
     gcc
     #    laravel
     htmx-lsp
-    unstable.go_1_23
+    go_1_23
+    gopls
     nodejs
     rustup
     yarn

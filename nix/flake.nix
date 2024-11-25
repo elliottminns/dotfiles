@@ -19,15 +19,19 @@
 
     # Alacritty theme
     alacritty-theme.url = "github:alexghr/alacritty-theme.nix";
+    alacritty-theme.inputs.nixpkgs.follows = "nixpkgs";
 
     # Templ
     templ.url = "github:a-h/templ";
+    templ.inputs.nixpkgs.follows = "nixpkgs";
 
     # Ags
     ags.url = "github:Aylur/ags";
+    ags.inputs.nixpkgs.follows = "nixpkgs";
 
     # Matugen
     matugen.url = "github:InioX/matugen?ref=v2.2.0";
+    matugen.inputs.nixpkgs.follows = "nixpkgs";
 
     # NixVim
     nixvim.url = "github:nix-community/nixvim";
