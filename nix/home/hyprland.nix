@@ -110,10 +110,10 @@ in {
       active_opacity = 1.0;
       inactive_opacity = 1.0;
 
-      drop_shadow = true;
-      shadow_range = 4;
-      shadow_render_power = 3;
-      "col.shadow" = "rgba(1a1a1aee)";
+      #drop_shadow = true;
+      #shadow_range = 4;
+      #shadow_render_power = 3;
+      #"col.shadow" = "rgba(1a1a1aee)";
 
       blur = {
         enabled = true;
@@ -155,6 +155,8 @@ in {
         "$mod, l, movefocus, r"
         "$mod, k, movefocus, u"
         "$mod, j, movefocus, d"
+        "CTRL, left, workspace, -1"
+        "CTRL, right, workspace, +1"
       ]
       ++ (
         builtins.concatLists (builtins.genList (

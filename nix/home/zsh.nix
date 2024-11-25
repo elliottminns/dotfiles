@@ -77,6 +77,7 @@
     plugins = [
       "git"
       "sudo"
+      "docker"
       "golang"
       "kubectl"
       "kubectx"

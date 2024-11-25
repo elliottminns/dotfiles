@@ -132,13 +132,14 @@ in {
 
   # $ nix search wget
   environment.systemPackages = with pkgs; [
+    act
     alejandra
     argocd
     awscli
     #banana-cursor
     banana-cursor-dreams
     bubblewrap
-    calibre
+    #calibre
     chromium
     clickgen
     distrobox
