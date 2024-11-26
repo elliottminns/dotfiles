@@ -47,6 +47,7 @@
         [
           pkgs.alacritty
           pkgs.air
+          pkgs.act
           pkgs.awscli
           pkgs.bun
           pkgs.ffmpeg
