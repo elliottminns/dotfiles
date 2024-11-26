@@ -6,6 +6,8 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     #nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.05";
 
+    nixos-hardware.url = "github:NixOs/nixos-hardware/master";
+
     # Unstable Packages
     nixpkgs-unstable.url = "github:nixos/nixpkgs/nixos-unstable";
 
@@ -49,6 +51,7 @@
     alacritty-theme,
     templ,
     nixpkgs-unstable,
+    nixos-hardware,
     ags,
     ...
   } @ inputs: let
@@ -66,6 +69,7 @@
       {name = "itachi";}
       {
         name = "karasu";
+        hardware = nixos-hardware.nixosModules.framework-13-7040-amd;
         gaps = false;
         monitors = [
           {
@@ -149,26 +153,32 @@
             };
           };
           system = "x86_64-linux";
-          modules = [
-            # Modules
-            disko.nixosModules.disko
-            # System Specific
-            ./machines/${host.name}/hardware-configuration.nix
-            ./machines/${host.name}/disko-config.nix
-            # General
-            ./configuration.nix
-            # Home Manager
-            home-manager.nixosModules.home-manager
-            {
-              home-manager.useGlobalPkgs = true;
-              home-manager.useUserPackages = true;
-              home-manager.users.elliott = import ./home/home.nix;
-              home-manager.extraSpecialArgs = {
-                inherit inputs;
-                meta = host;
-              };
-            }
-          ];
+          modules =
+            [
+              # Modules
+              disko.nixosModules.disko
+              # System Specific
+              ./machines/${host.name}/hardware-configuration.nix
+              ./machines/${host.name}/disko-config.nix
+              # General
+              ./configuration.nix
+              # Home Manager
+              home-manager.nixosModules.home-manager
+              {
+                home-manager.useGlobalPkgs = true;
+                home-manager.useUserPackages = true;
+                home-manager.users.elliott = import ./home/home.nix;
+                home-manager.extraSpecialArgs = {
+                  inherit inputs;
+                  meta = host;
+                };
+              }
+            ]
+            ++ (
+              if host.hardware != null
+              then [host.hardware]
+              else []
+            );
         };
       })
       hosts);
