@@ -74,7 +74,7 @@ ls.add_snippets("go", {
 
 	s("iferr", {
 		t({ "if err != nil {", "" }),
-		i(1, "return"),
+		i(1, "  return"),
 		t({ "", "}" }),
 	}),
 
