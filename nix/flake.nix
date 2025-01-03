@@ -85,6 +85,24 @@
         cursor = 64;
       }
       {
+        name = "zen13";
+        hardware = nixos-hardware.nixosModules.framework-13-7040-amd;
+        gaps = false;
+        monitors = [
+          {
+            name = "eDP-1";
+            dimensions = "preferred";
+            position = "0x0";
+            scale = 1.566667;
+            internal = true;
+            framerate = 144;
+            transform = 0;
+          }
+        ];
+        cursor = 64;
+      }
+
+      {
         name = "chidori";
         gaps = false;
         monitors = [
