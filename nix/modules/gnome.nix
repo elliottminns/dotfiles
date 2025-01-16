@@ -3,8 +3,8 @@
   services.gnome.gnome-online-accounts.enable = true;
 
   environment.systemPackages = with pkgs; [
-    pkgs.networkmanager-openvpn
-    gnome.gnome-shell-extensions
+    networkmanager-openvpn
+    gnome-shell-extensions
     gnomeExtensions.tiling-assistant
     gnomeExtensions.window-calls
   ];

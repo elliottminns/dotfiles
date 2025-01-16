@@ -103,7 +103,7 @@ in {
   };
 
   fonts.packages = with pkgs; [
-    (nerdfonts.override {fonts = ["JetBrainsMono"];})
+    unstable.nerd-fonts.jetbrains-mono
     openmoji-color
   ];
 
@@ -143,13 +143,12 @@ in {
     chromium
     clickgen
     distrobox
-    dfu-programmer
     dotool
+    doppler
     emacs
     eza
     firefox
     fzf
-    gio-sharp
     git
     glib
     go-migrate
@@ -161,6 +160,7 @@ in {
     k6
     hyprpaper
     hyprpicker
+    unstable.ghostty
     inputs.zen-browser.packages."${system}".specific
     imagemagick
     jq

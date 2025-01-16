@@ -123,6 +123,7 @@
       {
         name = "amaterasu";
         gaps = true;
+        hardware = null;
         monitors = [
           {
             name = "desc:IDI Elgato Prom. 0x01348D27";
