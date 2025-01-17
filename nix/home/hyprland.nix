@@ -44,6 +44,34 @@
         hyprctl dispatch exit
       fi
     '';
+
+  gapsScript =
+    pkgs.writeShellScript "gaps.sh"
+    ''
+      # Get current gaps values
+      CURRENT_GAPS_IN=$(hyprctl getoption general:gaps_in -j | jq '.custom')
+      CURRENT_GAPS_OUT=$(hyprctl getoption general:gaps_out -j | jq '.custom')
+
+      if [ "$CURRENT_GAPS_OUT" -eq "0" ]; then
+      # If gaps are 0, set them back to default values
+      hyprctl keyword general:gaps_out "27,27,27,27"
+      hyprctl keyword general:border_size "2"
+      hyprctl keyword decoration:rounding "16"
+      else
+      # If gaps exist, set them to 0
+      hyprctl keyword general:gaps_out 0
+      hyprctl keyword general:border_size "0"
+      hyprctl keyword decoration:rounding "0"
+      fi
+    '';
+
+  leftGaps =
+    pkgs.writeShellScript "leftgaps.sh"
+    ''
+      hyprctl keyword general:gaps_out "0,500,0,0"
+      hyprctl keyword general:border_size "0"
+      hyprctl keyword decoration:rounding "0"
+    '';
 in {
   enable = true;
   settings = {
@@ -139,6 +167,8 @@ in {
         "$mod, E, exec, nautilus"
         "$mod, V, togglefloating"
         "$mod+SHIFT, F, fullscreen, 0"
+        "$mod+SHIFT, G, exec, ${gapsScript}"
+        "$mod+SHIFT, L, exec, ${leftGaps}"
         "$mod, R, exec, wofi --show drun"
         "$mod, S, exec, grim"
         "$mod, P, pin"
