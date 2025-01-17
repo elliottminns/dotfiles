@@ -103,7 +103,7 @@ in {
   };
 
   fonts.packages = with pkgs; [
-    unstable.nerd-fonts.jetbrains-mono
+    nerd-fonts.jetbrains-mono
     openmoji-color
   ];
 
@@ -188,6 +188,7 @@ in {
       ];
     })
     oh-my-posh
+    openssl
     pika-backup
     python3
     pkg-config
@@ -204,6 +205,7 @@ in {
     spotify
     sqlc
     streamcontroller
+    unstable.stripe-cli
     stow
     stylua
     templ
@@ -223,6 +225,7 @@ in {
     zip
     avahi
     nssmdns
+    railway
   ];
 
   # Virtualisation
@@ -319,15 +322,16 @@ in {
           )
           (defalias
            caps (tap-hold 100 100 esc lctl)
-           a (tap-hold $tap-time $hold-time a lmet)
-           s (tap-hold $tap-time $hold-time s lalt)
-           d (tap-hold $tap-time $hold-time d lsft)
-           f (tap-hold $tap-time $hold-time f lctl)
-           j (tap-hold $tap-time $hold-time j rctl)
-           k (tap-hold $tap-time $hold-time k rsft)
-           l (tap-hold $tap-time $hold-time l ralt)
-           ; (tap-hold $tap-time $hold-time ; rmet)
+           a (multi f24 (tap-hold $tap-time $hold-time a lmet))
+           s (multi f24 (tap-hold $tap-time $hold-time s lalt))
+           d (multi f24 (tap-hold $tap-time $hold-time d lsft))
+           f (multi f24 (tap-hold $tap-time $hold-time f lctl))
+           j (multi f24 (tap-hold $tap-time $hold-time j rctl))
+           k (multi f24 (tap-hold $tap-time $hold-time k rsft))
+           l (multi f24 (tap-hold $tap-time $hold-time l ralt))
+           ; (multi f24 (tap-hold $tap-time $hold-time ; rmet))
           )
+
 
           (deflayer base
            @caps @a  @s  @d  @f  @j  @k  @l  @;
