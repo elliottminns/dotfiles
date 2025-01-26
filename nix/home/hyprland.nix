@@ -52,7 +52,7 @@
       CURRENT_GAPS_IN=$(hyprctl getoption general:gaps_in -j | jq '.custom')
       CURRENT_GAPS_OUT=$(hyprctl getoption general:gaps_out -j | jq '.custom')
 
-      if [ "$CURRENT_GAPS_OUT" -eq "0" ]; then
+      if [ "$CURRENT_GAPS_OUT" -eq "0 0 0 0" ]; then
       # If gaps are 0, set them back to default values
       hyprctl keyword general:gaps_out "27,27,27,27"
       hyprctl keyword general:border_size "2"

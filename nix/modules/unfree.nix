@@ -18,6 +18,7 @@
         pkgs.displaylink
         pkgs.davinci-resolve-studio
         pkgs.davinci-resolve
+        pkgs.reaper
       ]
     );
 
@@ -30,6 +31,7 @@
       obsidian
       signal-desktop
       slack
+      reaper
     ]
     ++ (
       if meta.hostname == "amaterasu"

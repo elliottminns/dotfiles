@@ -89,12 +89,12 @@
     ];
   };
   plugins = [
-    {
-      # will source zsh-autosuggestions.plugin.zsh
-      name = "zsh-autosuggestions";
-      src = pkgs.zsh-autosuggestions;
-      file = "share/zsh-autosuggestions/zsh-autosuggestions.zsh";
-    }
+    #{
+    # will source zsh-autosuggestions.plugin.zsh
+    #name = "zsh-autosuggestions";
+    #src = pkgs.zsh-autosuggestions;
+    #file = "share/zsh-autosuggestions/zsh-autosuggestions.zsh";
+    #}
     {
       name = "zsh-completions";
       src = pkgs.zsh-completions;
