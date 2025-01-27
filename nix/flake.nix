@@ -108,22 +108,22 @@
         hardware = null;
         monitors = [
           {
+            name = "eDP-2";
+            width = "2560";
+            height = "1600";
+            dimensions = "2560x1600";
+            position = "1920x0";
+            scale = 1.6;
+            framerate = 60;
+            internal = true;
+            transform = 0;
+          }
+          {
             name = "DP-1";
             dimensions = "3840x2160";
             position = "0x0";
             scale = 2.0;
             framerate = 60;
-            transform = 0;
-          }
-          {
-            name = "eDP-2";
-            width = "2560";
-            height = "1600";
-            dimensions = "2560x1600";
-            position = "3840x0";
-            scale = 1.6;
-            framerate = 60;
-            internal = true;
             transform = 0;
           }
         ];
