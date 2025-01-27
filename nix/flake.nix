@@ -92,10 +92,18 @@
           {
             name = "eDP-1";
             dimensions = "preferred";
-            position = "0x0";
+            position = "1920x0";
             scale = 1.566667;
             internal = true;
             framerate = 144;
+            transform = 0;
+          }
+          {
+            name = "desc:BNQ BenQ RD320UA 49R01325019";
+            dimensions = "3840x2160";
+            position = "0x0";
+            scale = 2.0;
+            framerate = 60;
             transform = 0;
           }
         ];
@@ -119,7 +127,7 @@
             transform = 0;
           }
           {
-            name = "DP-1";
+            name = "desc:BNQ BenQ RD320UA 49R01325019";
             dimensions = "3840x2160";
             position = "0x0";
             scale = 2.0;
