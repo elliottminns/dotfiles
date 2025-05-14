@@ -9,5 +9,6 @@ return {
 		"rustfmt",
 		"stylua",
 		"typescript-language-server",
+		"html-lsp",
 	},
 }

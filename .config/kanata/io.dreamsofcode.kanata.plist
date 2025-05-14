@@ -1,0 +1,38 @@
+?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+  <dict>
+    <key>Label</key>
+    <string>com.elliott.kanata</string>
+
+    <!-- Run the command as root -->
+    <key>ProgramArguments</key>
+    <array>
+      <string>/opt/homebrew/bin/kanata</string>
+      <string>-c</string>
+      <string>/Users/elliott/.dotfiles/.config/kanata</string>
+    </array>
+
+    <!-- Running as root -->
+    <key>UserName</key>
+    <string>root</string>
+
+    <key>GroupName</key>
+    <string>wheel</string>
+
+    <!-- Start the service as soon as the system starts -->
+    <key>RunAtLoad</key>
+    <true/>
+
+    <!-- Keep the service running forever -->
+    <key>KeepAlive</key>
+    <true/>
+
+    <!-- Log output to a specific file -->
+    <key>StandardErrorPath</key>
+    <string>/tmp/kanata.err</string>
+
+    <key>StandardOutPath</key>
+    <string>/tmp/kanata.out</string>
+  </dict>
+</plist>

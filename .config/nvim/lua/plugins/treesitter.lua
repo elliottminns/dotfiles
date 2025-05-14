@@ -8,7 +8,7 @@ return {
 			"apple/pkl-neovim",
 			"windwp/nvim-ts-autotag",
 			"EmranMR/tree-sitter-blade",
-			"vrischmann/tree-sitter-templ",
+			--"vrischmann/tree-sitter-templ",
 		},
 		opts = function()
 			return require("plugins.configs.treesitter")
@@ -24,14 +24,14 @@ return {
 				},
 				filetype = "blade",
 			}
-			parser_config.templ = {
-				install_info = {
-					url = "https://github.com/vrischmann/tree-sitter-templ",
-					files = { "src/parser.c" },
-					branch = "master",
-				},
-				filetype = "templ",
-			}
+			-- parser_config.templ = {
+			-- 	install_info = {
+			-- 		url = "https://github.com/vrischmann/tree-sitter-templ",
+			-- 		files = { "src/parser.c" },
+			-- 		branch = "master",
+			-- 	},
+			-- 	filetype = "templ",
+			-- }
 
 			require("nvim-treesitter.configs").setup(opts)
 
