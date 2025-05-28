@@ -68,7 +68,9 @@ zinit cdreplay -q
 
 # Keybindings
 bindkey -e
+bindkey '^[[A' history-search-backward
 bindkey '^p' history-search-backward
+bindkey '^[[B' history-search-forward
 bindkey '^n' history-search-forward
 bindkey '^[w' kill-region
 
@@ -76,7 +78,7 @@ zle_highlight+=(paste:none)
 
 # History
 HISTSIZE=5000
-HISTFILE=~/.zsh_history
+HISTFILE=~/.local/share/zsh/history
 SAVEHIST=$HISTSIZE
 setopt appendhistory
 setopt sharehistory
