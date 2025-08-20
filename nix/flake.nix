@@ -76,7 +76,7 @@
             name = "eDP-1";
             dimensions = "preferred";
             position = "0x0";
-            scale = 1.566667;
+            scale = 1.6;
             internal = true;
             framerate = 144;
             transform = 0;
@@ -93,7 +93,7 @@
             name = "eDP-1";
             dimensions = "preferred";
             position = "1920x0";
-            scale = 1.566667;
+            scale = 1.6;
             internal = true;
             framerate = 144;
             transform = 0;

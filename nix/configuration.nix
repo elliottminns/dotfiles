@@ -70,6 +70,7 @@ in {
     };
   };
 
+  services.tailscale.enable = true;
   services.mullvad-vpn.enable = true;
   services.systembus-notify.enable = true;
 
@@ -83,6 +84,8 @@ in {
 
   networking.hostName = meta.hostname; # Hostname is defined by the flake.
 
+  networking.extraHosts = ''
+  '';
   # Pick only one of the below networking options.
   #networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
   networking.networkmanager.enable = true; # Easiest to use and most distros use this by default.
@@ -142,6 +145,7 @@ in {
     #calibre
     chromium
     clickgen
+    cmake
     distrobox
     dotool
     doppler
@@ -171,6 +175,7 @@ in {
     kustomize
     lua-language-server
     mako # notification system developed by swaywm maintainer
+    htop
     mullvad-vpn
     mm-common
     my-helmfile
@@ -216,7 +221,7 @@ in {
     wvkbd
     showmethekey
     wshowkeys
-    wl-screenrec
+    #wl-screenrec
     wl-clipboard
     wofi
     vlc
@@ -226,6 +231,7 @@ in {
     avahi
     nssmdns
     railway
+    unstable.claude-code
   ];
 
   # Virtualisation
