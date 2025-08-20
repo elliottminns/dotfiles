@@ -10,7 +10,6 @@ return {
 		"javascript",
 		"tsx",
 		"php",
-		"blade",
 		"templ",
 	},
 	highlight = {
