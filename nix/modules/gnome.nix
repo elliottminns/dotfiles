@@ -1,4 +1,5 @@
-{pkgs, ...}: {
+{ pkgs, ... }:
+{
   services.accounts-daemon.enable = true;
   services.gnome.gnome-online-accounts.enable = true;
 
@@ -7,5 +8,6 @@
     gnome-shell-extensions
     gnomeExtensions.tiling-assistant
     gnomeExtensions.window-calls
+    gnomeExtensions.just-perfection
   ];
 }
