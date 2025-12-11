@@ -112,6 +112,14 @@ eval "$(zoxide init --cmd cd zsh)"
 PATH="/Applications/Docker.app/Contents/Resources/bin:$PATH"
 
 dburl() {
+  if [[ -z "$1" ]]; then
+    echo "Doppler project is missing"
+    return 1
+  fi
+  if [[ -z "$2" ]]; then
+    echo "Doppler config is missing"
+    return 1
+  fi
   export DATABASE_URL=$(doppler run -p "$1" -c "$2" -- bash -c 'echo $DATABASE_URL')
 }
 
@@ -120,11 +128,10 @@ opendb() {
     echo "Doppler project is missing"
     return 1
   fi
-    if [[ -z "$2" ]]; then
+  if [[ -z "$2" ]]; then
     echo "Doppler config is missing"
     return 1
   fi
-
   psql $(doppler run -p "$1" -c "$2" -- bash -c 'echo $DATABASE_URL')
 }
 
