@@ -15,6 +15,7 @@ fi
 
 PATH="$HOME/.go/bin:$PATH"
 PATH="$HOME/go/bin:$PATH"
+PATH="$HOME/.local/bin:$PATH"
 if [[ -f "/opt/homebrew/bin/brew" ]] then
   # If you're using macOS, you'll want this enabled
   eval "$(/opt/homebrew/bin/brew shellenv)"
@@ -44,8 +45,8 @@ zinit ice depth=1; zinit light romkatv/powerlevel10k
 
 # Add in zsh plugins
 zinit light zsh-users/zsh-syntax-highlighting
-zinit light zsh-users/zsh-completions
-zinit light zsh-users/zsh-autosuggestions
+#zinit light zsh-users/zsh-completions
+#zinit light zsh-users/zsh-autosuggestions
 zinit light Aloxaf/fzf-tab
 
 # Add in snippets
@@ -102,4 +103,47 @@ alias c='clear'
 
 # Shell integrations
 eval "$(fzf --zsh)"
+
+
+# Zoxide integration
 eval "$(zoxide init --cmd cd zsh)"
+
+
+PATH="/Applications/Docker.app/Contents/Resources/bin:$PATH"
+
+dburl() {
+  export DATABASE_URL=$(doppler run -p "$1" -c "$2" -- bash -c 'echo $DATABASE_URL')
+}
+
+opendb() {
+  if [[ -z "$1" ]]; then
+    echo "Doppler project is missing"
+    return 1
+  fi
+    if [[ -z "$2" ]]; then
+    echo "Doppler config is missing"
+    return 1
+  fi
+
+  psql $(doppler run -p "$1" -c "$2" -- bash -c 'echo $DATABASE_URL')
+}
+
+# Open buffer line in editor
+autoload -Uz edit-command-line
+zle -N edit-command-line
+bindkey '^x^e' edit-command-line
+
+# Suffix Aliases
+alias -s md="$EDITOR"
+alias -s mov="open"
+alias -s png="open"
+alias -s mp4="open"
+alias -s go="$EDITOR"
+alias -s js="$EDITOR"
+alias -s yaml="$EDITOR"
+alias -s json="jq <"
+export PATH="$HOME/.local/share/solana/install/active_release/bin:$PATH"
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
