@@ -225,6 +225,19 @@ in {
     wl-clipboard
     wofi
     vlc
+    
+    # Kiru dependencies (video editor)
+    ffmpeg
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
+    gst_all_1.gst-plugins-bad
+    gst_all_1.gst-plugins-ugly
+    gst_all_1.gst-libav
+    rustup  # Rust toolchain for Kiru
+    pkg-config
+    openssl
+    
     zenity
     zellij
     zip
