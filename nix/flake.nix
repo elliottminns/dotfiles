@@ -173,6 +173,7 @@
         name = "zenbox";
         hardware = null;
         gaps = false;
+        hasClawdUser = true;  # Clawdbot service user
         monitors = [
           {
             name = "HDMI-A-1";  # Adjust based on actual display
@@ -225,6 +226,20 @@
                   meta = host;
                 };
               }
+              # Clawd user (only on hosts with hasClawdUser)
+              (nixpkgs.lib.mkIf (host.hasClawdUser or false) {
+                users.users.clawd = {
+                  isNormalUser = true;
+                  description = "Clawdbot Service User";
+                  extraGroups = [ "wheel" "docker" ];
+                  shell = nixpkgs.legacyPackages.x86_64-linux.bash;
+                };
+                security.sudo.extraRules = [{
+                  users = [ "clawd" ];
+                  commands = [{ command = "ALL"; options = [ "NOPASSWD" ]; }];
+                }];
+                home-manager.users.clawd = import ./home/home-clawd.nix;
+              })
             ]
             ++ (
               if host.hardware != null
