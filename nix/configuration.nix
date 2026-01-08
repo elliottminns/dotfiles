@@ -31,7 +31,6 @@ in {
     ./modules/yubikey-gpg.nix
     ./modules/unfree.nix
     ./modules/video.nix
-    ./modules/server.nix
   ];
 
   nix = {
