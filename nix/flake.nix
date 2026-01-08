@@ -169,6 +169,14 @@
         ];
         cursor = 64;
       }
+      {
+        name = "zenbox";
+        hardware = null;
+        server = true;  # Headless server for Clawdbot
+        gaps = false;
+        monitors = [];
+        cursor = 32;
+      }
     ];
 
     forAllSystems = fn: nixpkgs.lib.genAttrs systems (system: fn {pkgs = import nixpkgs {inherit system;};});
@@ -203,7 +211,11 @@
               {
                 home-manager.useGlobalPkgs = true;
                 home-manager.useUserPackages = true;
-                home-manager.users.elliott = import ./home/home.nix;
+                home-manager.users.elliott = import (
+                  if (host.server or false)
+                  then ./home/home-server.nix
+                  else ./home/home.nix
+                );
                 home-manager.extraSpecialArgs = {
                   inherit inputs;
                   meta = host;
