@@ -74,16 +74,28 @@ lib.mkIf (meta.hasClawdUser or false) {
     allowedTCPPorts = [ 18789 18790 18793 ];
   };
 
-  # BTRFS snapshots for clawd home (if using BTRFS)
-  services.btrbk.instances."clawd-home" = {
-    onCalendar = "daily";
+  # BTRFS snapshots for /home
+  services.btrbk.instances."home" = {
+    onCalendar = "hourly";
     settings = {
-      snapshot_preserve_min = "1d";
-      snapshot_preserve = "7d 4w";
-      volume."/home/clawd" = {
-        snapshot_dir = "/home/clawd/.snapshots";
+      snapshot_preserve_min = "2h";
+      snapshot_preserve = "24h 7d 4w";  # 24 hourly, 7 daily, 4 weekly
+      volume."/home" = {
+        snapshot_dir = "/home/.snapshots";
         subvolume."." = {};
       };
     };
   };
+
+  # Create snapshot directory
+  systemd.tmpfiles.rules = [
+    "d /home/.snapshots 0755 root root -"
+  ];
+
+  # Add btrbk tools
+  environment.systemPackages = with pkgs; [
+    btrbk
+    btrfs-progs
+    compsize
+  ];
 }
