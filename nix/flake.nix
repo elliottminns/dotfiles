@@ -201,9 +201,7 @@
         value = nixpkgs.lib.nixosSystem {
           specialArgs = {
             inherit inputs outputs;
-            meta = {
-              hostname = host.name;
-            };
+            meta = host // { hostname = host.name; };
           };
           system = "x86_64-linux";
           modules =

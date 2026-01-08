@@ -31,6 +31,7 @@ in {
     ./modules/yubikey-gpg.nix
     ./modules/unfree.nix
     ./modules/video.nix
+    ./modules/clawdbot.nix
   ];
 
   nix = {
