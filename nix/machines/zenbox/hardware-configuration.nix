@@ -19,6 +19,9 @@
 
   # Blackmagic UltraStudio Mini support
   hardware.decklink.enable = true;
+  environment.sessionVariables = {
+    LD_LIBRARY_PATH = ["${pkgs.blackmagic-desktop-video}/lib"];
+  };
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
   # (the default) this is the recommended approach. When using systemd-networkd it's
