@@ -74,6 +74,7 @@ in {
   services.tailscale.enable = true;
   services.mullvad-vpn.enable = true;
   services.systembus-notify.enable = true;
+  services.hardware.bolt.enable = true; # Thunderbolt device management (boltctl)
 
   # Use the latest linux kernel.
   boot.kernelPackages = pkgs.linuxPackages_latest;

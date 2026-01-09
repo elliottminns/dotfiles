@@ -31,7 +31,6 @@
   hardware.graphics = {
     enable = true;
     extraPackages = with pkgs; [
-      amdvlk
       rocmPackages.clr.icd
       libva
       libvdpau-va-gl
@@ -64,7 +63,6 @@
     vulkan-headers
     vulkan-tools
 
-    amdvlk
     rocmPackages.clr.icd
     rocmPackages.clr
     rocmPackages.rocm-runtime

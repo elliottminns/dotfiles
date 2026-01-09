@@ -19,6 +19,7 @@
         pkgs.davinci-resolve-studio
         pkgs.davinci-resolve
         pkgs.reaper
+        pkgs.blackmagic-desktop-video
       ]
     );
 
