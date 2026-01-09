@@ -16,7 +16,7 @@
     clean = "clear";
     r2 = "aws --profile r2 --endpoint-url https://03af1b41c1aa6fe21d9b3a645dca423e.r2.cloudflarestorage.com";
   };
-  initExtra = ''
+  initContent = ''
     ZSH_DISABLE_COMPFIX=true
     export EDITOR=nvim
     if [ -n "$TTY" ]; then
@@ -72,6 +72,16 @@
     setopt hist_save_no_dups
     setopt hist_ignore_dups
     setopt hist_find_no_dups
+
+    autoload -Uz edit-command-line
+    zle -N edit-command-line
+    bindkey '^x^e' edit-command-line
+
+    alias -g NE='2>/dev/null'
+    alias -g ND='>/dev/null'
+    alias -g NUL='>/dev/null 2>1'
+    alias -g JQ='| jq'
+    alias -g C='| wl-copy'
   '';
   oh-my-zsh = {
     enable = true;

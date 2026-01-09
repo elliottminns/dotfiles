@@ -2,7 +2,8 @@
   pkgs,
   meta,
   ...
-}: {
+}:
+{
   enable = true;
   package = pkgs.unstable.alacritty;
 
@@ -12,7 +13,7 @@
         x = 4;
         y = 8;
       };
-      decorations = "full";
+      decorations = "None";
       opacity = 1;
       startup_mode = "Windowed";
       title = "Alacritty";
@@ -28,21 +29,20 @@
       live_config_reload = true;
     };
 
-    font = let
-      jetbrainsMono = style: {
-        family = "JetBrainsMono Nerd Font";
-        inherit style;
+    font =
+      let
+        jetbrainsMono = style: {
+          family = "JetBrainsMono Nerd Font";
+          inherit style;
+        };
+      in
+      {
+        size = if meta.name == "karasu" then 12 else 16;
+        normal = jetbrainsMono "Regular";
+        bold = jetbrainsMono "Bold";
+        italic = jetbrainsMono "Italic";
+        bold_italic = jetbrainsMono "Bold Italic";
       };
-    in {
-      size =
-        if meta.name == "karasu"
-        then 12
-        else 16;
-      normal = jetbrainsMono "Regular";
-      bold = jetbrainsMono "Bold";
-      italic = jetbrainsMono "Italic";
-      bold_italic = jetbrainsMono "Bold Italic";
-    };
 
     mouse.hide_when_typing = true;
 

@@ -5,7 +5,7 @@
     gcc
     #    laravel
     htmx-lsp
-    go_1_23
+    go
     gopls
     nodejs
     rustup

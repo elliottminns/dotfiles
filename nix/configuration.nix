@@ -85,8 +85,7 @@ in {
 
   networking.hostName = meta.hostname; # Hostname is defined by the flake.
 
-  networking.extraHosts = ''
-  '';
+  networking.extraHosts = '''';
   # Pick only one of the below networking options.
   #networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
   networking.networkmanager.enable = true; # Easiest to use and most distros use this by default.
@@ -137,6 +136,7 @@ in {
   # $ nix search wget
   environment.systemPackages = with pkgs; [
     act
+    bat
     alejandra
     argocd
     awscli
@@ -156,6 +156,7 @@ in {
     fzf
     git
     glib
+    gh
     go-migrate
     goimports-reviser
     golines
@@ -163,6 +164,7 @@ in {
     grim # screenshot functionality
     gtk3
     k6
+    fastfetch
     hyprpaper
     hyprpicker
     unstable.ghostty
@@ -200,7 +202,7 @@ in {
     pkg-config
     pop-gtk-theme
     postgresql
-    protonvpn-cli
+    proton-vpn-cli
     protonvpn-gui
     qemu
     qmk
@@ -245,6 +247,8 @@ in {
     avahi
     nssmdns
     railway
+    asciinema
+    jrnl
     unstable.claude-code
   ];
 
@@ -310,8 +314,8 @@ in {
 
   # gnome
   services.xserver.enable = true;
-  services.xserver.displayManager.gdm.enable = true;
-  services.xserver.desktopManager.gnome.enable = true;
+  services.displayManager.gdm.enable = true;
+  services.desktopManager.gnome.enable = true;
 
   xdg.portal = {
     enable = true;

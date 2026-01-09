@@ -5,12 +5,12 @@
 }: {
   enable = true;
   lfs.enable = true;
-  userName = "Elliott Minns";
-  userEmail = "elliott.minns@pm.me";
+  settings.user.name = "Elliott Minns";
+  settings.user.email = "elliott.minns@pm.me";
   signing.key = null;
   signing.signByDefault = true;
 
-  extraConfig = {
+  settings = {
     pull = {
       rebase = true;
     };

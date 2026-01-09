@@ -31,7 +31,6 @@
   hardware.graphics = {
     enable = true;
     extraPackages = with pkgs; [
-      amdvlk
       rocmPackages.clr.icd
       libva
       libvdpau-va-gl
@@ -40,7 +39,7 @@
 
   services.xserver.videoDrivers = [
     "amdgpu"
-    "displaylink"
+    #"displaylink"
     "modesetting"
   ];
 
@@ -52,7 +51,7 @@
 
   environment.systemPackages = with pkgs; [
     pkgs.clinfo
-    pkgs.displaylink
+    #pkgs.displaylink
     pkgs.rocmPackages.rocminfo
     pkgs.davinci-resolve
     mesa
@@ -64,7 +63,6 @@
     vulkan-headers
     vulkan-tools
 
-    amdvlk
     rocmPackages.clr.icd
     rocmPackages.clr
     rocmPackages.rocm-runtime

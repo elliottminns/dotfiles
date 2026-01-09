@@ -29,7 +29,6 @@
   hardware.graphics = {
     enable = true;
     extraPackages = with pkgs; [
-      amdvlk
       rocmPackages.clr.icd
       libva
       libvdpau-va-gl
