@@ -13,7 +13,7 @@
     fd
     brightnessctl
     swww
-    inputs.matugen.packages.${system}.default
+    inputs.matugen.packages.${pkgs.stdenv.hostPlatform.system}.default
     slurp
     wl-clipboard
     wayshot

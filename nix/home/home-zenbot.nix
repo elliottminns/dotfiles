@@ -1,11 +1,11 @@
-# Home Manager configuration for clawd user (Clawdbot service)
+# Home Manager configuration for zenbot user (Zenbot service)
 { config, pkgs, lib, ... }:
 
 {
   programs.home-manager.enable = true;
 
-  home.username = "clawd";
-  home.homeDirectory = "/home/clawd";
+  home.username = "zenbot";
+  home.homeDirectory = "/home/zenbot";
   home.stateVersion = "23.11";
 
   xdg.enable = true;
@@ -19,25 +19,25 @@
         gs = "git status";
         gp = "git push";
         gl = "git pull";
-        
-        # Clawdbot shortcuts
-        cb = "cd ~/clawdbot";
-        cw = "cd ~/clawd";
-        cbs = "systemctl --user status clawdbot";
-        cbl = "journalctl --user -u clawdbot -f";
-        cbr = "systemctl --user restart clawdbot";
+
+        # Zenbot shortcuts
+        zb = "cd ~/zenbot";
+        zw = "cd ~/workspace";
+        zbs = "systemctl --user status zenbot";
+        zbl = "journalctl --user -u zenbot -f";
+        zbr = "systemctl --user restart zenbot";
       };
       initExtra = ''
-        export PATH="$HOME/.local/bin:$HOME/clawdbot/node_modules/.bin:$PATH"
-        export CLAWDBOT_WORKSPACE="$HOME/clawd"
+        export PATH="$HOME/.local/bin:$HOME/zenbot/node_modules/.bin:$PATH"
+        export ZENBOT_WORKSPACE="$HOME/workspace"
       '';
     };
 
     git = {
       enable = true;
-      userName = "Dreamfox";
-      userEmail = "dreamfox@clawd.bot";
-      extraConfig = {
+      settings = {
+        user.name = "Zenbot";
+        user.email = "zenbot@zenbot.dev";
         init.defaultBranch = "main";
         pull.rebase = true;
         push.autoSetupRemote = true;
@@ -77,6 +77,6 @@
   ];
 
   # Create workspace directories
-  home.file.".clawdbot/.keep".text = "";
-  home.file."clawd/.keep".text = "";
+  home.file.".zenbot/.keep".text = "";
+  home.file."workspace/.keep".text = "";
 }

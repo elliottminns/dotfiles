@@ -169,7 +169,7 @@ in {
     hyprpaper
     hyprpicker
     unstable.ghostty
-    inputs.zen-browser.packages."${system}".default
+    inputs.zen-browser.packages."${pkgs.stdenv.hostPlatform.system}".default
     imagemagick
     jq
     kanata

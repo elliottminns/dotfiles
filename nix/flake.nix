@@ -224,19 +224,19 @@
                   meta = host;
                 };
               }
-              # Clawd user (only on hosts with hasClawdUser)
+              # Zenbot user (only on hosts with hasClawdUser)
               (nixpkgs.lib.mkIf (host.hasClawdUser or false) {
-                users.users.clawd = {
+                users.users.zenbot = {
                   isNormalUser = true;
-                  description = "Clawdbot Service User";
+                  description = "Zenbot Service User";
                   extraGroups = [ "wheel" "docker" ];
                   shell = nixpkgs.legacyPackages.x86_64-linux.bash;
                 };
                 security.sudo.extraRules = [{
-                  users = [ "clawd" ];
+                  users = [ "zenbot" ];
                   commands = [{ command = "ALL"; options = [ "NOPASSWD" ]; }];
                 }];
-                home-manager.users.clawd = import ./home/home-clawd.nix;
+                home-manager.users.zenbot = import ./home/home-zenbot.nix;
               })
             ]
             ++ (
