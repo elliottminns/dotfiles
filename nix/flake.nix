@@ -175,12 +175,13 @@
       }
       {
         name = "zenbox";
-        hardware = null;
+        # Framework Desktop
+        hardware = nixos-hardware.nixosModules.framework-desktop-amd-ai-max-300-series;
         gaps = false;
-        hasClawdUser = true;  # Clawdbot service user
+        hasClawdUser = true; # Clawdbot service user
         monitors = [
           {
-            name = "HDMI-A-1";  # Adjust based on actual display
+            name = "HDMI-A-1"; # Adjust based on actual display
             dimensions = "preferred";
             position = "0x0";
             scale = 1;
@@ -200,12 +201,17 @@
 
     packages = forAllSystems (system: import ./pkgs nixpkgs.legacyPackages.${system});
 
-    nixosConfigurations = builtins.listToAttrs (map (host: {
+    nixosConfigurations = builtins.listToAttrs (
+      map (host: {
         name = host.name;
         value = nixpkgs.lib.nixosSystem {
           specialArgs = {
             inherit inputs outputs;
-            meta = host // { hostname = host.name; };
+            meta =
+              host
+              // {
+                hostname = host.name;
+              };
           };
           system = "x86_64-linux";
           modules =
@@ -234,13 +240,24 @@
                 users.users.zenbot = {
                   isNormalUser = true;
                   description = "Zenbot Service User";
-                  extraGroups = [ "wheel" "docker" "dotfiles" ];
+                  extraGroups = [
+                    "wheel"
+                    "docker"
+                    "dotfiles"
+                  ];
                   shell = nixpkgs.legacyPackages.x86_64-linux.fish;
                 };
-                security.sudo.extraRules = [{
-                  users = [ "zenbot" ];
-                  commands = [{ command = "ALL"; options = [ "NOPASSWD" ]; }];
-                }];
+                security.sudo.extraRules = [
+                  {
+                    users = ["zenbot"];
+                    commands = [
+                      {
+                        command = "ALL";
+                        options = ["NOPASSWD"];
+                      }
+                    ];
+                  }
+                ];
                 home-manager.users.zenbot = import ./home/home-zenbot.nix;
 
                 # Clawdbot gateway system service
@@ -248,9 +265,14 @@
                   pkgs = nixpkgs.legacyPackages.x86_64-linux;
                 in {
                   description = "Clawdbot Gateway";
-                  after = [ "network.target" ];
-                  wantedBy = [ "multi-user.target" ];
-                  path = [ pkgs.nodejs_22 pkgs.coreutils pkgs.gnused pkgs.bash ];
+                  after = ["network.target"];
+                  wantedBy = ["multi-user.target"];
+                  path = [
+                    pkgs.nodejs_22
+                    pkgs.coreutils
+                    pkgs.gnused
+                    pkgs.bash
+                  ];
                   serviceConfig = {
                     Type = "simple";
                     User = "zenbot";
@@ -274,6 +296,7 @@
             );
         };
       })
-      hosts);
+      hosts
+    );
   };
 }

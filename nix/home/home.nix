@@ -42,6 +42,7 @@ in {
   programs = {
     tmux = import ./tmux.nix {inherit pkgs;};
     zsh = import ./zsh.nix {inherit config pkgs lib;};
+    starship = import ./starship.nix {inherit config pkgs lib;};
     fish = import ./fish.nix {};
     neovim = import ./neovim.nix {inherit config pkgs;};
     git = import ./git.nix {inherit config pkgs;};

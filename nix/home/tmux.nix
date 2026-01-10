@@ -29,7 +29,8 @@ in {
   newSession = true;
   secureSocket = true;
   shell = "${pkgs.fish}/bin/fish";
-  shortcut = "a";
+  # NOTE: Keep prefix off of Ctrl+A so Zsh can use Ctrl+A (beginning-of-line).
+  shortcut = "Space";
   terminal = "screen-256color";
 
   plugins = with pkgs.tmuxPlugins; [

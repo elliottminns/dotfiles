@@ -82,6 +82,11 @@ in
   # Use the latest linux kernel.
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
+  # Helps recover from transient GPU/display glitches (e.g. hotplug/input-switch).
+  boot.kernelParams = [
+    "amdgpu.gpu_recovery=1"
+  ];
+
   # List packages installed in system profile. To search, run:
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
@@ -138,6 +143,9 @@ in
   };
 
   security.sudo.wheelNeedsPassword = false;
+
+  # Ensure device firmware (incl. GPU firmware) is available.
+  hardware.enableRedistributableFirmware = true;
 
   hardware.keyboard.qmk.enable = true;
 

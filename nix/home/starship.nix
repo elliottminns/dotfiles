@@ -1,6 +1,6 @@
 {pkgs, ...}: {
   enable = true;
-  enableZshIntegration = true;
+  enableZshIntegration = false;
   enableFishIntegration = true;
   settings = {
     format = ''
