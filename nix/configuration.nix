@@ -8,8 +8,10 @@
   meta,
   lib,
   ...
-}: let
-  my-kubernetes-helm = with pkgs;
+}:
+let
+  my-kubernetes-helm =
+    with pkgs;
     wrapHelm kubernetes-helm {
       plugins = with pkgs.kubernetes-helmPlugins; [
         helm-secrets
@@ -22,7 +24,8 @@
   my-helmfile = pkgs.helmfile-wrapped.override {
     inherit (my-kubernetes-helm) pluginsDir;
   };
-in {
+in
+{
   imports = [
     ./modules/languages.nix
     ./modules/gnome.nix
@@ -111,14 +114,18 @@ in {
     openmoji-color
   ];
 
-  # Define a user account. Don't forget to set a password with ‘passwd’.
+  # Define groups
+  users.groups.dotfiles = {};
+
+  # Define a user account. Don't forget to set a password with 'passwd'.
   users.users.elliott = {
     isNormalUser = true;
     extraGroups = [
-      "wheel" # Enable ‘sudo’ for the user.
+      "wheel" # Enable 'sudo' for the user.
       "docker"
       "input"
       "uinput"
+      "dotfiles"
     ];
     shell = pkgs.zsh;
     packages = with pkgs; [

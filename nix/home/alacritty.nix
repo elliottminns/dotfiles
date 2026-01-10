@@ -53,5 +53,7 @@
     env = {
       TERM = "xterm-256color";
     };
+
+    terminal.shell.program = "${pkgs.fish}/bin/fish";
   };
 }

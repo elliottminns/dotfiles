@@ -41,6 +41,9 @@
 
     # Zen browser
     zen-browser.url = "github:0xc000022070/zen-browser-flake";
+
+    # Clawdbot
+    nix-clawdbot.url = "github:clawdbot/nix-clawdbot";
   };
 
   outputs = {
@@ -53,6 +56,7 @@
     nixpkgs-unstable,
     nixos-hardware,
     ags,
+    nix-clawdbot,
     ...
   } @ inputs: let
     inherit (self) outputs;
@@ -226,17 +230,41 @@
               }
               # Zenbot user (only on hosts with hasClawdUser)
               (nixpkgs.lib.mkIf (host.hasClawdUser or false) {
+                programs.fish.enable = true;
                 users.users.zenbot = {
                   isNormalUser = true;
                   description = "Zenbot Service User";
-                  extraGroups = [ "wheel" "docker" ];
-                  shell = nixpkgs.legacyPackages.x86_64-linux.bash;
+                  extraGroups = [ "wheel" "docker" "dotfiles" ];
+                  shell = nixpkgs.legacyPackages.x86_64-linux.fish;
                 };
                 security.sudo.extraRules = [{
                   users = [ "zenbot" ];
                   commands = [{ command = "ALL"; options = [ "NOPASSWD" ]; }];
                 }];
                 home-manager.users.zenbot = import ./home/home-zenbot.nix;
+
+                # Clawdbot gateway system service
+                systemd.services.clawdbot-gateway = let
+                  pkgs = nixpkgs.legacyPackages.x86_64-linux;
+                in {
+                  description = "Clawdbot Gateway";
+                  after = [ "network.target" ];
+                  wantedBy = [ "multi-user.target" ];
+                  path = [ pkgs.nodejs_22 pkgs.coreutils pkgs.gnused pkgs.bash ];
+                  serviceConfig = {
+                    Type = "simple";
+                    User = "zenbot";
+                    Group = "users";
+                    Environment = [
+                      "PNPM_HOME=/home/zenbot/.local/share/pnpm"
+                      "HOME=/home/zenbot"
+                    ];
+                    ExecStart = "/home/zenbot/.local/share/pnpm/clawdbot gateway";
+                    Restart = "on-failure";
+                    RestartSec = 5;
+                    WorkingDirectory = "/home/zenbot";
+                  };
+                };
               })
             ]
             ++ (

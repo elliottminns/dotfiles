@@ -2,6 +2,9 @@
 { config, pkgs, lib, ... }:
 
 {
+  imports = [
+    ./clawdbot.nix
+  ];
   programs.home-manager.enable = true;
 
   home.username = "zenbot";
