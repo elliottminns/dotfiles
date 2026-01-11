@@ -265,7 +265,8 @@
                   pkgs = nixpkgs.legacyPackages.x86_64-linux;
                 in {
                   description = "Clawdbot Gateway";
-                  after = ["network.target"];
+                  after = ["network.target" "local-fs.target"];
+                  requiresMountsFor = ["/home/zenbot/clawd/dotfiles"];
                   wantedBy = ["multi-user.target"];
                   path = [
                     pkgs.nodejs_22

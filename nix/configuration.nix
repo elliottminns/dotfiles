@@ -122,6 +122,19 @@ in
   # Define groups
   users.groups.dotfiles = {};
 
+  # Keep dotfiles mounted for Zenbot/Clawdbot on hosts that run the service user.
+  # This is a bind mount, so it survives reboot and doesn't rely on a manual mount.
+  fileSystems = lib.mkIf (meta.hasClawdUser or false) {
+    "/home/zenbot/clawd/dotfiles" = {
+      device = "/home/elliott/.dotfiles";
+      options = ["bind"];
+    };
+  };
+
+  systemd.tmpfiles.rules = lib.mkIf (meta.hasClawdUser or false) [
+    "d /home/zenbot/clawd/dotfiles 0775 zenbot users -"
+  ];
+
   # Define a user account. Don't forget to set a password with 'passwd'.
   users.users.elliott = {
     isNormalUser = true;
