@@ -18,9 +18,9 @@ in {
   home.pointerCursor = {
     x11.enable = true;
     gtk.enable = true;
-    package = pkgs.banana-cursor-dreams;
+    package = pkgs.bibata-cursors;
     size = meta.cursor;
-    name = "Banana-Catppuccin-Mocha";
+    name = "Bibata-Modern-Classic";
   };
 
   xdg.enable = true;
@@ -37,6 +37,7 @@ in {
 
   home.packages = with pkgs; [
     telegram-desktop
+    opencode
   ];
 
   programs = {

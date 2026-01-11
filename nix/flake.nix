@@ -266,8 +266,10 @@
                 in {
                   description = "Clawdbot Gateway";
                   after = ["network.target" "local-fs.target"];
-                  requiresMountsFor = ["/home/zenbot/clawd/dotfiles"];
                   wantedBy = ["multi-user.target"];
+                  unitConfig = {
+                    RequiresMountsFor = "/home/zenbot/clawd/dotfiles";
+                  };
                   path = [
                     pkgs.nodejs_22
                     pkgs.coreutils

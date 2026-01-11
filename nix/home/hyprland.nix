@@ -80,7 +80,7 @@ in {
     exec = [
       ''gsettings set org.gnome.desktop.interface gtk-theme "Adwaita"   # for GTK3 apps''
       ''gsettings set org.gnome.desktop.interface color-scheme "prefer-dark"   # for GTK4 apps''
-      ''gsettings set org.gnome.desktop.interface cursor-theme "Banana-Catppuccin-Mocha"''
+      ''gsettings set org.gnome.desktop.interface cursor-theme "Bibata-Modern-Classic"''
       ''gsettings set org.gnome.desktop.interface cursor-size 64''
     ];
     xwayland = {
