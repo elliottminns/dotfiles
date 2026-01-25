@@ -11,6 +11,9 @@
   signing.signByDefault = true;
 
   settings = {
+    safe = {
+      directory = "/home/elliott/.dotfiles";
+    };
     pull = {
       rebase = true;
     };

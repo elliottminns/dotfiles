@@ -10,13 +10,6 @@
     # example = prev.example.overrideAttrs (oldAttrs: rec {
     # ...
     # });
-    # wl-screenrec = prev.wl-screenrec.overrideAttrs (oldAttrs: {
-    #   buildInputs = [
-    #     final.wayland
-    #     final.libdrm
-    #     final.ffmpeg_6
-    #   ];
-    # });
   };
 
   # When applied, the unstable nixpkgs set (declared in the flake inputs) will

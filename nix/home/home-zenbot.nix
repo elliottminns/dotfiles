@@ -14,6 +14,9 @@
   xdg.enable = true;
 
   programs = {
+    fish = import ./fish.nix {};
+    starship = import ./starship.nix {inherit pkgs;};
+
     bash = {
       enable = true;
       shellAliases = {

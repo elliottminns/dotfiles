@@ -8,10 +8,8 @@
   meta,
   lib,
   ...
-}:
-let
-  my-kubernetes-helm =
-    with pkgs;
+}: let
+  my-kubernetes-helm = with pkgs;
     wrapHelm kubernetes-helm {
       plugins = with pkgs.kubernetes-helmPlugins; [
         helm-secrets
@@ -24,8 +22,7 @@ let
   my-helmfile = pkgs.helmfile-wrapped.override {
     inherit (my-kubernetes-helm) pluginsDir;
   };
-in
-{
+in {
   imports = [
     ./modules/languages.nix
     ./modules/gnome.nix
@@ -199,6 +196,7 @@ in
     unstable.ghostty
     inputs.zen-browser.packages."${pkgs.stdenv.hostPlatform.system}".default
     imagemagick
+    justfile
     jq
     kanata
     keylight-controller-mschneider82
@@ -343,8 +341,14 @@ in
 
   # gnome
   services.xserver.enable = true;
-  services.displayManager.gdm.enable = true;
+  services.displayManager.gdm.enable = false;
   services.desktopManager.gnome.enable = true;
+
+  # COSMIC
+  # Enable the COSMIC login manager
+  services.displayManager.cosmic-greeter.enable = true;
+  # Enable the COSMIC desktop environment
+  services.desktopManager.cosmic.enable = true;
 
   xdg.portal = {
     enable = true;

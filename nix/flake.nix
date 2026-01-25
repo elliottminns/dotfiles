@@ -178,7 +178,7 @@
         # Framework Desktop
         hardware = nixos-hardware.nixosModules.framework-desktop-amd-ai-max-300-series;
         gaps = false;
-        hasClawdUser = true; # Clawdbot service user
+        hasClawdUser = false;
         monitors = [
           {
             name = "HDMI-A-1"; # Adjust based on actual display
