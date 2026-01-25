@@ -8,8 +8,10 @@
   meta,
   lib,
   ...
-}: let
-  my-kubernetes-helm = with pkgs;
+}:
+let
+  my-kubernetes-helm =
+    with pkgs;
     wrapHelm kubernetes-helm {
       plugins = with pkgs.kubernetes-helmPlugins; [
         helm-secrets
@@ -22,7 +24,8 @@
   my-helmfile = pkgs.helmfile-wrapped.override {
     inherit (my-kubernetes-helm) pluginsDir;
   };
-in {
+in
+{
   imports = [
     ./modules/languages.nix
     ./modules/gnome.nix
@@ -117,14 +120,14 @@ in {
   ];
 
   # Define groups
-  users.groups.dotfiles = {};
+  users.groups.dotfiles = { };
 
   # Keep dotfiles mounted for Zenbot/Clawdbot on hosts that run the service user.
   # This is a bind mount, so it survives reboot and doesn't rely on a manual mount.
   fileSystems = lib.mkIf (meta.hasClawdUser or false) {
     "/home/zenbot/clawd/dotfiles" = {
       device = "/home/elliott/.dotfiles";
-      options = ["bind"];
+      options = [ "bind" ];
     };
   };
 
@@ -196,7 +199,7 @@ in {
     unstable.ghostty
     inputs.zen-browser.packages."${pkgs.stdenv.hostPlatform.system}".default
     imagemagick
-    justfile
+    just
     jq
     kanata
     keylight-controller-mschneider82

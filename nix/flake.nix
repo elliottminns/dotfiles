@@ -111,7 +111,7 @@
             transform = 0;
           }
         ];
-        cursor = 64;
+        cursor = 24;
       }
 
       {
