@@ -44,7 +44,7 @@ in {
     tmux = import ./tmux.nix {inherit pkgs;};
     zsh = import ./zsh.nix {inherit config pkgs lib;};
     starship = import ./starship.nix {inherit config pkgs lib;};
-    fish = import ./fish.nix {};
+    fish = import ./fish.nix {inherit pkgs;};
     neovim = import ./neovim.nix {inherit config pkgs;};
     git = import ./git.nix {inherit config pkgs;};
     alacritty = import ./alacritty.nix {inherit config pkgs meta;};

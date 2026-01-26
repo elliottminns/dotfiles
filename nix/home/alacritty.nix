@@ -13,7 +13,7 @@
         x = 4;
         y = 8;
       };
-      decorations = "None";
+      decorations = "Full";
       opacity = 1;
       startup_mode = "Windowed";
       title = "Alacritty";
