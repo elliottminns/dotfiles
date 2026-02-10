@@ -353,6 +353,14 @@ in
   # Enable the COSMIC desktop environment
   services.desktopManager.cosmic.enable = true;
 
+  # Audio (PipeWire) — explicit config ensures ALSA plugin paths stay consistent
+  services.pipewire = {
+    enable = true;
+    alsa.enable = true;
+    alsa.support32Bit = true;
+    pulse.enable = true;
+  };
+
   xdg.portal = {
     enable = true;
     extraPortals = lib.mkForce [
