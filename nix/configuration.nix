@@ -74,6 +74,17 @@ in {
 
   services.tailscale.enable = true;
   services.mullvad-vpn.enable = true;
+  services.ollama = {
+    enable = true;
+    host = "0.0.0.0";
+    package = pkgs.ollama-rocm;
+    loadModels = [
+      "glm-4.7-flash"
+      "gemma3:27b"
+      "orieg/gemma3-tools:27b"
+      "llama4:16x17b"
+    ];
+  };
   services.systembus-notify.enable = true;
   services.hardware.bolt.enable = true; # Thunderbolt device management (boltctl)
 
@@ -96,6 +107,9 @@ in {
   # Pick only one of the below networking options.
   #networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
   networking.networkmanager.enable = true; # Easiest to use and most distros use this by default.
+  networking.nameservers = [
+    "192.168.1.250"
+  ];
 
   # Set your time zone.
   time.timeZone = "America/Chicago";
@@ -207,6 +221,7 @@ in {
     lua-language-server
     mako # notification system developed by swaywm maintainer
     htop
+    nvtopPackages.full
     mullvad-vpn
     mm-common
     my-helmfile
@@ -252,10 +267,15 @@ in {
     wvkbd
     showmethekey
     wshowkeys
-    #wl-screenrec
+    unstable.wl-screenrec
+    wf-recorder
+    gpu-screen-recorder
+    libva-utils
+    pciutils
     wl-clipboard
     wofi
     vlc
+    mpv
 
     # Kiru (video editor) — built from local nixpkgs checkout
     local.kiru
@@ -269,6 +289,7 @@ in {
     asciinema
     jrnl
     unstable.claude-code
+    cosmic-ext-tweaks
   ];
 
   # Virtualisation
