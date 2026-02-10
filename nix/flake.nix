@@ -44,6 +44,9 @@
 
     # Clawdbot
     nix-clawdbot.url = "github:clawdbot/nix-clawdbot";
+
+    # Opencode
+    opencode.url = "github:anomalyco/opencode/v1.1.53";
   };
 
   outputs = {
@@ -199,7 +202,7 @@
 
     formatter = forAllSystems ({pkgs}: pkgs.alejandra);
 
-    packages = forAllSystems (system: import ./pkgs nixpkgs.legacyPackages.${system});
+    packages = forAllSystems ({pkgs}: import ./pkgs pkgs);
 
     nixosConfigurations = builtins.listToAttrs (
       map (host: {

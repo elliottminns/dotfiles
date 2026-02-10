@@ -10,6 +10,7 @@
     # example = prev.example.overrideAttrs (oldAttrs: rec {
     # ...
     # });
+    opencode = inputs.opencode.packages.${prev.system}.opencode;
   };
 
   # When applied, the unstable nixpkgs set (declared in the flake inputs) will
