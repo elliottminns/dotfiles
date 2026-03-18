@@ -28,6 +28,7 @@
       environment.systemPackages =
         [
 	  pkgs.neovim
+          pkgs.alejandra
           pkgs.betterdisplay
           pkgs.claude-code-bin
           pkgs.doppler
@@ -113,6 +114,8 @@
     };
   in
   {
+    formatter.aarch64-darwin = nixpkgs.legacyPackages.aarch64-darwin.alejandra;
+
     # Build darwin flake using:
     # $ darwin-rebuild build --flake .#amaterasu
     darwinConfigurations."amaterasu" = nix-darwin.lib.darwinSystem {
