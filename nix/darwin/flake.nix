@@ -33,6 +33,7 @@
       environment.systemPackages = [
         pkgs.neovim
         pkgs.alejandra
+        pkgs.bat
         pkgs.betterdisplay
         pkgs.claude-code-bin
         pkgs.doppler
@@ -44,6 +45,7 @@
         pkgs.just
         pkgs.ollama
         pkgs.pass
+        pkgs.rust-analyzer
         pkgs.rustup
         pkgs.slack
         pkgs.tmux
