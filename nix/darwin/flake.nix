@@ -39,7 +39,6 @@
           inputs.codex-cli-nix.packages.${pkgs.system}.default
         ];
 
-      services.karabiner-elements.enable = true;
       services.kanata.enable = true;
       services.kanata.package = pkgs.kanata;
       services.kanata.keyboards.internal = {
