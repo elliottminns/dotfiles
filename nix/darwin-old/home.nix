@@ -17,7 +17,6 @@ in {
   home.stateVersion = "23.11";
 
   programs = {
-    git = import ../home/git.nix { inherit config pkgs lib;};
     tmux = import ../home/tmux.nix {inherit pkgs;};
     zsh = import ../home/zsh.nix {inherit config pkgs lib; };
     zoxide = (import ../home/zoxide.nix { inherit config pkgs; });
