@@ -33,6 +33,7 @@
           pkgs.gh
           pkgs.ghostty-bin
           pkgs.gnupg
+          pkgs.ollama
           pkgs.pass
           pkgs.rustup
           pkgs.tmux
