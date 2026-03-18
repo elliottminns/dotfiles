@@ -12,12 +12,17 @@
     home-manager.inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  outputs = inputs@{ self, nix-darwin, nixpkgs, home-manager, ... }:
-  let
+  outputs = inputs @ {
+    self,
+    nix-darwin,
+    nixpkgs,
+    home-manager,
+    ...
+  }: let
     # Username
     username = "elliott";
-    configuration = { pkgs, ... }: {
-      disabledModules = [ "services/karabiner-elements" ];
+    configuration = {pkgs, ...}: {
+      disabledModules = ["services/karabiner-elements"];
       imports = [
         ./modules/services/karabiner-elements.nix
         ./extra/services/kanata.nix
@@ -25,26 +30,26 @@
 
       # List packages installed in system profile. To search by name, run:
       # $ nix-env -qaP | grep wget
-      environment.systemPackages =
-        [
-	  pkgs.neovim
-          pkgs.alejandra
-          pkgs.betterdisplay
-          pkgs.claude-code-bin
-          pkgs.doppler
-          pkgs.git
-          pkgs.gh
-          pkgs.ghostty-bin
-          pkgs.gnupg
-          pkgs.just
-          pkgs.ollama
-          pkgs.pass
-          pkgs.rustup
-          pkgs.slack
-          pkgs.tmux
-          pkgs.zoxide
-          inputs.codex-cli-nix.packages.${pkgs.system}.default
-        ];
+      environment.systemPackages = [
+        pkgs.neovim
+        pkgs.alejandra
+        pkgs.betterdisplay
+        pkgs.claude-code-bin
+        pkgs.doppler
+        pkgs.ffmpeg
+        pkgs.git
+        pkgs.gh
+        pkgs.ghostty-bin
+        pkgs.gnupg
+        pkgs.just
+        pkgs.ollama
+        pkgs.pass
+        pkgs.rustup
+        pkgs.slack
+        pkgs.tmux
+        pkgs.zoxide
+        inputs.codex-cli-nix.packages.${pkgs.system}.default
+      ];
 
       services.kanata.enable = true;
       services.kanata.package = pkgs.kanata;
@@ -91,15 +96,17 @@
       users.users.elliott = {
         name = username;
         home = "/Users/elliott";
+        shell = pkgs.zsh;
       };
 
       # Necessary for using flakes on this system.
       nix.settings.experimental-features = "nix-command flakes";
-      nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (pkgs.lib.getName pkg) [
-        "betterdisplay"
-        "claude-code-bin"
-        "slack"
-      ];
+      nixpkgs.config.allowUnfreePredicate = pkg:
+        builtins.elem (pkgs.lib.getName pkg) [
+          "betterdisplay"
+          "claude-code-bin"
+          "slack"
+        ];
       homebrew = {
         enable = true;
         onActivation = {
@@ -111,11 +118,13 @@
           "obs"
           "logi-options+"
           "elgato-stream-deck"
+          "notion"
+          "figma"
         ];
       };
 
-      # Enable alternative shell support in nix-darwin.
-      # programs.fish.enable = true;
+      # Create /etc/zshrc and make zsh available as the managed login shell.
+      programs.zsh.enable = true;
 
       # Set Git commit hash for darwin-version.
       system.configurationRevision = self.rev or self.dirtyRev or null;
@@ -128,8 +137,7 @@
       # The platform the configuration will be used on.
       nixpkgs.hostPlatform = "aarch64-darwin";
     };
-  in
-  {
+  in {
     formatter.aarch64-darwin = nixpkgs.legacyPackages.aarch64-darwin.alejandra;
 
     # Build darwin flake using:
@@ -137,7 +145,7 @@
     darwinConfigurations."amaterasu" = nix-darwin.lib.darwinSystem {
       modules = [
         configuration
-	home-manager.darwinModules.home-manager
+        home-manager.darwinModules.home-manager
         {
           # `home-manager` config
           home-manager.useGlobalPkgs = true;

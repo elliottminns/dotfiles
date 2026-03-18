@@ -28,7 +28,7 @@ in {
   keyMode = "vi";
   newSession = true;
   secureSocket = true;
-  shell = "${pkgs.fish}/bin/fish";
+  shell = "${pkgs.zsh}/bin/zsh";
   # NOTE: Keep prefix off of Ctrl+A so Zsh can use Ctrl+A (beginning-of-line).
   shortcut = "Space";
   terminal = "screen-256color";
