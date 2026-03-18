@@ -97,6 +97,19 @@
         "betterdisplay"
         "claude-code-bin"
       ];
+      homebrew = {
+        enable = true;
+        onActivation = {
+          autoUpdate = false;
+          upgrade = false;
+          cleanup = "none";
+        };
+        casks = [
+          "obs"
+          "logi-options+"
+          "elgato-stream-deck"
+        ];
+      };
 
       # Enable alternative shell support in nix-darwin.
       # programs.fish.enable = true;
