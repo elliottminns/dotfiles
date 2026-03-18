@@ -36,6 +36,7 @@
           pkgs.gh
           pkgs.ghostty-bin
           pkgs.gnupg
+          pkgs.just
           pkgs.ollama
           pkgs.pass
           pkgs.rustup
