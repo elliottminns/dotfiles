@@ -5,6 +5,7 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
     nix-darwin.url = "github:nix-darwin/nix-darwin/master";
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
+    codex-cli-nix.url = "github:sadjow/codex-cli-nix";
 
     # Home Manager
     home-manager.url = "github:nix-community/home-manager";
@@ -29,6 +30,7 @@
           pkgs.rustup
           pkgs.tmux
           pkgs.zoxide
+          inputs.codex-cli-nix.packages.${pkgs.system}.default
         ];
 
       # User directory
