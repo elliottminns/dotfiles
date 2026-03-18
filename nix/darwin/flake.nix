@@ -18,7 +18,10 @@
     username = "elliott";
     configuration = { pkgs, ... }: {
       disabledModules = [ "services/karabiner-elements" ];
-      imports = [ ./modules/services/karabiner-elements.nix ];
+      imports = [
+        ./modules/services/karabiner-elements.nix
+        ./extra/services/kanata.nix
+      ];
 
       # List packages installed in system profile. To search by name, run:
       # $ nix-env -qaP | grep wget
@@ -37,6 +40,46 @@
         ];
 
       services.karabiner-elements.enable = true;
+      services.kanata.enable = true;
+      services.kanata.package = pkgs.kanata;
+      services.kanata.keyboards.internal = {
+        extraDefCfg = ''
+          process-unmapped-keys yes
+        '';
+        config = ''
+          (defsrc
+            f1   f2   f3   f4   f5   f6   f7   f8   f9   f10   f11   f12
+            caps a s d f j k l ;
+          )
+
+          (defvar
+            tap-time 150
+            hold-time 200
+          )
+
+          (defalias
+            escctrl (tap-hold 100 100 esc lctl)
+            a (tap-hold $tap-time $hold-time a lmet)
+            s (tap-hold $tap-time $hold-time s lalt)
+            d (tap-hold $tap-time $hold-time d lsft)
+            f (tap-hold $tap-time $hold-time f lctl)
+            j (tap-hold $tap-time $hold-time j rctl)
+            k (tap-hold $tap-time $hold-time k rsft)
+            l (tap-hold $tap-time $hold-time l ralt)
+            ; (tap-hold $tap-time $hold-time ; rmet)
+          )
+
+          (deflayer base
+            brdn  brup  _    _    _    _   prev  pp  next  mute  vold  volu
+            @escctrl @a @s @d @f @j @k @l @;
+          )
+
+          (deflayer fn
+            f1   f2   f3   f4   f5   f6   f7   f8   f9   f10   f11   f12
+            @escctrl _ _ _ _ _ _ _ _
+          )
+        '';
+      };
 
       # User directory
       users.users.elliott = {
