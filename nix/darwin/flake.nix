@@ -17,6 +17,9 @@
     # Username
     username = "elliott";
     configuration = { pkgs, ... }: {
+      disabledModules = [ "services/karabiner-elements" ];
+      imports = [ ./modules/services/karabiner-elements.nix ];
+
       # List packages installed in system profile. To search by name, run:
       # $ nix-env -qaP | grep wget
       environment.systemPackages =
@@ -32,6 +35,8 @@
           pkgs.zoxide
           inputs.codex-cli-nix.packages.${pkgs.system}.default
         ];
+
+      services.karabiner-elements.enable = true;
 
       # User directory
       users.users.elliott = {
@@ -51,6 +56,7 @@
       # Used for backwards compatibility, please read the changelog before changing.
       # $ darwin-rebuild changelog
       system.stateVersion = 6;
+      system.primaryUser = username;
 
       # The platform the configuration will be used on.
       nixpkgs.hostPlatform = "aarch64-darwin";
