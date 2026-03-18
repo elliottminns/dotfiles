@@ -29,6 +29,7 @@
         [
 	  pkgs.neovim
           pkgs.betterdisplay
+          pkgs.claude-code-bin
           pkgs.doppler
           pkgs.git
           pkgs.gh
@@ -93,6 +94,7 @@
       nix.settings.experimental-features = "nix-command flakes";
       nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (pkgs.lib.getName pkg) [
         "betterdisplay"
+        "claude-code-bin"
       ];
 
       # Enable alternative shell support in nix-darwin.
