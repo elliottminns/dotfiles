@@ -3,7 +3,6 @@ return {
 		"neovim/nvim-lspconfig",
 		lazy = false,
 		config = function()
-			local lspconfig = require("lspconfig")
 			local capabilities = vim.lsp.protocol.make_client_capabilities()
 			capabilities = vim.tbl_deep_extend("force", capabilities, require("cmp_nvim_lsp").default_capabilities())
 
@@ -20,7 +19,7 @@ return {
 				vim.keymap.set("n", "<leader>d", vim.diagnostic.open_float, opts)
 			end
 
-			lspconfig.lua_ls.setup({
+			vim.lsp.config("lua_ls", {
 				on_attach = on_attach,
 				capabilities = capabilities,
 				settings = {
@@ -32,8 +31,9 @@ return {
 					},
 				},
 			})
+			vim.lsp.enable("lua_ls")
 
-			lspconfig.rust_analyzer.setup({
+			vim.lsp.config("rust_analyzer", {
 				on_attach = on_attach,
 				capabilities = capabilities,
 				settings = {
@@ -61,8 +61,9 @@ return {
 					},
 				},
 			})
+			vim.lsp.enable("rust_analyzer")
 
-			lspconfig.gopls.setup({
+			vim.lsp.config("gopls", {
 				on_attach = on_attach,
 				capabilities = capabilities,
 				filetypes = { "go", "gomod", "gowork", "gotmpl" },
@@ -75,8 +76,9 @@ return {
 					},
 				},
 			})
+			vim.lsp.enable("gopls")
 
-			-- lspconfig.tailwindcss.setup({
+			-- vim.lsp.config("tailwindcss", {
 			-- 	on_attach = on_attach,
 			-- 	capabilities = capabilities,
 			-- 	filetypes = { "templ", "astro", "javascript", "typescript", "react" },
@@ -88,33 +90,39 @@ return {
 			-- 		},
 			-- 	},
 			-- })
+			-- vim.lsp.enable("tailwindcss")
 
-			lspconfig.templ.setup({
+			vim.lsp.config("templ", {
 				on_attach = on_attach,
 				capabilities = capabilities,
 			})
+			vim.lsp.enable("templ")
 
-			lspconfig.nil_ls.setup({
+			vim.lsp.config("nil_ls", {
 				on_attach = on_attach,
 				capabilities = capabilities,
 			})
+			vim.lsp.enable("nil_ls")
 
-			lspconfig.ts_ls.setup({
+			vim.lsp.config("ts_ls", {
 				on_attach = on_attach,
 				capabilities = capabilities,
 			})
+			vim.lsp.enable("ts_ls")
 
-			lspconfig.html.setup({
+			vim.lsp.config("html", {
 				on_attach = on_attach,
 				capabilities = capabilities,
 				filetypes = { "html", "templ" },
 			})
+			vim.lsp.enable("html")
 
-			lspconfig.htmx.setup({
+			vim.lsp.config("htmx", {
 				on_attach = on_attach,
 				capabilities = capabilities,
 				filetypes = { "html", "templ" },
 			})
+			vim.lsp.enable("htmx")
 		end,
 	},
 }

@@ -1,7 +1,8 @@
 return {
 	{
 		"nvim-treesitter/nvim-treesitter",
-		event = { "BufReadPost", "BufNewFile" },
+		branch = "master",
+		lazy = false,
 		cmd = { "TSInstall", "TSBufEnable", "TSBufDisable", "TSModuleInfo" },
 		build = ":TSUpdate",
 		dependencies = {
@@ -13,7 +14,6 @@ return {
 			return require("plugins.configs.treesitter")
 		end,
 		config = function(_, opts)
-			local parser_config = require("nvim-treesitter.parsers").get_parser_configs()
 			require("nvim-treesitter.configs").setup(opts)
 		end,
 	},
