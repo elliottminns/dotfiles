@@ -28,6 +28,7 @@
       environment.systemPackages =
         [
 	  pkgs.neovim
+          pkgs.betterdisplay
           pkgs.git
           pkgs.gh
           pkgs.ghostty-bin
@@ -88,6 +89,9 @@
 
       # Necessary for using flakes on this system.
       nix.settings.experimental-features = "nix-command flakes";
+      nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (pkgs.lib.getName pkg) [
+        "betterdisplay"
+      ];
 
       # Enable alternative shell support in nix-darwin.
       # programs.fish.enable = true;
