@@ -29,6 +29,7 @@
         [
 	  pkgs.neovim
           pkgs.betterdisplay
+          pkgs.doppler
           pkgs.git
           pkgs.gh
           pkgs.ghostty-bin
