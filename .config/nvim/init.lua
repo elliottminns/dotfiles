@@ -1,7 +1,12 @@
 -- Set leader key
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
-vim.opt.scrolloff = 3
+vim.opt.scrolloff = 1
+vim.opt.listchars = {
+	tab = "> ",
+	trail = "·",
+	space = "·", -- can be noisy, often omitted
+}
 
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
@@ -36,10 +41,10 @@ vim.o.hlsearch = false
 vim.wo.number = true
 
 -- Tabs vs spaces
-vim.o.tabstop = 2 -- A TAB character looks like 4 spaces
+vim.o.tabstop = 2      -- A TAB character looks like 4 spaces
 vim.o.expandtab = true -- Pressing the TAB key will insert spaces instead of a TAB character
-vim.o.softtabstop = 2 -- Number of spaces inserted instead of a TAB character
-vim.o.shiftwidth = 2 -- Number of spaces inserted when indenting
+vim.o.softtabstop = 2  -- Number of spaces inserted instead of a TAB character
+vim.o.shiftwidth = 2   -- Number of spaces inserted when indenting
 
 -- Enable mouse mode
 vim.o.mouse = "a"

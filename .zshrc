@@ -1,3 +1,7 @@
+
+# Kiro CLI pre block. Keep at the top of this file.
+[[ -f "${HOME}/Library/Application Support/kiro-cli/shell/zshrc.pre.zsh" ]] && builtin source "${HOME}/Library/Application Support/kiro-cli/shell/zshrc.pre.zsh"
+
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
@@ -106,7 +110,9 @@ eval "$(fzf --zsh)"
 
 
 # Zoxide integration
-eval "$(zoxide init --cmd cd zsh)"
+if [[ -o interactive ]] && command -v zoxide >/dev/null 2>&1; then
+  eval "$(zoxide init --cmd cd zsh)"
+fi
 
 
 PATH="/Applications/Docker.app/Contents/Resources/bin:$PATH"
@@ -141,16 +147,75 @@ zle -N edit-command-line
 bindkey '^x^e' edit-command-line
 
 # Suffix Aliases
-alias -s md="$EDITOR"
+alias -s md="bat"
 alias -s mov="open"
 alias -s png="open"
 alias -s mp4="open"
 alias -s go="$EDITOR"
 alias -s js="$EDITOR"
-alias -s yaml="$EDITOR"
-alias -s json="jq <"
+alias -s ts="$EDITOR"
+alias -s yaml="bat"
+alias -s json="jless"
 export PATH="$HOME/.local/share/solana/install/active_release/bin:$PATH"
 
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+# Clear screen, keep buffer
+clear-keep-buffer() {
+  zle clear-screen
+}
+zle -N clear-keep-buffer
+bindkey '^X0' clear-keep-buffer
+
+
+# Copy current command to clipboard
+copy-command() {
+  echo -n $BUFFER | pbcopy  # or xclip
+  zle -M "Copied to clipboard"
+}
+zle -N copy-command
+bindkey '^Xc' copy-command
+
+# Bind magic space
+bindkey ' ' magic-space
+
+# cpwd hook for nix
+function nix_hook() {
+  # Don't nest shells
+  [[ -n "$IN_NIX_SHELL" ]] && return
+
+  if [[ -f flake.nix ]]; then
+    nix develop
+  elif [[ -f shell.nix || -f default.nix ]]; then
+    nix-shell
+  fi
+}
+
+function python_hook() {
+  # chpwd hook for python
+  # If already in a venv, check if we should exit
+  if [[ -n "$VIRTUAL_ENV" ]]; then
+    case "$PWD/" in
+      "$VIRTUAL_ENV"/*) return ;;
+      *) deactivate ;;
+    esac
+  fi
+
+  # Enter venv if present
+  if [[ -z "$VIRTUAL_ENV" ]]; then
+    if [[ -f .venv/bin/activate ]]; then
+      source .venv/bin/activate
+    elif [[ -f venv/bin/activate ]]; then
+      source venv/bin/activate
+    fi
+  fi
+}
+
+# opencode
+export PATH=/Users/elliott/.opencode/bin:$PATH
+
+
+# Kiro CLI post block. Keep at the bottom of this file.
+[[ -f "${HOME}/Library/Application Support/kiro-cli/shell/zshrc.post.zsh" ]] && builtin source "${HOME}/Library/Application Support/kiro-cli/shell/zshrc.post.zsh"

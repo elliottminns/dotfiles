@@ -1,7 +1,7 @@
 # This file contains fish universal variable definitions.
 # VERSION: 3.0
 SETUVAR VIRTUAL_ENV_DISABLE_PROMPT:true
-SETUVAR __fish_initialized:3100
+SETUVAR __fish_initialized:3800
 SETUVAR _fisher_IlanCosman_2F_tide_40_v5_files:/home/elliott/\x2econfig/fish/functions/_tide_detect_os\x2efish\x1e/home/elliott/\x2econfig/fish/functions/_tide_find_and_remove\x2efish\x1e/home/elliott/\x2econfig/fish/functions/_tide_item_character\x2efish\x1e/home/elliott/\x2econfig/fish/functions/_tide_item_chruby\x2efish\x1e/home/elliott/\x2econfig/fish/functions/_tide_item_cmd_duration\x2efish\x1e/home/elliott/\x2econfig/fish/functions/_tide_item_context\x2efish\x1e/home/elliott/\x2econfig/fish/functions/_tide_item_git\x2efish\x1e/home/elliott/\x2econfig/fish/functions/_tide_item_go\x2efish\x1e/home/elliott/\x2econfig/fish/functions/_tide_item_jobs\x2efish\x1e/home/elliott/\x2econfig/fish/functions/_tide_item_kubectl\x2efish\x1e/home/elliott/\x2econfig/fish/functions/_tide_item_newline\x2efish\x1e/home/elliott/\x2econfig/fish/functions/_tide_item_node\x2efish\x1e/home/elliott/\x2econfig/fish/functions/_tide_item_os\x2efish\x1e/home/elliott/\x2econfig/fish/functions/_tide_item_php\x2efish\x1e/home/elliott/\x2econfig/fish/functions/_tide_item_rustc\x2efish\x1e/home/elliott/\x2econfig/fish/functions/_tide_item_shlvl\x2efish\x1e/home/elliott/\x2econfig/fish/functions/_tide_item_status\x2efish\x1e/home/elliott/\x2econfig/fish/functions/_tide_item_time\x2efish\x1e/home/elliott/\x2econfig/fish/functions/_tide_item_vi_mode\x2efish\x1e/home/elliott/\x2econfig/fish/functions/_tide_item_virtual_env\x2efish\x1e/home/elliott/\x2econfig/fish/functions/_tide_print_item\x2efish\x1e/home/elliott/\x2econfig/fish/functions/_tide_prompt\x2efish\x1e/home/elliott/\x2econfig/fish/functions/_tide_pwd\x2efish\x1e/home/elliott/\x2econfig/fish/functions/_tide_remove_unusable_items\x2efish\x1e/home/elliott/\x2econfig/fish/functions/_tide_sub_bug\x2dreport\x2efish\x1e/home/elliott/\x2econfig/fish/functions/_tide_sub_configure\x2efish\x1e/home/elliott/\x2econfig/fish/functions/fish_mode_prompt\x2efish\x1e/home/elliott/\x2econfig/fish/functions/fish_prompt\x2efish\x1e/home/elliott/\x2econfig/fish/functions/tide\x1e/home/elliott/\x2econfig/fish/functions/tide\x2efish\x1e/home/elliott/\x2econfig/fish/conf\x2ed/_tide_init\x2efish\x1e/home/elliott/\x2econfig/fish/completions/tide\x2efish
 SETUVAR _fisher_catppuccin_2F_fish_files:/home/elliott/\x2econfig/fish/conf\x2ed/catppuccin\x2efish
 SETUVAR _fisher_jorgebucaran_2F_fisher_files:/home/elliott/\x2econfig/fish/functions/fisher\x2efish\x1e/home/elliott/\x2econfig/fish/completions/fisher\x2efish
@@ -48,6 +48,8 @@ SETUVAR fish_pager_color_completion:\x1d
 SETUVAR fish_pager_color_description:B3A06D\x1eyellow
 SETUVAR fish_pager_color_prefix:normal\x1e\x2d\x2dbold\x1e\x2d\x2dunderline
 SETUVAR fish_pager_color_progress:brwhite\x1e\x2d\x2dbackground\x3dcyan
+SETUVAR fish_pager_color_selected_background:\x2dr
+SETUVAR fish_user_paths:/opt/homebrew/bin
 SETUVAR tide_character_bg_color:normal
 SETUVAR tide_character_color:brgreen
 SETUVAR tide_character_color_failure:brred
@@ -119,7 +121,7 @@ SETUVAR tide_pwd_icon_home:\x1d
 SETUVAR tide_pwd_icon_unwritable:\uf023
 SETUVAR tide_pwd_markers:\x2ebzr\x1e\x2ecitc\x1e\x2egit\x1e\x2ehg\x1e\x2enode\x2dversion\x1e\x2epython\x2dversion\x1e\x2eruby\x2dversion\x1e\x2eshorten_folder_marker\x1e\x2esvn\x1e\x2eterraform\x1eCargo\x2etoml\x1ecomposer\x2ejson\x1eCVS\x1ego\x2emod\x1epackage\x2ejson
 SETUVAR tide_right_prompt_frame_enabled:false
-SETUVAR tide_right_prompt_items:status\x1ecmd_duration\x1econtext\x1ejobs\x1enode\x1evirtual_env\x1erustc\x1ephp\x1ego\x1ekubectl\x1etime
+SETUVAR tide_right_prompt_items:status\x1ecmd_duration\x1econtext\x1ejobs\x1evirtual_env\x1etime
 SETUVAR tide_right_prompt_prefix:\x20
 SETUVAR tide_right_prompt_separator_diff_color:\x20
 SETUVAR tide_right_prompt_separator_same_color:\x20

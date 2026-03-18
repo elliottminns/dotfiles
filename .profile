@@ -1,3 +1,7 @@
+
+# Kiro CLI pre block. Keep at the top of this file.
+[[ -f "${HOME}/Library/Application Support/kiro-cli/shell/profile.pre.bash" ]] && builtin source "${HOME}/Library/Application Support/kiro-cli/shell/profile.pre.bash"
+
 alias c="clear"
 alias vim='nvim'
 alias ls='ls --color=auto'
@@ -62,3 +66,9 @@ if [ -f /opt/asdf-vm/asdf.sh ]; then
   # Insert autocompletion setup for your shell here.
 fi
 . "$HOME/.cargo/env"
+
+export PATH="/Users/elliott/.local/share/solana/install/active_release/bin:$PATH"
+
+
+# Kiro CLI post block. Keep at the bottom of this file.
+[[ -f "${HOME}/Library/Application Support/kiro-cli/shell/profile.post.bash" ]] && builtin source "${HOME}/Library/Application Support/kiro-cli/shell/profile.post.bash"
