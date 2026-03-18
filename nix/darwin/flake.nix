@@ -39,6 +39,7 @@
           pkgs.ollama
           pkgs.pass
           pkgs.rustup
+          pkgs.slack
           pkgs.tmux
           pkgs.zoxide
           inputs.codex-cli-nix.packages.${pkgs.system}.default
@@ -96,6 +97,7 @@
       nixpkgs.config.allowUnfreePredicate = pkg: builtins.elem (pkgs.lib.getName pkg) [
         "betterdisplay"
         "claude-code-bin"
+        "slack"
       ];
       homebrew = {
         enable = true;
