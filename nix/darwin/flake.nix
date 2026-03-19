@@ -33,6 +33,7 @@
       environment.systemPackages = [
         pkgs.neovim
         pkgs.alejandra
+        pkgs.awscli2
         pkgs.bat
         pkgs.betterdisplay
         pkgs.claude-code-bin
@@ -48,6 +49,7 @@
         pkgs.rust-analyzer
         pkgs.rustup
         pkgs.slack
+        pkgs.tailwindcss
         pkgs.tmux
         pkgs.zoxide
         inputs.codex-cli-nix.packages.${pkgs.system}.default
@@ -117,6 +119,7 @@
           cleanup = "none";
         };
         casks = [
+          "aldente"
           "obs"
           "logi-options+"
           "elgato-stream-deck"
