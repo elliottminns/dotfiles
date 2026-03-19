@@ -36,6 +36,7 @@
         pkgs.awscli2
         pkgs.bat
         pkgs.betterdisplay
+        pkgs.bun
         pkgs.claude-code-bin
         pkgs.doppler
         pkgs.ffmpeg
@@ -46,11 +47,13 @@
         pkgs.just
         pkgs.ollama
         pkgs.pass
+        pkgs.pkg-config
         pkgs.rust-analyzer
         pkgs.rustup
         pkgs.slack
         pkgs.tailwindcss
         pkgs.tmux
+        pkgs.wasm-pack
         pkgs.zoxide
         inputs.codex-cli-nix.packages.${pkgs.system}.default
       ];
