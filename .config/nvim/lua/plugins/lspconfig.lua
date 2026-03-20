@@ -49,7 +49,7 @@ return {
 								},
 							},
 						},
-						checkOnSave = {
+						check = {
 							command = "clippy",
 						},
 						inlayHints = {
