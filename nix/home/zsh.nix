@@ -3,7 +3,25 @@
   pkgs,
   lib,
   ...
-}: {
+}: let
+  pkgConfigDeps = [
+    pkgs.cairo.dev
+    pkgs.gdk-pixbuf.dev
+    pkgs.glib.dev
+    pkgs.gst_all_1.gstreamer.dev
+    pkgs.gst_all_1.gst-plugins-bad.dev
+    pkgs.gst_all_1.gst-plugins-base.dev
+    pkgs.gst_all_1.gst-plugins-good.dev
+    pkgs.harfbuzz.dev
+    pkgs.gtk3.dev
+    pkgs.pango.dev
+  ];
+  pkgConfigPath =
+    lib.makeSearchPath "lib/pkgconfig" pkgConfigDeps
+    + ":"
+    + lib.makeSearchPath "share/pkgconfig" pkgConfigDeps;
+  exiftoolLibDir = "${pkgs.exiftool}/lib/perl5/site_perl/${pkgs.perl.version}";
+in {
   enable = true;
   dotDir = "${config.xdg.configHome}/zsh";
   history.size = 10000;
@@ -15,6 +33,7 @@
     C-l = "ctrl-l";
     control-l = "clear";
     clean = "clear";
+    drs = "darwin-rebuild switch --flake /Users/elliott/.dotfiles/nix/darwin#amaterasu";
     r2 = "aws --profile r2 --endpoint-url https://03af1b41c1aa6fe21d9b3a645dca423e.r2.cloudflarestorage.com";
   };
   initContent = ''
@@ -27,7 +46,9 @@
     fi
 
     export BUN_INSTALL=$HOME/.bun
-    export PATH="$HOME/.cargo/bin:$HOME/go/bin:$BUN_INSTALL/bin:$PATH"
+    export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:$HOME/.cargo/bin:$HOME/go/bin:$BUN_INSTALL/bin:$PATH"
+    export EXIFTOOL_LIB_DIR="${exiftoolLibDir}"
+    export PKG_CONFIG_PATH="${pkgConfigPath}''${PKG_CONFIG_PATH:+:$PKG_CONFIG_PATH}"
 
     # SSH_AUTH_SOCK set to GPG to enable using gpgagent as the ssh agent.
     export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)

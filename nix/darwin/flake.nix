@@ -21,7 +21,11 @@
   }: let
     # Username
     username = "elliott";
-    configuration = {pkgs, ...}: {
+    configuration = {pkgs, ...}: let
+      gsed = pkgs.writeShellScriptBin "gsed" ''
+        exec ${pkgs.gnused}/bin/sed "$@"
+      '';
+    in {
       disabledModules = ["services/karabiner-elements"];
       imports = [
         ./modules/services/karabiner-elements.nix
@@ -37,23 +41,42 @@
         pkgs.bat
         pkgs.betterdisplay
         pkgs.bun
+        pkgs.cargo-bundle
         pkgs.claude-code-bin
         pkgs.doppler
         pkgs.ffmpeg
         pkgs.git
         pkgs.gh
         pkgs.ghostty-bin
+        pkgs.cairo
+        pkgs.gdk-pixbuf
+        pkgs.glib
         pkgs.gnupg
+        pkgs.gnused
+        gsed
+        pkgs.gst_all_1.gstreamer
+        pkgs.gst_all_1.gst-plugins-bad
+        pkgs.gst_all_1.gst-plugins-base
+        pkgs.gst_all_1.gst-plugins-good
+        pkgs.harfbuzz
+        pkgs.gtk3
         pkgs.just
+        pkgs.mediainfo
+        pkgs.python3Packages.mlx-lm
         pkgs.ollama
+        pkgs.exiftool
+        pkgs.pango
         pkgs.pass
         pkgs.pkg-config
+        pkgs.ripgrep
         pkgs.rust-analyzer
         pkgs.rustup
         pkgs.slack
         pkgs.tailwindcss
         pkgs.tmux
+        pkgs.uv
         pkgs.wasm-pack
+        pkgs.zellij
         pkgs.zoxide
         inputs.codex-cli-nix.packages.${pkgs.system}.default
       ];
@@ -99,6 +122,12 @@
         '';
       };
 
+      services.openssh.enable = true;
+
+      networking.hostName = "amaterasu";
+      networking.localHostName = "amaterasu";
+      networking.computerName = "amaterasu";
+
       # User directory
       users.users.elliott = {
         name = username;
@@ -121,6 +150,9 @@
           upgrade = false;
           cleanup = "none";
         };
+        brews = [
+          "dylibbundler"
+        ];
         casks = [
           "aldente"
           "obs"

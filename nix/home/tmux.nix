@@ -31,7 +31,7 @@ in {
   shell = "${pkgs.zsh}/bin/zsh";
   # NOTE: Keep prefix off of Ctrl+A so Zsh can use Ctrl+A (beginning-of-line).
   shortcut = "Space";
-  terminal = "screen-256color";
+  terminal = "tmux-256color";
 
   plugins = with pkgs.tmuxPlugins; [
     tokyo-night
