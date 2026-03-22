@@ -43,6 +43,7 @@
         pkgs.bun
         pkgs.cargo-bundle
         pkgs.claude-code-bin
+        pkgs.dioxus-cli
         pkgs.doppler
         pkgs.ffmpeg
         pkgs.git
@@ -61,24 +62,28 @@
         pkgs.harfbuzz
         pkgs.gtk3
         pkgs.just
+        pkgs.macdylibbundler
         pkgs.mediainfo
+        pkgs.openssl
         pkgs.python3Packages.mlx-lm
         pkgs.ollama
         pkgs.exiftool
         pkgs.pango
         pkgs.pass
         pkgs.pkg-config
+        pkgs.protonmail-bridge
         pkgs.ripgrep
         pkgs.rust-analyzer
         pkgs.rustup
         pkgs.slack
         pkgs.tailwindcss
         pkgs.tmux
+        pkgs.trunk
         pkgs.uv
         pkgs.wasm-pack
         pkgs.zellij
         pkgs.zoxide
-        inputs.codex-cli-nix.packages.${pkgs.system}.default
+        inputs.codex-cli-nix.packages.${pkgs.stdenv.hostPlatform.system}.default
       ];
 
       services.kanata.enable = true;
@@ -148,17 +153,18 @@
         onActivation = {
           autoUpdate = false;
           upgrade = false;
-          cleanup = "none";
+          cleanup = "uninstall";
         };
-        brews = [
-          "dylibbundler"
-        ];
+        brews = [];
         casks = [
           "aldente"
+          "cmux"
+          "font-inter"
           "obs"
           "logi-options+"
           "elgato-stream-deck"
           "notion"
+          "sizeup"
           "figma"
         ];
       };

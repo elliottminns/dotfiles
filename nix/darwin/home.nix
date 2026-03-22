@@ -7,6 +7,7 @@
   inherit (config.lib.file) mkOutOfStoreSymlink;
 in {
   imports = [
+    ../home/fastfetch.nix
     ../home/ghostty.nix
   ];
 

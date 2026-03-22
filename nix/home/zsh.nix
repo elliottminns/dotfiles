@@ -14,6 +14,7 @@
     pkgs.gst_all_1.gst-plugins-good.dev
     pkgs.harfbuzz.dev
     pkgs.gtk3.dev
+    pkgs.openssl.dev
     pkgs.pango.dev
   ];
   pkgConfigPath =
@@ -21,6 +22,8 @@
     + ":"
     + lib.makeSearchPath "share/pkgconfig" pkgConfigDeps;
   exiftoolLibDir = "${pkgs.exiftool}/lib/perl5/site_perl/${pkgs.perl.version}";
+  opensslDev = pkgs.openssl.dev;
+  opensslLib = pkgs.lib.getLib pkgs.openssl;
 in {
   enable = true;
   dotDir = "${config.xdg.configHome}/zsh";
@@ -34,7 +37,9 @@ in {
     control-l = "clear";
     clean = "clear";
     drs = "darwin-rebuild switch --flake /Users/elliott/.dotfiles/nix/darwin#amaterasu";
+    ff = "fastfetch";
     r2 = "aws --profile r2 --endpoint-url https://03af1b41c1aa6fe21d9b3a645dca423e.r2.cloudflarestorage.com";
+    sysinfo = "fastfetch";
   };
   initContent = ''
     ZSH_DISABLE_COMPFIX=true
@@ -49,6 +54,9 @@ in {
     export PATH="/opt/homebrew/bin:/opt/homebrew/sbin:$HOME/.cargo/bin:$HOME/go/bin:$BUN_INSTALL/bin:$PATH"
     export EXIFTOOL_LIB_DIR="${exiftoolLibDir}"
     export PKG_CONFIG_PATH="${pkgConfigPath}''${PKG_CONFIG_PATH:+:$PKG_CONFIG_PATH}"
+    export OPENSSL_DIR="${opensslDev}"
+    export OPENSSL_LIB_DIR="${opensslLib}/lib"
+    export OPENSSL_INCLUDE_DIR="${opensslDev}/include"
 
     # SSH_AUTH_SOCK set to GPG to enable using gpgagent as the ssh agent.
     export SSH_AUTH_SOCK=$(gpgconf --list-dirs agent-ssh-socket)
