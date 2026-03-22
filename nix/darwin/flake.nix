@@ -64,6 +64,7 @@
         pkgs.just
         pkgs.macdylibbundler
         pkgs.mediainfo
+        pkgs.opentofu
         pkgs.openssl
         pkgs.python3Packages.mlx-lm
         pkgs.ollama
