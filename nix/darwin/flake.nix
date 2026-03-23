@@ -66,6 +66,7 @@
         pkgs.mediainfo
         pkgs.opentofu
         pkgs.openssl
+        pkgs.postgresql
         pkgs.python3Packages.mlx-lm
         pkgs.ollama
         pkgs.exiftool
@@ -158,14 +159,19 @@
         };
         brews = [];
         casks = [
+          "adobe-creative-cloud"
           "aldente"
-          "cmux"
+          "discord"
+          "docker-desktop"
+          "elgato-camera-hub"
           "font-inter"
+          "istat-menus"
           "obs"
           "logi-options+"
           "elgato-stream-deck"
           "notion"
           "sizeup"
+          "vlc"
           "figma"
         ];
       };
