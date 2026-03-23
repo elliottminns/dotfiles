@@ -112,6 +112,30 @@ in {
     alias -g NUL='>/dev/null 2>1'
     alias -g JQ='| jq'
     alias -g C='| wl-copy'
+
+    dburl() {
+      if [[ -z "$1" ]]; then
+        echo "Doppler project is missing"
+        return 1
+      fi
+      if [[ -z "$2" ]]; then
+        echo "Doppler config is missing"
+        return 1
+      fi
+      export DATABASE_URL=$(doppler run -p "$1" -c "$2" -- bash -c 'echo $DATABASE_URL')
+    }
+
+    opendb() {
+      if [[ -z "$1" ]]; then
+        echo "Doppler project is missing"
+        return 1
+      fi
+      if [[ -z "$2" ]]; then
+        echo "Doppler config is missing"
+        return 1
+      fi
+      psql "$(doppler run -p "$1" -c "$2" -- bash -c 'echo $DATABASE_URL')"
+    }
   '';
   oh-my-zsh = {
     enable = true;
