@@ -42,6 +42,7 @@
         pkgs.betterdisplay
         pkgs.bun
         pkgs.cargo-bundle
+        pkgs.cargo-leptos
         pkgs.claude-code-bin
         pkgs.dioxus-cli
         pkgs.doppler
@@ -52,6 +53,7 @@
         pkgs.cairo
         pkgs.gdk-pixbuf
         pkgs.glib
+        pkgs.go
         pkgs.gnupg
         pkgs.gnused
         gsed
@@ -73,6 +75,7 @@
         pkgs.pango
         pkgs.pass
         pkgs.pkg-config
+        pkgs.pwgen
         pkgs.protonmail-bridge
         pkgs.ripgrep
         pkgs.rust-analyzer
@@ -165,6 +168,7 @@
           "docker-desktop"
           "elgato-camera-hub"
           "font-inter"
+          "google-drive"
           "istat-menus"
           "obs"
           "logi-options+"
@@ -173,7 +177,11 @@
           "sizeup"
           "vlc"
           "figma"
+          "google-chrome"
         ];
+        masApps = {
+          Xcode = 497799835;
+        };
       };
 
       # Create /etc/zshrc and make zsh available as the managed login shell.

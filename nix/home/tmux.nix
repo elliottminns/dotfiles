@@ -43,6 +43,8 @@ in {
   extraConfig = ''
     # set-default colorset-option -ga terminal-overrides ",xterm-256color:Tc"
     set -as terminal-features ",xterm-256color:RGB"
+    set -as terminal-features ",xterm-ghostty:RGB"
+    set -as terminal-features ",tmux-256color:RGB"
     # set-option -sa terminal-overrides ",xterm*:Tc"
     set -g mouse on
 
