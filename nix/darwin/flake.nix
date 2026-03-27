@@ -168,6 +168,8 @@
           "docker-desktop"
           "elgato-camera-hub"
           "font-inter"
+          "font-montserrat"
+          "font-poppins"
           "google-drive"
           "istat-menus"
           "obs"
