@@ -89,8 +89,12 @@ in {
 
     # Keybindings
     bindkey -e
-    bindkey '^p' history-search-backward
-    bindkey '^n' history-search-forward
+    autoload -Uz history-beginning-search-backward-end
+    autoload -Uz history-beginning-search-forward-end
+    zle -N history-beginning-search-backward-end
+    zle -N history-beginning-search-forward-end
+    bindkey '^p' history-beginning-search-backward-end
+    bindkey '^n' history-beginning-search-forward-end
     bindkey '^[w' kill-region
 
     zle_highlight+=(paste:none)
