@@ -89,12 +89,70 @@ in {
 
     # Keybindings
     bindkey -e
-    autoload -Uz history-beginning-search-backward-end
-    autoload -Uz history-beginning-search-forward-end
-    zle -N history-beginning-search-backward-end
-    zle -N history-beginning-search-forward-end
-    bindkey '^p' history-beginning-search-backward-end
-    bindkey '^n' history-beginning-search-forward-end
+    typeset -gi __prefix_history_event=0
+    typeset -g __prefix_history_query=""
+    typeset -g __prefix_history_current=""
+
+    __prefix_history_search() {
+      emulate -L zsh
+
+      local direction="$1"
+      local prefix start event line
+      local -a events
+
+      if [[ "$BUFFER" == "$__prefix_history_current" && -n "$__prefix_history_query" ]]; then
+        prefix="$__prefix_history_query"
+        start=$__prefix_history_event
+      else
+        __prefix_history_query="$BUFFER"
+        __prefix_history_current="$BUFFER"
+        __prefix_history_event=$HISTCMD
+        prefix="$BUFFER"
+        start=$HISTCMD
+      fi
+
+      if [[ "$direction" == "backward" ]]; then
+        events=( ''${(Onk)history} )
+        for event in $events; do
+          (( event < start )) || continue
+          line=$history[$event]
+          [[ "''${line[1,$#prefix]}" == "$prefix" ]] || continue
+          BUFFER="$line"
+          CURSOR=$#BUFFER
+          __prefix_history_current="$line"
+          __prefix_history_event=$event
+          return 0
+        done
+      else
+        events=( ''${(onk)history} )
+        for event in $events; do
+          (( event > start )) || continue
+          line=$history[$event]
+          [[ "''${line[1,$#prefix]}" == "$prefix" ]] || continue
+          BUFFER="$line"
+          CURSOR=$#BUFFER
+          __prefix_history_current="$line"
+          __prefix_history_event=$event
+          return 0
+        done
+      fi
+
+      zle beep
+      return 1
+    }
+
+    __prefix_history_search_backward() {
+      __prefix_history_search backward
+    }
+
+    __prefix_history_search_forward() {
+      __prefix_history_search forward
+    }
+
+    zle -N __prefix_history_search_backward
+    zle -N __prefix_history_search_forward
+    bindkey '^p' __prefix_history_search_backward
+    bindkey '^n' __prefix_history_search_forward
     bindkey '^[w' kill-region
 
     zle_highlight+=(paste:none)
