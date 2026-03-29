@@ -44,6 +44,7 @@
         pkgs.cargo-bundle
         pkgs.cargo-leptos
         pkgs.claude-code-bin
+        pkgs.cmake
         pkgs.dioxus-cli
         pkgs.doppler
         pkgs.ffmpeg
@@ -63,9 +64,11 @@
         pkgs.gst_all_1.gst-plugins-good
         pkgs.harfbuzz
         pkgs.gtk3
+        pkgs.imagemagick
         pkgs.just
         pkgs.macdylibbundler
         pkgs.mediainfo
+        pkgs.micromamba
         pkgs.opentofu
         pkgs.openssl
         pkgs.postgresql
@@ -146,7 +149,23 @@
       };
 
       # Necessary for using flakes on this system.
-      nix.settings.experimental-features = "nix-command flakes";
+      nix = {
+        gc = {
+          automatic = true;
+          interval = {
+            Hour = 3;
+            Minute = 15;
+            Weekday = 7;
+          };
+          options = "--delete-older-than 14d";
+        };
+        optimise.automatic = true;
+        registry.nixpkgs.flake = nixpkgs;
+        settings = {
+          auto-optimise-store = true;
+          experimental-features = "nix-command flakes";
+        };
+      };
       nixpkgs.config.allowUnfreePredicate = pkg:
         builtins.elem (pkgs.lib.getName pkg) [
           "betterdisplay"
@@ -175,13 +194,17 @@
           "obs"
           "logi-options+"
           "elgato-stream-deck"
+          "mullvad-vpn"
           "notion"
+          "protonvpn"
+          "praat"
           "sizeup"
           "vlc"
           "figma"
           "google-chrome"
         ];
         masApps = {
+          FinalCutPro = 424389933;
           Xcode = 497799835;
         };
       };
