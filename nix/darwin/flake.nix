@@ -47,6 +47,7 @@
         pkgs.cmake
         pkgs.dioxus-cli
         pkgs.doppler
+        pkgs.fd
         pkgs.ffmpeg
         pkgs.git
         pkgs.gh
@@ -66,6 +67,7 @@
         pkgs.gtk3
         pkgs.imagemagick
         pkgs.just
+        pkgs.macpm
         pkgs.macdylibbundler
         pkgs.mediainfo
         pkgs.micromamba
@@ -136,6 +138,7 @@
       };
 
       services.openssh.enable = true;
+      security.pam.services.sudo_local.touchIdAuth = true;
 
       networking.hostName = "amaterasu";
       networking.localHostName = "amaterasu";
@@ -182,13 +185,14 @@
         brews = [];
         casks = [
           "adobe-creative-cloud"
-          "aldente"
+          "cinebench"
           "discord"
           "docker-desktop"
           "elgato-camera-hub"
           "font-inter"
           "font-montserrat"
           "font-poppins"
+          "geekbench"
           "google-drive"
           "istat-menus"
           "obs"
