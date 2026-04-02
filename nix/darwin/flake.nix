@@ -67,10 +67,13 @@
         pkgs.gtk3
         pkgs.imagemagick
         pkgs.just
+        pkgs.kubectl
+        pkgs.kubectx
         pkgs.macpm
         pkgs.macdylibbundler
         pkgs.mediainfo
         pkgs.micromamba
+        pkgs.opencode
         pkgs.opentofu
         pkgs.openssl
         pkgs.postgresql
