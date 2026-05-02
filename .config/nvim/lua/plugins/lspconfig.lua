@@ -3,6 +3,19 @@ return {
 		"neovim/nvim-lspconfig",
 		lazy = false,
 		config = function()
+			vim.api.nvim_create_user_command("LspStop", function(args)
+				local name = args.fargs[1]
+				local clients = vim.lsp.get_clients({ name = name })
+				for _, client in ipairs(clients) do
+					client:stop()
+				end
+			end, {
+				nargs = "?",
+				complete = function()
+					return vim.tbl_map(function(c) return c.name end, vim.lsp.get_clients())
+				end,
+			})
+
 			local capabilities = vim.lsp.protocol.make_client_capabilities()
 			capabilities = vim.tbl_deep_extend("force", capabilities, require("cmp_nvim_lsp").default_capabilities())
 

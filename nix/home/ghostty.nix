@@ -3,7 +3,7 @@
     enable = true;
     package = pkgs.ghostty-bin;
     settings = {
-      font-family = "JetBrains Mono";
+      font-family = "JetBrainsMono Nerd Font";
       font-size = 20;
       font-feature = "-calt, -liga, -dlig";
       theme = "TokyoNight";

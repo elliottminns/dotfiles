@@ -19,6 +19,28 @@
     home-manager,
     ...
   }: let
+    overlay = final: prev: {
+      python3Packages = prev.python3Packages.overrideScope (
+        pyFinal: pyPrev: {
+          mlx-vlm = pyPrev.mlx-vlm.overridePythonAttrs (_: rec {
+            version = "0.4.3";
+            src = prev.fetchFromGitHub {
+              owner = "Blaizzy";
+              repo = "mlx-vlm";
+              tag = "v${version}";
+              hash = "sha256-8cVJUibEhfAqyRq3ian8pKc2XmCsNRWXjS6iZIojEKk=";
+            };
+            dependencies =
+              pyPrev.mlx-vlm.dependencies
+              ++ [
+                pyPrev.miniaudio
+                pyPrev.sentencepiece
+              ];
+          });
+        }
+      );
+    };
+
     # Username
     username = "elliott";
     configuration = {pkgs, ...}: let
@@ -26,6 +48,7 @@
         exec ${pkgs.gnused}/bin/sed "$@"
       '';
     in {
+      nixpkgs.overlays = [overlay];
       disabledModules = ["services/karabiner-elements"];
       imports = [
         ./modules/services/karabiner-elements.nix
@@ -41,11 +64,13 @@
         pkgs.bat
         pkgs.betterdisplay
         pkgs.bun
+        pkgs.caffeine
         pkgs.cargo-bundle
         pkgs.cargo-leptos
-        pkgs.claude-code-bin
+        pkgs.claude-code
         pkgs.cmake
         pkgs.dioxus-cli
+        pkgs.doctl
         pkgs.doppler
         pkgs.fd
         pkgs.ffmpeg
@@ -63,21 +88,27 @@
         pkgs.gst_all_1.gst-plugins-bad
         pkgs.gst_all_1.gst-plugins-base
         pkgs.gst_all_1.gst-plugins-good
+        pkgs.helmfile
         pkgs.harfbuzz
         pkgs.gtk3
         pkgs.imagemagick
         pkgs.just
         pkgs.kubectl
         pkgs.kubectx
+        pkgs.kubernetes-helm
+        pkgs.kubeseal
+        pkgs.kustomize
         pkgs.macpm
         pkgs.macdylibbundler
         pkgs.mediainfo
         pkgs.micromamba
+        pkgs.nodejs
         pkgs.opencode
         pkgs.opentofu
         pkgs.openssl
         pkgs.postgresql
         pkgs.python3Packages.mlx-lm
+        pkgs.python3Packages.mlx-vlm
         pkgs.ollama
         pkgs.exiftool
         pkgs.pango
@@ -88,12 +119,14 @@
         pkgs.ripgrep
         pkgs.rust-analyzer
         pkgs.rustup
+        pkgs.saml2aws
         pkgs.slack
         pkgs.tailwindcss
         pkgs.tmux
         pkgs.trunk
         pkgs.uv
         pkgs.wasm-pack
+        pkgs.zig
         pkgs.zellij
         pkgs.zoxide
         inputs.codex-cli-nix.packages.${pkgs.stdenv.hostPlatform.system}.default
@@ -102,6 +135,7 @@
       services.kanata.enable = true;
       services.kanata.package = pkgs.kanata;
       services.kanata.keyboards.internal = {
+        devices = ["Apple Internal Keyboard / Trackpad"];
         extraDefCfg = ''
           process-unmapped-keys yes
         '';
@@ -143,6 +177,10 @@
       services.openssh.enable = true;
       security.pam.services.sudo_local.touchIdAuth = true;
 
+      fonts.packages = [
+        pkgs.nerd-fonts.jetbrains-mono
+      ];
+
       networking.hostName = "amaterasu";
       networking.localHostName = "amaterasu";
       networking.computerName = "amaterasu";
@@ -175,7 +213,7 @@
       nixpkgs.config.allowUnfreePredicate = pkg:
         builtins.elem (pkgs.lib.getName pkg) [
           "betterdisplay"
-          "claude-code-bin"
+          "claude-code"
           "slack"
         ];
       homebrew = {
@@ -201,10 +239,12 @@
           "obs"
           "logi-options+"
           "elgato-stream-deck"
+          "lm-studio"
           "mullvad-vpn"
           "notion"
           "protonvpn"
           "praat"
+          "session-manager-plugin"
           "sizeup"
           "vlc"
           "figma"
