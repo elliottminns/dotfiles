@@ -47,6 +47,10 @@
 
     # Opencode
     opencode.url = "github:anomalyco/opencode/v1.1.53";
+
+    # Kiru
+    kiru-agent.url = "git+ssh://git@github.com/kiruhq/kiru";
+    kiru.url = "github:kiruhq/kiru-nix";
   };
 
   outputs = {
@@ -61,20 +65,37 @@
     nixos-hardware,
     ags,
     nix-clawdbot,
+    kiru-agent,
+    kiru,
     ...
   } @ inputs: let
     inherit (self) outputs;
 
     systems = [
       "aarch64-linux"
-      "i686-linux"
       "x86_64-linux"
       "aarch64-darwin"
       "x86_64-darwin"
     ];
 
     hosts = [
-      {name = "itachi";}
+      {
+        name = "itachi";
+        hardware = null;
+        gaps = false;
+        monitors = [
+          {
+            name = "eDP-1";
+            dimensions = "preferred";
+            position = "0x0";
+            scale = 1.6;
+            internal = true;
+            framerate = 60;
+            transform = 0;
+          }
+        ];
+        cursor = 64;
+      }
       {
         name = "karasu";
         hardware = nixos-hardware.nixosModules.framework-13-7040-amd;
@@ -183,6 +204,8 @@
         hardware = nixos-hardware.nixosModules.framework-desktop-amd-ai-max-300-series;
         gaps = false;
         hasClawdUser = false;
+        hasGaming = false;
+        hasFixer = true;
         monitors = [
           {
             name = "HDMI-A-1"; # Adjust based on actual display
@@ -301,6 +324,34 @@
             ++ (
               if host.hardware != null
               then [host.hardware]
+              else []
+            )
+            ++ (
+              if (host.hasFixer or false)
+              then [
+                kiru-agent.nixosModules.fixer
+                (
+                  {
+                    config,
+                    pkgs,
+                    lib,
+                    ...
+                  }: {
+                    services.kiru-fixer.enable = true;
+
+                    systemd.tmpfiles.rules = [
+                      "f /etc/doppler/kiru-fixer.token 0600 kiru-fixer kiru-fixer - -"
+                    ];
+
+                    systemd.services.kiru-fixer.serviceConfig.ExecStart = lib.mkForce "${pkgs.writeShellScript "kiru-fixer-doppler" ''
+                      export DOPPLER_TOKEN="$(cat /etc/doppler/kiru-fixer.token)"
+                      exec ${pkgs.doppler}/bin/doppler run \
+                        -p kiru-agent -c prod \
+                        -- ${config.services.kiru-fixer.package}/bin/fixer
+                    ''}";
+                  }
+                )
+              ]
               else []
             );
         };

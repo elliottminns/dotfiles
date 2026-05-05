@@ -25,7 +25,7 @@ in {
 
   xdg.enable = true;
 
-  xdg.configFile.nvim.source = mkOutOfStoreSymlink "/home/elliott/.dotfiles/.config/nvim";
+  xdg.configFile.nvim.source = ../../.config/nvim;
   xdg.dataFile.password-store.source = mkOutOfStoreSymlink "/home/elliott/.password-store";
 
   xdg.portal = {

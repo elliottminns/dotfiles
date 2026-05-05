@@ -81,7 +81,7 @@ in {
     loadModels = [
       "glm-4.7-flash"
       "gemma3:27b"
-      "orieg/gemma3-tools:27b"
+      #"orieg/gemma3-tools:27b" # removed: no longer on Ollama registry
       "llama4:16x17b"
     ];
   };
@@ -143,9 +143,20 @@ in {
     };
   };
 
-  systemd.tmpfiles.rules = lib.mkIf (meta.hasClawdUser or false) [
-    "d /home/zenbot/clawd/dotfiles 0775 zenbot users -"
-  ];
+  systemd.tmpfiles.rules =
+    [
+      "d /var/lib/soci-snapshotter-grpc 0755 root root -"
+    ]
+    ++ lib.optionals (meta.hasClawdUser or false) [
+      "d /home/zenbot/clawd/dotfiles 0775 zenbot users -"
+    ];
+
+  environment.sessionVariables = lib.mkIf (meta.hostname == "zenbox") {
+    PKG_CONFIG_PATH = lib.makeSearchPath "lib/pkgconfig" [
+      pkgs.glib.dev
+      pkgs.gtk3.dev
+    ];
+  };
 
   # Define a user account. Don't forget to set a password with 'passwd'.
   users.users.elliott = {
@@ -153,6 +164,7 @@ in {
     extraGroups = [
       "wheel" # Enable 'sudo' for the user.
       "docker"
+      "containerd"
       "input"
       "uinput"
       "dotfiles"
@@ -180,7 +192,7 @@ in {
     bat
     alejandra
     argocd
-    awscli
+    awscli2
     #banana-cursor
     banana-cursor-dreams
     bubblewrap
@@ -260,6 +272,7 @@ in {
     stow
     stylua
     templ
+    opentofu
     tmux
     transmission_4-gtk
     typescript-language-server
@@ -289,10 +302,15 @@ in {
     asciinema
     jrnl
     unstable.claude-code
+    unstable.codex
     cosmic-ext-tweaks
+    soci-snapshotter
   ];
 
   # Virtualisation
+  virtualisation.containerd.enable = true;
+  users.groups.containerd.gid = 994;
+  virtualisation.containerd.settings.grpc.gid = 994;
   virtualisation.docker.enable = true;
   virtualisation.libvirtd.enable = true;
   virtualisation.podman = {
