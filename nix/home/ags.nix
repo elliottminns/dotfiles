@@ -12,7 +12,7 @@
     dart-sass
     fd
     brightnessctl
-    swww
+    awww
     inputs.matugen.packages.${pkgs.stdenv.hostPlatform.system}.default
     slurp
     wl-clipboard

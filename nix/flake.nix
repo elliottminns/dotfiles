@@ -4,7 +4,7 @@
   inputs = {
     # Nixpkgs
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    #nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.05";
+    nixpkgs-local.url = "path:/home/elliott/Projects/nixpkgs";
 
     nixos-hardware.url = "github:NixOs/nixos-hardware/master";
 
@@ -57,6 +57,7 @@
     alacritty-theme,
     templ,
     nixpkgs-unstable,
+    nixpkgs-local,
     nixos-hardware,
     ags,
     nix-clawdbot,
@@ -216,7 +217,6 @@
                 hostname = host.name;
               };
           };
-          system = "x86_64-linux";
           modules =
             [
               # Modules
@@ -268,7 +268,10 @@
                   pkgs = nixpkgs.legacyPackages.x86_64-linux;
                 in {
                   description = "Clawdbot Gateway";
-                  after = ["network.target" "local-fs.target"];
+                  after = [
+                    "network.target"
+                    "local-fs.target"
+                  ];
                   wantedBy = ["multi-user.target"];
                   unitConfig = {
                     RequiresMountsFor = "/home/zenbot/clawd/dotfiles";

@@ -11,12 +11,21 @@
     # ...
     # });
     opencode = inputs.opencode.packages.${prev.system}.opencode;
+    openldap = prev.openldap.overrideAttrs { doCheck = false; };
   };
 
   # When applied, the unstable nixpkgs set (declared in the flake inputs) will
   # be accessible through 'pkgs.unstable'
   unstable = final: _prev: {
     unstable = import inputs.nixpkgs-unstable {
+      system = final.system;
+      config.allowUnfree = true;
+    };
+  };
+
+  # Local nixpkgs checkout — accessible through 'pkgs.local'
+  local = final: _prev: {
+    local = import inputs.nixpkgs-local {
       system = final.system;
       config.allowUnfree = true;
     };

@@ -45,7 +45,7 @@
       rocmPackages.clr.icd
       libva
       libvdpau-va-gl
-      mesa.drivers
+      mesa
     ];
   };
 
@@ -65,7 +65,7 @@
     pkgs.clinfo
     #pkgs.displaylink
     pkgs.rocmPackages.rocminfo
-    pkgs.davinci-resolve
+    #pkgs.davinci-resolve
     mesa
     libva
     libvdpau-va-gl

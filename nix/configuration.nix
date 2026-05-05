@@ -8,10 +8,8 @@
   meta,
   lib,
   ...
-}:
-let
-  my-kubernetes-helm =
-    with pkgs;
+}: let
+  my-kubernetes-helm = with pkgs;
     wrapHelm kubernetes-helm {
       plugins = with pkgs.kubernetes-helmPlugins; [
         helm-secrets
@@ -24,8 +22,7 @@ let
   my-helmfile = pkgs.helmfile-wrapped.override {
     inherit (my-kubernetes-helm) pluginsDir;
   };
-in
-{
+in {
   imports = [
     ./modules/languages.nix
     ./modules/gnome.nix
@@ -51,6 +48,7 @@ in
       # Add overlays your own flake exports (from overlays and pkgs dir):
       outputs.overlays.additions
       outputs.overlays.unstable
+      outputs.overlays.local
       outputs.overlays.modifications
       inputs.templ.overlays.default
       inputs.alacritty-theme.overlays.default
@@ -94,7 +92,7 @@ in
 
   networking.hostName = meta.hostname; # Hostname is defined by the flake.
 
-  networking.extraHosts = '''';
+  networking.extraHosts = "";
   # Pick only one of the below networking options.
   #networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
   networking.networkmanager.enable = true; # Easiest to use and most distros use this by default.
@@ -120,14 +118,14 @@ in
   ];
 
   # Define groups
-  users.groups.dotfiles = { };
+  users.groups.dotfiles = {};
 
   # Keep dotfiles mounted for Zenbot/Clawdbot on hosts that run the service user.
   # This is a bind mount, so it survives reboot and doesn't rely on a manual mount.
   fileSystems = lib.mkIf (meta.hasClawdUser or false) {
     "/home/zenbot/clawd/dotfiles" = {
       device = "/home/elliott/.dotfiles";
-      options = [ "bind" ];
+      options = ["bind"];
     };
   };
 
@@ -233,7 +231,7 @@ in
     pop-gtk-theme
     postgresql
     proton-vpn-cli
-    protonvpn-gui
+    proton-vpn
     qemu
     qmk
     rclone
@@ -259,17 +257,8 @@ in
     wofi
     vlc
 
-    # Kiru dependencies (video editor)
-    ffmpeg
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
-    gst_all_1.gst-plugins-good
-    gst_all_1.gst-plugins-bad
-    gst_all_1.gst-plugins-ugly
-    gst_all_1.gst-libav
-    rustup # Rust toolchain for Kiru
-    pkg-config
-    openssl
+    # Kiru (video editor) — built from local nixpkgs checkout
+    local.kiru
 
     zenity
     zellij
@@ -290,6 +279,11 @@ in
   };
 
   programs.virt-manager.enable = true;
+
+  programs.appimage = {
+    enable = true;
+    binfmt = true;
+  };
 
   # Steam
   programs.steam = {
@@ -368,6 +362,25 @@ in
       pkgs.xdg-desktop-portal-hyprland # For Hyprland
       pkgs.xdg-desktop-portal-gnome # For GNOME
     ];
+    config = {
+      gnome = {
+        default = [
+          "gnome"
+          "gtk"
+        ];
+        "org.freedesktop.portal.FileChooser" = ["gnome"];
+      };
+      hyprland = {
+        default = [
+          "hyprland"
+          "gtk"
+        ];
+        "org.freedesktop.impl.portal.FileChooser" = ["gtk"];
+      };
+      common = {
+        default = ["gtk"];
+      };
+    };
   };
 
   services.kanata = {
@@ -390,14 +403,14 @@ in
           )
           (defalias
            caps (tap-hold 100 100 esc lctl)
-           a (multi f24 (tap-hold $tap-time $hold-time a lmet))
-           s (multi f24 (tap-hold $tap-time $hold-time s lalt))
-           d (multi f24 (tap-hold $tap-time $hold-time d lsft))
-           f (multi f24 (tap-hold $tap-time $hold-time f lctl))
-           j (multi f24 (tap-hold $tap-time $hold-time j rctl))
-           k (multi f24 (tap-hold $tap-time $hold-time k rsft))
-           l (multi f24 (tap-hold $tap-time $hold-time l ralt))
-           ; (multi f24 (tap-hold $tap-time $hold-time ; rmet))
+           a (tap-hold $tap-time $hold-time a lmet)
+           s (tap-hold $tap-time $hold-time s lalt)
+           d (tap-hold $tap-time $hold-time d lsft)
+           f (tap-hold $tap-time $hold-time f lctl)
+           j (tap-hold $tap-time $hold-time j rctl)
+           k (tap-hold $tap-time $hold-time k rsft)
+           l (tap-hold $tap-time $hold-time l ralt)
+           ; (tap-hold $tap-time $hold-time ; rmet)
           )
 
 

@@ -3,8 +3,10 @@
   lib,
   meta,
   ...
-}: {
-  nixpkgs.config.allowUnfreePredicate = pkg:
+}:
+{
+  nixpkgs.config.allowUnfreePredicate =
+    pkg:
     builtins.elem (lib.getName pkg) (
       map lib.getName [
         pkgs.discord
@@ -25,18 +27,12 @@
 
   nixpkgs.config.allowUnfree = true;
 
-  environment.systemPackages = with pkgs;
-    [
-      discord
-      unstable.keymapp
-      obsidian
-      signal-desktop
-      slack
-      reaper
-    ]
-    ++ (
-      if meta.hostname == "amaterasu"
-      then [unstable.davinci-resolve-studio]
-      else []
-    );
+  environment.systemPackages = with pkgs; [
+    discord
+    unstable.keymapp
+    obsidian
+    signal-desktop
+    slack
+    reaper
+  ];
 }
