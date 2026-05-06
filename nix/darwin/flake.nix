@@ -124,6 +124,7 @@
         pkgs.tailwindcss
         pkgs.tmux
         pkgs.trunk
+        pkgs.utm
         pkgs.uv
         pkgs.wasm-pack
         pkgs.zig
