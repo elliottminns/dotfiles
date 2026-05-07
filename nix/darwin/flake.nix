@@ -20,6 +20,14 @@
     ...
   }: let
     overlay = final: prev: {
+      alacritty = prev.alacritty.overrideAttrs (old: {
+        postInstall =
+          (old.postInstall or "")
+          + ''
+            cp ${./assets/alacritty.icns} $out/Applications/Alacritty.app/Contents/Resources/alacritty.icns
+          '';
+      });
+
       python3Packages = prev.python3Packages.overrideScope (
         pyFinal: pyPrev: {
           mlx-vlm = pyPrev.mlx-vlm.overridePythonAttrs (_: rec {
@@ -59,6 +67,7 @@
       # $ nix-env -qaP | grep wget
       environment.systemPackages = [
         pkgs.neovim
+        pkgs.alacritty
         pkgs.alejandra
         pkgs.awscli2
         pkgs.bat

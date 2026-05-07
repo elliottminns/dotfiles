@@ -19,6 +19,29 @@ return {
 			local capabilities = vim.lsp.protocol.make_client_capabilities()
 			capabilities = vim.tbl_deep_extend("force", capabilities, require("cmp_nvim_lsp").default_capabilities())
 
+			vim.diagnostic.config({
+				severity_sort = true,
+				virtual_text = {
+					source = "if_many",
+				},
+				float = {
+					border = "rounded",
+					focusable = false,
+					source = "if_many",
+				},
+			})
+
+			local diagnostic_group = vim.api.nvim_create_augroup("DiagnosticFloat", { clear = true })
+			vim.api.nvim_create_autocmd("CursorHold", {
+				group = diagnostic_group,
+				callback = function()
+					vim.diagnostic.open_float(nil, {
+						focus = false,
+						scope = "cursor",
+					})
+				end,
+			})
+
 			vim.api.nvim_create_autocmd({ "BufWritePre" }, { pattern = { "*.templ" }, callback = vim.lsp.buf.format })
 			vim.api.nvim_create_autocmd({ "BufWritePre" }, { pattern = { "*.rs" }, callback = vim.lsp.buf.format })
 
