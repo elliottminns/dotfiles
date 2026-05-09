@@ -43,7 +43,18 @@ return {
 			})
 
 			vim.api.nvim_create_autocmd({ "BufWritePre" }, { pattern = { "*.templ" }, callback = vim.lsp.buf.format })
-			vim.api.nvim_create_autocmd({ "BufWritePre" }, { pattern = { "*.rs" }, callback = vim.lsp.buf.format })
+			vim.api.nvim_create_autocmd({ "BufWritePre" }, {
+				pattern = { "*.rs" },
+				callback = function(args)
+					vim.lsp.buf.format({
+						bufnr = args.buf,
+						timeout_ms = 3000,
+						filter = function(client)
+							return client.name == "rust_analyzer"
+						end,
+					})
+				end,
+			})
 
 			local on_attach = function(_client, bufnr)
 				local opts = { buffer = bufnr, silent = true }
