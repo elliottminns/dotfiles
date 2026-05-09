@@ -15,16 +15,20 @@ in {
 
   home.username = "elliott";
   home.homeDirectory = "/Users/elliott";
+  home.packages = [
+    pkgs.alacritty
+  ];
+
   xdg.enable = true;
   xdg.configFile.nvim.source = mkOutOfStoreSymlink "/Users/elliott/.dotfiles/.config/nvim";
 
   home.stateVersion = "23.11";
 
   programs = {
-    git = import ../home/git.nix { inherit config pkgs lib;};
+    git = import ../home/git.nix {inherit config pkgs lib;};
     tmux = import ../home/tmux.nix {inherit pkgs;};
-    zsh = import ../home/zsh.nix {inherit config pkgs lib; };
-    zoxide = (import ../home/zoxide.nix { inherit config pkgs; });
+    zsh = import ../home/zsh.nix {inherit config pkgs lib;};
+    zoxide = import ../home/zoxide.nix {inherit config pkgs;};
     fzf = import ../home/fzf.nix {inherit pkgs;};
     oh-my-posh = import ../home/oh-my-posh.nix {inherit pkgs;};
   };

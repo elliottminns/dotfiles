@@ -6,6 +6,7 @@
     nix-darwin.url = "github:nix-darwin/nix-darwin/master";
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
     codex-cli-nix.url = "github:sadjow/codex-cli-nix";
+    mac-app-util.url = "github:hraban/mac-app-util";
 
     # Home Manager
     home-manager.url = "github:nix-community/home-manager";
@@ -17,6 +18,7 @@
     nix-darwin,
     nixpkgs,
     home-manager,
+    mac-app-util,
     ...
   }: let
     overlay = final: prev: {
@@ -67,7 +69,6 @@
       # $ nix-env -qaP | grep wget
       environment.systemPackages = [
         pkgs.neovim
-        pkgs.alacritty
         pkgs.alejandra
         pkgs.awscli2
         pkgs.bat
@@ -76,6 +77,7 @@
         pkgs.caffeine
         pkgs.cargo-bundle
         pkgs.cargo-leptos
+        pkgs.cdrtools
         pkgs.claude-code
         pkgs.cmake
         pkgs.dioxus-cli
@@ -124,6 +126,7 @@
         pkgs.pass
         pkgs.pkg-config
         pkgs.pwgen
+        pkgs.qemu
         pkgs.protonmail-bridge
         pkgs.ripgrep
         pkgs.rust-analyzer
@@ -131,6 +134,7 @@
         pkgs.saml2aws
         pkgs.slack
         pkgs.tailwindcss
+        pkgs.tart
         pkgs.tmux
         pkgs.trunk
         pkgs.utm
@@ -225,6 +229,7 @@
           "betterdisplay"
           "claude-code"
           "slack"
+          "tart"
         ];
       homebrew = {
         enable = true;
@@ -288,11 +293,15 @@
     darwinConfigurations."amaterasu" = nix-darwin.lib.darwinSystem {
       modules = [
         configuration
+        mac-app-util.darwinModules.default
         home-manager.darwinModules.home-manager
         {
           # `home-manager` config
           home-manager.useGlobalPkgs = true;
           home-manager.useUserPackages = true;
+          home-manager.sharedModules = [
+            mac-app-util.homeManagerModules.default
+          ];
           home-manager.users.elliott = import ./home.nix;
         }
       ];
