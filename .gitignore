@@ -2,3 +2,5 @@
 .emacs.d/session.*
 .emacs.d/#*#
 .config/tmux/plugins
+.codex
+*/.codex

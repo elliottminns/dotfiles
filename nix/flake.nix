@@ -4,7 +4,6 @@
   inputs = {
     # Nixpkgs
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-    nixpkgs-local.url = "path:/home/elliott/Projects/nixpkgs";
 
     nixos-hardware.url = "github:NixOs/nixos-hardware/master";
 
@@ -61,7 +60,6 @@
     alacritty-theme,
     templ,
     nixpkgs-unstable,
-    nixpkgs-local,
     nixos-hardware,
     ags,
     nix-clawdbot,

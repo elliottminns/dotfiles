@@ -31,6 +31,7 @@ in {
     ./modules/yubikey-gpg.nix
     ./modules/unfree.nix
     ./modules/video.nix
+    ./modules/k3s-worker.nix
     #./modules/clawdbot.nix
   ];
 
@@ -48,7 +49,7 @@ in {
       # Add overlays your own flake exports (from overlays and pkgs dir):
       outputs.overlays.additions
       outputs.overlays.unstable
-      outputs.overlays.local
+      outputs.overlays.kiru
       outputs.overlays.modifications
       inputs.templ.overlays.default
       inputs.alacritty-theme.overlays.default
@@ -108,7 +109,7 @@ in {
   #networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
   networking.networkmanager.enable = true; # Easiest to use and most distros use this by default.
   networking.nameservers = [
-    "192.168.1.250"
+    "1.1.1.1"
   ];
 
   # Set your time zone.
@@ -199,6 +200,7 @@ in {
     #calibre
     chromium
     clickgen
+    cloud-utils
     cmake
     distrobox
     dotool
@@ -290,8 +292,19 @@ in {
     vlc
     mpv
 
-    # Kiru (video editor) — built from local nixpkgs checkout
-    local.kiru
+    # Kiru dependencies (video editor)
+    ffmpeg
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
+    gst_all_1.gst-plugins-bad
+    gst_all_1.gst-plugins-ugly
+    gst_all_1.gst-libav
+    rustup # Rust toolchain for Kiru
+    kiru.kiru
+    cargo-watch
+    cargo-edit
+    pkgsCross.mingwW64.stdenv.cc
 
     zenity
     zellij

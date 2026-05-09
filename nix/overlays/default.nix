@@ -23,11 +23,7 @@
     };
   };
 
-  # Local nixpkgs checkout — accessible through 'pkgs.local'
-  local = final: _prev: {
-    local = import inputs.nixpkgs-local {
-      system = final.system;
-      config.allowUnfree = true;
-    };
+  kiru = final: _prev: {
+    kiru.kiru = inputs.kiru.packages.${final.system}.kiru;
   };
 }
