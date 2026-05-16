@@ -10,4 +10,5 @@ return {
 	"tsx",
 	"php",
 	"templ",
+	"toml",
 }

@@ -41,10 +41,10 @@ vim.o.hlsearch = false
 vim.wo.number = true
 
 -- Tabs vs spaces
-vim.o.tabstop = 2      -- A TAB character looks like 4 spaces
+vim.o.tabstop = 2 -- A TAB character looks like 4 spaces
 vim.o.expandtab = true -- Pressing the TAB key will insert spaces instead of a TAB character
-vim.o.softtabstop = 2  -- Number of spaces inserted instead of a TAB character
-vim.o.shiftwidth = 2   -- Number of spaces inserted when indenting
+vim.o.softtabstop = 2 -- Number of spaces inserted instead of a TAB character
+vim.o.shiftwidth = 2 -- Number of spaces inserted when indenting
 
 -- Enable mouse mode
 vim.o.mouse = "a"
@@ -76,9 +76,5 @@ vim.o.completeopt = "menuone,noselect"
 
 -- Set terminal gui colors to true
 vim.o.termguicolors = true
-
--- add binaries installed by mason.nvim to path
-local is_windows = vim.loop.os_uname().sysname == "Windows_NT"
-vim.env.PATH = vim.fn.stdpath("data") .. "/mason/bin" .. (is_windows and ";" or ":") .. vim.env.PATH
 
 require("lazy").setup("plugins")

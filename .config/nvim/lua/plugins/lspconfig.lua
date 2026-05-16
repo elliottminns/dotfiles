@@ -12,7 +12,9 @@ return {
 			end, {
 				nargs = "?",
 				complete = function()
-					return vim.tbl_map(function(c) return c.name end, vim.lsp.get_clients())
+					return vim.tbl_map(function(c)
+						return c.name
+					end, vim.lsp.get_clients())
 				end,
 			})
 
@@ -50,7 +52,7 @@ return {
 						bufnr = args.buf,
 						timeout_ms = 3000,
 						filter = function(client)
-							return client.name == "rust_analyzer"
+							return client.name == "rust-analyzer" or client.name == "rust_analyzer"
 						end,
 					})
 				end,
@@ -79,36 +81,6 @@ return {
 				},
 			})
 			vim.lsp.enable("lua_ls")
-
-			vim.lsp.config("rust_analyzer", {
-				on_attach = on_attach,
-				capabilities = capabilities,
-				settings = {
-					["rust-analyzer"] = {
-						cargo = {
-							features = "all",
-						},
-						procMacro = {
-							ignored = {
-								leptos_macro = {
-									"component",
-									"server",
-								},
-							},
-						},
-						check = {
-							command = "clippy",
-						},
-						inlayHints = {
-							enable = true,
-						},
-						assist = {
-							importGranularity = "module",
-						},
-					},
-				},
-			})
-			vim.lsp.enable("rust_analyzer")
 
 			vim.lsp.config("gopls", {
 				on_attach = on_attach,
@@ -156,6 +128,14 @@ return {
 				capabilities = capabilities,
 			})
 			vim.lsp.enable("ts_ls")
+
+			if vim.fn.executable("taplo") == 1 then
+				vim.lsp.config("taplo", {
+					on_attach = on_attach,
+					capabilities = capabilities,
+				})
+				vim.lsp.enable("taplo")
+			end
 
 			vim.lsp.config("html", {
 				on_attach = on_attach,

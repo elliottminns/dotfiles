@@ -8,7 +8,10 @@
     go
     gopls
     nodejs
+    rust-analyzer
     rustup
+    taplo
+    tree-sitter
     yarn
     gofumpt
     golines
