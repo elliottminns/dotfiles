@@ -1,9 +1,9 @@
 return {
 	{
 		"nvim-treesitter/nvim-treesitter",
-		branch = "master",
+		branch = "main",
 		lazy = false,
-		cmd = { "TSInstall", "TSBufEnable", "TSBufDisable", "TSModuleInfo" },
+		cmd = { "TSInstall", "TSUpdate", "TSUninstall", "TSLog" },
 		build = ":TSUpdate",
 		dependencies = {
 			"apple/pkl-neovim",
@@ -13,8 +13,17 @@ return {
 		opts = function()
 			return require("plugins.configs.treesitter")
 		end,
-		config = function(_, opts)
-			require("nvim-treesitter.configs").setup(opts)
+		config = function(_, languages)
+			require("nvim-treesitter").setup()
+			require("nvim-treesitter").install(languages)
+
+			vim.api.nvim_create_autocmd("FileType", {
+				pattern = languages,
+				callback = function()
+					pcall(vim.treesitter.start)
+					vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+				end,
+			})
 		end,
 	},
 	{

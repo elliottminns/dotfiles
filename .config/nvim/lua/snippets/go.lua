@@ -5,10 +5,6 @@ local t = ls.text_node
 local i = ls.insert_node
 local d = ls.dynamic_node
 
-local ts_locals = require("nvim-treesitter.locals")
-local ts_utils = require("nvim-treesitter.ts_utils")
-local get_node_text = vim.treesitter.get_node_text
-
 vim.treesitter.query.set(
 	"go",
 	"method_receiver_name",
@@ -24,29 +20,29 @@ vim.treesitter.query.set(
 )
 
 local function get_go_receiver_name()
-	local cursor_node = ts_utils.get_node_at_cursor()
-	local scope = ts_locals.get_scope_tree(cursor_node, 0)
+	local node = vim.treesitter.get_node()
 
-	local function_node
-	for _, v in ipairs(scope) do
-		if v:type() == "method_declaration" then
-			function_node = v
+	while node do
+		if node:type() == "method_declaration" then
 			break
 		end
+		node = node:parent()
 	end
 
-	if function_node == nil then
+	if node == nil then
 		return nil
 	end
 
 	local bufnr = 0
-
 	local query = vim.treesitter.query.get("go", "method_receiver_name")
-	for id, node in query:iter_captures(function_node, bufnr) do
+	if not query then
+		return nil
+	end
+
+	for id, capture_node in query:iter_captures(node, bufnr) do
 		local name = query.captures[id]
 		if name == "receiver_name" then
-			local receiver_name = vim.treesitter.get_node_text(node, bufnr)
-			return receiver_name
+			return vim.treesitter.get_node_text(capture_node, bufnr)
 		end
 	end
 
@@ -55,7 +51,6 @@ end
 
 local go_receiver_name = function()
 	local receiver_name = get_go_receiver_name()
-	print(receiver_name)
 
 	if receiver_name == nil then
 		return
