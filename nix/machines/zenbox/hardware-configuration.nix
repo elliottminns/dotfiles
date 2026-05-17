@@ -20,7 +20,7 @@
   # Blackmagic UltraStudio Mini support
   hardware.decklink.enable = true;
   environment.sessionVariables = {
-    LD_LIBRARY_PATH = ["${pkgs.blackmagic-desktop-video}/lib"];
+    LD_LIBRARY_PATH = ["${pkgs.blackmagic-desktop-video-vendor}/lib"];
   };
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
@@ -45,7 +45,7 @@
 
   services.xserver.videoDrivers = [
     "amdgpu"
-    #"displaylink"
+    "displaylink"
     "modesetting"
   ];
 
@@ -57,7 +57,7 @@
 
   environment.systemPackages = with pkgs; [
     pkgs.clinfo
-    #pkgs.displaylink
+    pkgs.displaylink
     pkgs.rocmPackages.rocminfo
     pkgs.davinci-resolve
     mesa

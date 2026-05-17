@@ -25,7 +25,7 @@ in {
 
   xdg.enable = true;
 
-  xdg.configFile.nvim.source = ../../.config/nvim;
+  xdg.configFile.nvim.source = mkOutOfStoreSymlink "/home/elliott/.dotfiles/.config/nvim";
   xdg.dataFile.password-store.source = mkOutOfStoreSymlink "/home/elliott/.password-store";
 
   xdg.portal = {
@@ -36,14 +36,14 @@ in {
       xdg-desktop-portal-hyprland
     ];
     config = {
-      common.default = [ "gtk" ];
+      common.default = ["gtk"];
       gnome = {
-        default = [ "gnome" "gtk" ];
-        "org.freedesktop.portal.FileChooser" = [ "gnome" ];
+        default = ["gnome" "gtk"];
+        "org.freedesktop.portal.FileChooser" = ["gnome"];
       };
       hyprland = {
-        default = [ "hyprland" "gtk" ];
-        "org.freedesktop.impl.portal.FileChooser" = [ "gtk" ];
+        default = ["hyprland" "gtk"];
+        "org.freedesktop.impl.portal.FileChooser" = ["gtk"];
       };
     };
   };

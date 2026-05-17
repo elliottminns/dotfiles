@@ -89,8 +89,12 @@ in {
   services.systembus-notify.enable = true;
   services.hardware.bolt.enable = true; # Thunderbolt device management (boltctl)
 
-  # Use the latest linux kernel.
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+  # Blackmagic Desktop Video is sensitive to bleeding-edge kernels; keep zenbox
+  # off linuxPackages_latest so DeckLink API enumeration works reliably.
+  boot.kernelPackages =
+    if meta.hostname == "zenbox"
+    then pkgs.linuxPackages
+    else pkgs.linuxPackages_latest;
 
   # Helps recover from transient GPU/display glitches (e.g. hotplug/input-switch).
   boot.kernelParams = [
@@ -108,8 +112,11 @@ in {
   # Pick only one of the below networking options.
   #networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
   networking.networkmanager.enable = true; # Easiest to use and most distros use this by default.
+  networking.networkmanager.insertNameservers = [
+    "192.168.0.1"
+  ];
   networking.nameservers = [
-    "1.1.1.1"
+    "192.168.0.1"
   ];
 
   # Set your time zone.
@@ -243,15 +250,19 @@ in {
     neovim
     nil
     nwg-look
-    (wrapOBS {
-      plugins = with pkgs.obs-studio-plugins; [
-        wlrobs
-        obs-backgroundremoval
-        obs-pipewire-audio-capture
-        obs-gstreamer
-        obs-vaapi
-      ];
-    })
+    ((wrapOBS.override (lib.optionalAttrs (meta.hostname == "zenbox") {
+        obs-studio = pkgs.obs-studio.override {
+          decklinkSupport = true;
+        };
+      })) {
+        plugins = with pkgs.obs-studio-plugins; [
+          wlrobs
+          obs-backgroundremoval
+          obs-pipewire-audio-capture
+          obs-gstreamer
+          obs-vaapi
+        ];
+      })
     oh-my-posh
     openssl
     pika-backup

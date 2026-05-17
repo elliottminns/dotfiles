@@ -12,6 +12,7 @@
     rustup
     taplo
     tree-sitter
+    valgrind
     yarn
     gofumpt
     golines
