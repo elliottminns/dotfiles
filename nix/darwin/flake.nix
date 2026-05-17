@@ -133,6 +133,7 @@
         pkgs.rustup
         pkgs.saml2aws
         pkgs.slack
+        pkgs.spotify
         pkgs.tailwindcss
         pkgs.tart
         pkgs.tmux
@@ -229,6 +230,7 @@
           "betterdisplay"
           "claude-code"
           "slack"
+          "spotify"
           "tart"
         ];
       homebrew = {
