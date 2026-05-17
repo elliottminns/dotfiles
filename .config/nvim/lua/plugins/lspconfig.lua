@@ -3,6 +3,24 @@ return {
 		"neovim/nvim-lspconfig",
 		lazy = false,
 		config = function()
+			local function readable_float_opts()
+				local available_width = math.max(vim.o.columns - 6, 20)
+				local width = math.min(
+					math.max(math.floor(vim.o.columns * 0.72), math.min(64, available_width)),
+					96,
+					available_width
+				)
+				local height = math.min(math.max(math.floor(vim.o.lines * 0.35), 12), 24)
+
+				return {
+					border = "rounded",
+					width = width,
+					max_width = width,
+					max_height = height,
+					wrap = true,
+				}
+			end
+
 			vim.api.nvim_create_user_command("LspStop", function(args)
 				local name = args.fargs[1]
 				local clients = vim.lsp.get_clients({ name = name })
@@ -30,6 +48,9 @@ return {
 					border = "rounded",
 					focusable = false,
 					source = "if_many",
+					max_width = readable_float_opts().max_width,
+					max_height = readable_float_opts().max_height,
+					wrap = true,
 				},
 			})
 
@@ -40,6 +61,9 @@ return {
 					vim.diagnostic.open_float(nil, {
 						focus = false,
 						scope = "cursor",
+						max_width = readable_float_opts().max_width,
+						max_height = readable_float_opts().max_height,
+						wrap = true,
 					})
 				end,
 			})
@@ -62,10 +86,20 @@ return {
 				local opts = { buffer = bufnr, silent = true }
 				vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
 				vim.keymap.set("n", "gr", vim.lsp.buf.references, opts)
-				vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
+				vim.keymap.set("n", "K", function()
+					vim.lsp.buf.hover(readable_float_opts())
+				end, opts)
 				vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, opts)
 				vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts)
-				vim.keymap.set("n", "<leader>d", vim.diagnostic.open_float, opts)
+				vim.keymap.set("n", "<leader>d", function()
+					vim.diagnostic.open_float(
+						nil,
+						vim.tbl_extend("force", readable_float_opts(), {
+							focus = false,
+							scope = "cursor",
+						})
+					)
+				end, opts)
 			end
 
 			vim.lsp.config("lua_ls", {

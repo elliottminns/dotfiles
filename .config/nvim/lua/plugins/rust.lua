@@ -7,6 +7,23 @@ return {
 			"mfussenegger/nvim-dap",
 		},
 		init = function()
+			local function readable_float_opts()
+				local available_width = math.max(vim.o.columns - 6, 20)
+				local width = math.min(
+					math.max(math.floor(vim.o.columns * 0.72), math.min(64, available_width)),
+					96,
+					available_width
+				)
+
+				return {
+					border = "rounded",
+					width = width,
+					max_width = width,
+					max_height = math.min(math.max(math.floor(vim.o.lines * 0.35), 12), 24),
+					wrap = true,
+				}
+			end
+
 			local function resolve_rust_analyzer()
 				local path = vim.fn.exepath("rust-analyzer")
 				if path ~= "" and not path:match("/rustup%-%d") then
@@ -38,6 +55,7 @@ return {
 					code_actions = {
 						ui_select_fallback = true,
 					},
+					float_win_config = readable_float_opts(),
 					test_executor = "background",
 				},
 				server = {
@@ -60,6 +78,14 @@ return {
 						map("<leader>d", vim.diagnostic.open_float, "Line diagnostics")
 
 						map("<leader>rr", rust_lsp("runnables"), "Rust runnables")
+						map("<leader>rh", function()
+							if not vim.lsp.inlay_hint then
+								return
+							end
+
+							local enabled = vim.lsp.inlay_hint.is_enabled({ bufnr = bufnr })
+							vim.lsp.inlay_hint.enable(not enabled, { bufnr = bufnr })
+						end, "Toggle Rust hints")
 						map("<leader>rl", function()
 							vim.cmd.RustLsp({ "runnables", bang = true })
 						end, "Rust rerun last")
@@ -115,18 +141,65 @@ return {
 								bindingModeHints = {
 									enable = true,
 								},
+								chainingHints = {
+									enable = true,
+								},
+								closingBraceHints = {
+									enable = true,
+								},
+								closureCaptureHints = {
+									enable = true,
+								},
 								closureReturnTypeHints = {
 									enable = "always",
 								},
 								discriminantHints = {
 									enable = "always",
 								},
+								expressionAdjustmentHints = {
+									enable = "always",
+								},
+								genericParameterHints = {
+									const = {
+										enable = true,
+									},
+									lifetime = {
+										enable = true,
+									},
+									type = {
+										enable = true,
+									},
+								},
+								implicitDrops = {
+									enable = true,
+								},
+								implicitSizedBoundHints = {
+									enable = true,
+								},
+								impliedDynTraitHints = {
+									enable = true,
+								},
 								lifetimeElisionHints = {
-									enable = "skip_trivial",
+									enable = "always",
 									useParameterNames = true,
 								},
+								parameterHints = {
+									enable = true,
+									missingArguments = {
+										enable = true,
+									},
+								},
+								rangeExclusiveHints = {
+									enable = true,
+								},
+								reborrowHints = {
+									enable = "always",
+								},
 								typeHints = {
+									enable = true,
 									hideClosureInitialization = false,
+									hideClosureParameter = false,
+									hideInferredTypes = false,
 									hideNamedConstructor = false,
 								},
 							},
