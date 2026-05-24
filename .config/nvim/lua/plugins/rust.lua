@@ -408,7 +408,7 @@ return {
 							},
 							check = {
 								command = "clippy",
-								extraArgs = { "--all-targets" },
+								allTargets = true,
 							},
 							procMacro = {
 								enable = true,
