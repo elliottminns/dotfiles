@@ -71,6 +71,7 @@
         pkgs.neovim
         pkgs.alejandra
         pkgs.awscli2
+        pkgs.audacity
         pkgs.bat
         pkgs.betterdisplay
         pkgs.bun
@@ -137,6 +138,7 @@
         pkgs.tailwindcss
         pkgs.tart
         pkgs.tmux
+        pkgs.tree-sitter
         pkgs.trunk
         pkgs.utm
         pkgs.uv
