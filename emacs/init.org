@@ -1,0 +1,672 @@
+#+title: Elliott's Emacs Configuration
+
+This is the actual Emacs configuration. =init.el= is intentionally small: it
+tangles this file into an Emacs Lisp file under the XDG cache directory, then
+loads that generated file.
+
+* Paths
+
+Keep generated state out of the symlinked dotfiles directory. Cache files go
+under =$XDG_CACHE_HOME/emacs= and durable editor state goes under
+=$XDG_STATE_HOME/emacs=.
+
+#+begin_src emacs-lisp
+  (defconst dreams/cache-dir
+    (expand-file-name "emacs/" (or (getenv "XDG_CACHE_HOME") "~/.cache/")))
+
+  (defconst dreams/state-dir
+    (expand-file-name "emacs/" (or (getenv "XDG_STATE_HOME") "~/.local/state/")))
+
+  (dolist (dir (list dreams/cache-dir
+                     dreams/state-dir
+                     (expand-file-name "auto-save/" dreams/cache-dir)
+                     (expand-file-name "auto-save-list/" dreams/cache-dir)
+                     (expand-file-name "backups/" dreams/cache-dir)
+                     (expand-file-name "undo-tree/" dreams/state-dir)))
+    (unless (file-directory-p dir)
+      (make-directory dir t)))
+
+  (setq custom-file (expand-file-name "custom.el" dreams/state-dir))
+  (load custom-file t)
+
+  (setq auto-save-list-file-prefix (expand-file-name "auto-save-list/.saves-" dreams/cache-dir))
+  (setq backup-directory-alist `(("." . ,(expand-file-name "backups/" dreams/cache-dir))))
+  (setq auto-save-file-name-transforms `((".*" ,(expand-file-name "auto-save/" dreams/cache-dir) t)))
+  (setq bookmark-default-file (expand-file-name "bookmarks" dreams/state-dir))
+  (setq project-list-file (expand-file-name "projects" dreams/state-dir))
+  (setq recentf-save-file (expand-file-name "recentf" dreams/state-dir))
+  (setq savehist-file (expand-file-name "savehist" dreams/state-dir))
+  (setq save-place-file (expand-file-name "places" dreams/state-dir))
+  (setq url-history-file (expand-file-name "url-history" dreams/state-dir))
+  (setq package-user-dir (expand-file-name "elpa" dreams/state-dir))
+  (setq create-lockfiles nil)
+#+end_src
+
+* Package Archives
+
+Use the built-in package manager for now. Nothing is installed automatically by
+this config yet, but the archives are ready when packages are added.
+
+#+begin_src emacs-lisp
+  (require 'package)
+
+  (setq package-archives
+        '(("gnu" . "https://elpa.gnu.org/packages/")
+          ("nongnu" . "https://elpa.nongnu.org/nongnu/")
+          ("melpa" . "https://melpa.org/packages/")))
+
+  (package-initialize)
+#+end_src
+
+* Defaults
+
+These are small, predictable editing defaults: no startup screen, shorter
+prompts, spaces instead of tabs, and final newlines.
+
+#+begin_src emacs-lisp
+  (setq inhibit-startup-screen t)
+  (setq initial-scratch-message nil)
+  (setq ring-bell-function 'ignore)
+  (setq use-short-answers t)
+  (setq confirm-kill-emacs 'y-or-n-p)
+  (setq require-final-newline t)
+  (setq make-backup-files t)
+  (setq auto-save-default t)
+  (setq-default indent-tabs-mode nil)
+  (setq-default tab-width 2)
+  (setq-default fill-column 100)
+
+  (global-set-key (kbd "<escape>") #'keyboard-escape-quit)
+  (global-set-key (kbd "C-x C-b") #'ibuffer)
+  (global-set-key (kbd "M-/") #'comment-dwim)
+  (global-set-key (kbd "C-c p") project-prefix-map)
+#+end_src
+
+Open this literate config quickly from inside Emacs.
+
+#+begin_src emacs-lisp
+  (defun dreams/open-emacs-config ()
+    "Open this Emacs configuration."
+    (interactive)
+    (find-file (expand-file-name "init.org" dreams/config-dir)))
+
+  (defun dreams/reload-emacs-config ()
+    "Reload the literate Emacs configuration."
+    (interactive)
+    (load-file user-init-file)
+    (message "Reloaded Emacs config."))
+
+  (global-set-key (kbd "C-c i") #'dreams/open-emacs-config)
+  (global-set-key (kbd "C-c r") #'dreams/reload-emacs-config)
+#+end_src
+
+* UI
+
+Keep the frame minimal and use Catppuccin Mocha when the package is available.
+Fall back to a built-in dark theme so the config still loads before the Home
+Manager package generation is active.
+
+#+begin_src emacs-lisp
+  (menu-bar-mode -1)
+  (tool-bar-mode -1)
+  (scroll-bar-mode -1)
+  (tooltip-mode -1)
+  (column-number-mode 1)
+  (global-display-line-numbers-mode 1)
+  (global-hl-line-mode 1)
+  (set-fringe-mode 10)
+
+  (if (require 'catppuccin-theme nil t)
+      (progn
+        (setq catppuccin-flavor 'mocha)
+        (load-theme 'catppuccin t))
+    (load-theme 'modus-vivendi t))
+
+  (dolist (mode '(org-mode-hook
+                  term-mode-hook
+                  shell-mode-hook
+                  eshell-mode-hook
+                  vterm-mode-hook))
+    (add-hook mode (lambda () (display-line-numbers-mode -1))))
+#+end_src
+
+* Editing
+
+Enable built-in quality-of-life modes for common editing sessions.
+
+#+begin_src emacs-lisp
+  (delete-selection-mode 1)
+  (electric-pair-mode 1)
+  (global-auto-revert-mode 1)
+  (global-so-long-mode 1)
+  (recentf-mode 1)
+  (savehist-mode 1)
+  (save-place-mode 1)
+  (winner-mode 1)
+
+  (when (fboundp 'pixel-scroll-precision-mode)
+    (pixel-scroll-precision-mode 1))
+
+  (when (fboundp 'repeat-mode)
+    (repeat-mode 1))
+#+end_src
+
+* Projects and Dired
+
+Use Emacs' built-in project manager as the project entry point and Dired as the
+project landing page. =SPC p p= switches projects, remembers the selected root,
+and opens Dired there.
+
+#+begin_src emacs-lisp
+  (require 'project)
+  (require 'dired)
+  (require 'dired-x)
+
+  (setq project-switch-commands 'project-dired)
+
+  (when (boundp 'project-vc-extra-root-markers)
+    (setq project-vc-extra-root-markers '(".project")))
+
+  (setq dired-dwim-target t)
+  (setq dired-kill-when-opening-new-dired-buffer t)
+  (setq dired-listing-switches "-alh --group-directories-first")
+
+  (defun dreams/project-root ()
+    "Return the current project root as a directory name."
+    (if-let* ((project (project-current)))
+        (project-root project)
+      default-directory))
+
+  (defun dreams/project-open-root ()
+    "Open Dired at the current project root."
+    (interactive)
+    (dired (dreams/project-root)))
+
+  (defun dreams/project-find-file ()
+    "Fuzzy-find a file in the current project, or fall back to `find-file'."
+    (interactive)
+    (if (and (project-current) (fboundp 'consult-fd) (executable-find "fd"))
+        (consult-fd (dreams/project-root))
+      (if (project-current)
+        (call-interactively #'project-find-file)
+        (call-interactively #'find-file))))
+
+  (defun dreams/project-search ()
+    "Search the current project with Consult when available."
+    (interactive)
+    (if (and (project-current) (fboundp 'consult-ripgrep))
+        (consult-ripgrep (dreams/project-root))
+      (call-interactively #'project-find-regexp)))
+
+  (defun dreams/project-switch-buffer ()
+    "Switch to a project buffer with Consult when available."
+    (interactive)
+    (if (and (project-current) (fboundp 'consult-project-buffer))
+        (call-interactively #'consult-project-buffer)
+      (call-interactively #'project-switch-to-buffer)))
+
+  (defun dreams/switch-buffer ()
+    "Switch buffers with Consult when available."
+    (interactive)
+    (if (fboundp 'consult-buffer)
+        (call-interactively #'consult-buffer)
+      (call-interactively #'switch-to-buffer)))
+
+  (defun dreams/recent-file ()
+    "Open a recent file with Consult when available."
+    (interactive)
+    (if (fboundp 'consult-recent-file)
+        (call-interactively #'consult-recent-file)
+      (call-interactively #'recentf-open-files)))
+
+  (defun dreams/project-eshell ()
+    "Open Eshell at the current project root."
+    (interactive)
+    (let ((default-directory (dreams/project-root)))
+      (eshell t)))
+#+end_src
+
+Dired should behave like a practical file manager: omit noisy files by default,
+make =h= and =l= behave like directory navigation when Evil is available, and
+keep the normal Dired commands available.
+
+#+begin_src emacs-lisp
+  (add-hook 'dired-mode-hook #'dired-omit-mode)
+
+  (with-eval-after-load 'evil
+    (evil-define-key 'normal dired-mode-map
+      (kbd "h") #'dired-up-directory
+      (kbd "l") #'dired-find-file
+      (kbd "RET") #'dired-find-file
+      (kbd "q") #'quit-window))
+#+end_src
+
+* Evil
+
+Use Evil as the primary editing model. Nix provides the Evil packages through
+Home Manager, and this config checks each optional package before enabling it so
+the file can still batch-load before the Home Manager generation is active.
+
+#+begin_src emacs-lisp
+  (setq evil-want-integration t)
+  (setq evil-want-keybinding nil)
+  (setq evil-want-C-u-scroll t)
+  (setq evil-want-C-i-jump nil)
+  (setq evil-respect-visual-line-mode t)
+  (setq evil-search-module 'isearch)
+
+  (when (require 'undo-tree nil t)
+    (setq undo-tree-history-directory-alist
+          `(("." . ,(expand-file-name "undo-tree/" dreams/state-dir))))
+    (setq undo-tree-auto-save-history t)
+    (global-undo-tree-mode 1)
+    (setq evil-undo-system 'undo-tree))
+
+  (defun dreams/evil-hook ()
+    "Use Emacs state in modes where modal editing tends to get in the way."
+    (dolist (mode '(custom-mode
+                    eshell-mode
+                    git-rebase-mode
+                    help-mode
+                    messages-buffer-mode
+                    shell-mode
+                    special-mode
+                    term-mode))
+      (add-to-list 'evil-emacs-state-modes mode)))
+
+  (defun dreams/no-arrow-keys ()
+    "Nudge navigation back to Evil's home-row motions."
+    (interactive)
+    (message "Use h, j, k, and l for movement."))
+
+  (when (require 'evil nil t)
+    (add-hook 'evil-mode-hook #'dreams/evil-hook)
+    (evil-mode 1)
+
+    (define-key evil-insert-state-map (kbd "C-g") #'evil-normal-state)
+    (define-key evil-insert-state-map (kbd "C-h") #'evil-delete-backward-char-and-join)
+
+    (evil-global-set-key 'motion "j" #'evil-next-visual-line)
+    (evil-global-set-key 'motion "k" #'evil-previous-visual-line)
+
+    (dolist (key '("<left>" "<right>" "<down>" "<up>"))
+      (define-key evil-normal-state-map (kbd key) #'dreams/no-arrow-keys)
+      (define-key evil-visual-state-map (kbd key) #'dreams/no-arrow-keys)
+      (evil-global-set-key 'motion (kbd key) #'dreams/no-arrow-keys))
+
+    (evil-set-initial-state 'messages-buffer-mode 'normal)
+    (evil-set-initial-state 'dashboard-mode 'normal))
+#+end_src
+
+Which-key keeps leader bindings discoverable.
+
+#+begin_src emacs-lisp
+  (when (require 'which-key nil t)
+    (setq which-key-idle-delay 0.35)
+    (which-key-mode 1))
+#+end_src
+
+General provides the leader-key layer. =SPC= is the normal/visual leader and
+=C-SPC= works from insert and Emacs states.
+
+#+begin_src emacs-lisp
+  (when (require 'general nil t)
+    (general-evil-setup t)
+
+    (general-create-definer dreams/leader
+      :states '(normal visual motion)
+      :keymaps 'override
+      :prefix "SPC"
+      :global-prefix "C-SPC")
+
+    (dreams/leader
+      "SPC" '(dreams/project-find-file :which-key "project file")
+      "," '(dreams/switch-buffer :which-key "switch buffer")
+      "." '(find-file :which-key "find file")
+      ":" '(execute-extended-command :which-key "M-x")
+
+      "b" '(:ignore t :which-key "buffers")
+      "bb" '(dreams/switch-buffer :which-key "switch")
+      "bd" '(kill-current-buffer :which-key "kill")
+      "bi" '(ibuffer :which-key "ibuffer")
+      "bn" '(next-buffer :which-key "next")
+      "bp" '(previous-buffer :which-key "previous")
+      "bs" '(save-buffer :which-key "save")
+
+      "e" '(:ignore t :which-key "eval")
+      "eb" '(eval-buffer :which-key "buffer")
+      "ee" '(eval-last-sexp :which-key "last sexp")
+      "er" '(eval-region :which-key "region")
+
+      "f" '(:ignore t :which-key "files")
+      "ff" '(find-file :which-key "find")
+      "fs" '(save-buffer :which-key "save")
+      "fr" '(dreams/recent-file :which-key "recent")
+
+      "h" '(:ignore t :which-key "help")
+      "hf" '(describe-function :which-key "function")
+      "hk" '(describe-key :which-key "key")
+      "hm" '(describe-mode :which-key "mode")
+      "hv" '(describe-variable :which-key "variable")
+
+      "l" '(:ignore t :which-key "lsp")
+      "la" '(eglot-code-actions :which-key "code actions")
+      "ld" '(xref-find-definitions :which-key "definition")
+      "lD" '(xref-find-definitions-other-window :which-key "definition other window")
+      "lf" '(dreams/eglot-format-buffer :which-key "format")
+      "lh" '(eldoc :which-key "hover echo")
+      "lH" '(eldoc-doc-buffer :which-key "hover buffer")
+      "li" '(eglot-inlay-hints-mode :which-key "inlay hints")
+      "lI" '(dreams/eglot-organize-imports :which-key "organize imports")
+      "ll" '(eglot :which-key "start/reconnect")
+      "lq" '(flymake-show-buffer-diagnostics :which-key "diagnostics")
+      "lr" '(eglot-rename :which-key "rename")
+      "lR" '(xref-find-references :which-key "references")
+
+      "o" '(:ignore t :which-key "open")
+      "oi" '(dreams/open-emacs-config :which-key "init.org")
+      "or" '(dreams/reload-emacs-config :which-key "reload config")
+      "ot" '(ansi-term :which-key "terminal")
+
+      "p" '(:ignore t :which-key "project")
+      "p!" '(project-shell-command :which-key "shell command")
+      "p&" '(project-async-shell-command :which-key "async command")
+      "pb" '(dreams/project-switch-buffer :which-key "buffer")
+      "pc" '(project-compile :which-key "compile")
+      "pd" '(dreams/project-open-root :which-key "dired")
+      "pe" '(dreams/project-eshell :which-key "eshell")
+      "pf" '(dreams/project-find-file :which-key "find file")
+      "pg" '(dreams/project-search :which-key "grep")
+      "pk" '(project-kill-buffers :which-key "kill buffers")
+      "pp" '(project-switch-project :which-key "switch")
+      "pr" '(project-query-replace-regexp :which-key "replace")
+      "ps" '(project-shell :which-key "shell")
+      "pv" '(project-vc-dir :which-key "vc-dir")
+
+      "q" '(:ignore t :which-key "quit")
+      "qq" '(save-buffers-kill-terminal :which-key "quit emacs")
+      "qr" '(restart-emacs :which-key "restart")
+
+      "t" '(:ignore t :which-key "toggles")
+      "tf" '(display-fill-column-indicator-mode :which-key "fill column")
+      "tl" '(display-line-numbers-mode :which-key "line numbers")
+      "tt" '(load-theme :which-key "theme")
+      "tw" '(whitespace-mode :which-key "whitespace")
+
+      "w" '(:ignore t :which-key "windows")
+      "wd" '(delete-window :which-key "delete")
+      "wh" '(windmove-left :which-key "left")
+      "wj" '(windmove-down :which-key "down")
+      "wk" '(windmove-up :which-key "up")
+      "wl" '(windmove-right :which-key "right")
+      "wo" '(delete-other-windows :which-key "only")
+      "ws" '(split-window-below :which-key "split below")
+      "wv" '(split-window-right :which-key "split right")))
+#+end_src
+
+Evil extensions fill in the normal Vim-adjacent behavior: collection bindings
+for built-in modes, surround editing, commenting, text objects for arguments,
+and Org-specific motions.
+
+#+begin_src emacs-lisp
+  (with-eval-after-load 'evil
+    (when (require 'evil-collection nil t)
+      (setq evil-collection-outline-bind-tab-p nil)
+      (evil-collection-init))
+
+    (when (require 'evil-surround nil t)
+      (global-evil-surround-mode 1))
+
+    (when (require 'evil-commentary nil t)
+      (evil-commentary-mode 1))
+
+    (when (require 'evil-args nil t)
+      (define-key evil-inner-text-objects-map "a" #'evil-inner-arg)
+      (define-key evil-outer-text-objects-map "a" #'evil-outer-arg)))
+
+  (with-eval-after-load 'org
+    (when (require 'evil-org nil t)
+      (add-hook 'org-mode-hook #'evil-org-mode)
+      (with-eval-after-load 'evil-org
+        (require 'evil-org-agenda)
+        (evil-org-agenda-set-keys))))
+#+end_src
+
+* Completion
+
+Use Vertico, Orderless, Marginalia, and Consult when available. Together they
+turn project and buffer commands into a fuzzy picker while still falling back to
+Emacs' built-in completion stack before the package generation is active.
+
+#+begin_src emacs-lisp
+  (when (require 'vertico nil t)
+    (vertico-mode 1))
+
+  (when (require 'marginalia nil t)
+    (marginalia-mode 1))
+
+  (when (require 'orderless nil t)
+    (setq completion-styles '(orderless basic))
+    (setq completion-category-defaults nil)
+    (setq completion-category-overrides '((file (styles partial-completion)))))
+
+  (unless (featurep 'orderless)
+    (setq completion-styles '(basic substring partial-completion flex))
+    (setq completion-category-overrides '((file (styles basic partial-completion)))))
+
+  (setq completion-ignore-case t)
+  (setq read-buffer-completion-ignore-case t)
+  (setq read-file-name-completion-ignore-case t)
+  (setq completions-detailed t)
+  (setq completion-auto-help nil)
+  (setq completion-auto-select nil)
+  (setq completion-show-help nil)
+  (setq tab-always-indent 'complete)
+
+  (when (and (not (featurep 'vertico))
+             (fboundp 'fido-vertical-mode))
+    (fido-vertical-mode 1))
+
+  (when (require 'consult nil t)
+    (global-set-key (kbd "C-s") #'consult-line)
+    (global-set-key (kbd "C-x b") #'consult-buffer)
+    (global-set-key (kbd "C-x C-r") #'consult-recent-file))
+
+  (when (require 'corfu nil t)
+    (setq corfu-auto t)
+    (setq corfu-auto-delay 0.1)
+    (setq corfu-auto-prefix 1)
+    (setq corfu-cycle t)
+    (setq corfu-count 14)
+    (setq corfu-max-width 100)
+    (setq corfu-min-width 35)
+    (setq corfu-preview-current 'insert)
+    (setq corfu-quit-no-match 'separator)
+    (setq corfu-on-exact-match nil)
+    (setq corfu-scroll-margin 4)
+    (global-corfu-mode 1)
+    (when (require 'corfu-terminal nil t)
+      (corfu-terminal-mode 1))
+    (define-key corfu-map (kbd "TAB") #'corfu-next)
+    (define-key corfu-map (kbd "<tab>") #'corfu-next)
+    (define-key corfu-map (kbd "S-TAB") #'corfu-previous)
+    (define-key corfu-map (kbd "<backtab>") #'corfu-previous)
+    (define-key corfu-map (kbd "RET") #'corfu-insert)
+    (when (fboundp 'corfu-popupinfo-mode)
+      (setq corfu-popupinfo-delay '(0.4 . 0.2))
+      (corfu-popupinfo-mode 1)))
+
+  (when (require 'cape nil t)
+    (add-to-list 'completion-at-point-functions #'cape-file)
+    (add-to-list 'completion-at-point-functions #'cape-dabbrev)
+    (add-to-list 'completion-at-point-functions #'cape-keyword))
+#+end_src
+
+* Programming
+
+Use built-in programming helpers. Eglot is Emacs' built-in LSP client; Rust
+buffers start it automatically when =rust-analyzer= is available.
+
+#+begin_src emacs-lisp
+  (add-hook 'prog-mode-hook #'display-fill-column-indicator-mode)
+  (add-hook 'prog-mode-hook #'electric-indent-mode)
+
+  (defun dreams/eglot-format-buffer ()
+    "Format the current buffer with Eglot when possible."
+    (interactive)
+    (if (bound-and-true-p eglot--managed-mode)
+        (eglot-format)
+      (message "No active Eglot server for this buffer.")))
+
+  (defun dreams/eglot-organize-imports ()
+    "Ask the active language server to organize imports."
+    (interactive)
+    (if (bound-and-true-p eglot--managed-mode)
+        (eglot-code-action-organize-imports (point-min) (point-max))
+      (message "No active Eglot server for this buffer.")))
+
+  (defun dreams/eglot-managed-mode-setup ()
+    "Polish LSP buffers after Eglot attaches."
+    (when (derived-mode-p 'rust-mode 'rust-ts-mode)
+      (when (and (display-graphic-p)
+                 (require 'eldoc-box nil t)
+                 (fboundp 'eldoc-box-hover-at-point-mode))
+        (eldoc-box-hover-at-point-mode 1))))
+
+  (setq eldoc-idle-delay 0.2)
+  (setq eldoc-echo-area-use-multiline-p nil)
+  (setq eldoc-documentation-strategy #'eldoc-documentation-compose-eagerly)
+
+  (defun dreams/eldoc-box-position-right (width height)
+    "Place the Eldoc child frame slightly to the right of point."
+    (let* ((position (eldoc-box--default-at-point-position-function width height))
+           (max-x (max 0 (- (frame-inner-width) width 16)))
+           (x (min max-x (+ (car position) 48))))
+      (cons x (cdr position))))
+
+  (with-eval-after-load 'eldoc-box
+    (setq eldoc-box-max-pixel-width 1000)
+    (setq eldoc-box-max-pixel-height 850)
+    (setq eldoc-box-offset '(24 16 16))
+    (setq eldoc-box-position-function #'dreams/eldoc-box-position-right)
+    (set-face-attribute 'eldoc-box-body nil :height 1.08))
+
+  (with-eval-after-load 'eglot
+    (when (boundp 'eglot-stay-out-of)
+      (add-to-list 'eglot-stay-out-of 'flymake))
+    (setq eglot-autoshutdown t)
+    (setq eglot-extend-to-xref t)
+    (add-hook 'eglot-managed-mode-hook #'dreams/eglot-managed-mode-setup)
+    (define-key eglot-mode-map (kbd "C-c e f") #'eglot-format)
+    (define-key eglot-mode-map (kbd "C-c e r") #'eglot-rename)
+    (define-key eglot-mode-map (kbd "C-c e a") #'eglot-code-actions))
+#+end_src
+
+* Rust
+
+Use tree-sitter for Rust when the grammar is available, otherwise fall back to
+=rust-mode=. The Nix Emacs package closure provides the Rust and TOML grammars,
+while the system language module already provides =rust-analyzer=. Rust Analyzer
+knows how to provide dense inline hints, but they stay off by default because
+they add a lot of visual noise; toggle them with =SPC l i= when needed.
+
+#+begin_src emacs-lisp
+  (setq treesit-font-lock-level 4)
+
+  (setq-default eglot-workspace-configuration
+                '(:rust-analyzer
+                  (:cargo
+                   (:allFeatures t)
+                   :check
+                   (:command "clippy")
+                   :procMacro
+                   (:enable t)
+                   :inlayHints
+                   (:bindingModeHints
+                    (:enable t)
+                    :chainingHints
+                    (:enable t)
+                    :closingBraceHints
+                    (:enable t :minLines 10)
+                    :closureReturnTypeHints
+                    (:enable "always")
+                    :discriminantHints
+                    (:enable "always")
+                    :expressionAdjustmentHints
+                    (:enable "always" :hideOutsideUnsafe t)
+                    :lifetimeElisionHints
+                    (:enable "skip_trivial" :useParameterNames t)
+                    :parameterHints
+                    (:enable t)
+                    :rangeExclusiveHints
+                    (:enable t)
+                    :renderColons t
+                    :typeHints
+                    (:enable t :hideClosureInitialization nil :hideNamedConstructor nil)))))
+
+  (defun dreams/rust-mode ()
+    "Use `rust-ts-mode' when tree-sitter Rust is ready, otherwise use `rust-mode'."
+    (interactive)
+    (if (and (fboundp 'rust-ts-mode)
+             (require 'treesit nil t)
+             (treesit-ready-p 'rust t))
+        (rust-ts-mode)
+      (if (require 'rust-mode nil t)
+          (rust-mode)
+        (prog-mode))))
+
+  (add-to-list 'auto-mode-alist '("\\.rs\\'" . dreams/rust-mode))
+  (add-to-list 'auto-mode-alist '("Cargo\\.lock\\'" . toml-mode))
+  (add-to-list 'auto-mode-alist '("Cargo\\.toml\\'" . toml-mode))
+
+  (defun dreams/rust-setup ()
+    "Make Rust buffers easier to read and work in."
+    (setq-local fill-column 100)
+    (setq-local indent-tabs-mode nil)
+    (subword-mode 1)
+    (display-fill-column-indicator-mode 1)
+
+    (when (require 'rainbow-delimiters nil t)
+      (rainbow-delimiters-mode 1))
+
+    (when (require 'highlight-numbers nil t)
+      (highlight-numbers-mode 1))
+
+    (when (require 'cargo nil t)
+      (cargo-minor-mode 1))
+
+    (when (and (fboundp 'eglot-ensure)
+               (executable-find "rust-analyzer"))
+      (eglot-ensure)))
+
+  (add-hook 'rust-mode-hook #'dreams/rust-setup)
+  (add-hook 'rust-ts-mode-hook #'dreams/rust-setup)
+
+  (with-eval-after-load 'rust-mode
+    (setq rust-format-on-save t))
+
+  (with-eval-after-load 'eglot
+    (add-to-list 'eglot-server-programs
+                 '((rust-mode rust-ts-mode) . ("rust-analyzer"))))
+#+end_src
+
+* Org
+
+Org is the format of this config, so keep source blocks comfortable and enable
+the languages used most often in notes.
+
+#+begin_src emacs-lisp
+  (setq org-directory (expand-file-name "~/org"))
+  (setq org-startup-indented t)
+  (setq org-hide-emphasis-markers t)
+  (setq org-src-fontify-natively t)
+  (setq org-src-tab-acts-natively t)
+  (setq org-confirm-babel-evaluate nil)
+
+  (with-eval-after-load 'org
+    (org-babel-do-load-languages
+     'org-babel-load-languages
+     '((emacs-lisp . t)
+       (python . t)
+       (shell . t))))
+#+end_src

@@ -25,6 +25,10 @@ in {
 
   xdg.enable = true;
 
+  xdg.configFile.emacs.source = mkOutOfStoreSymlink "/home/elliott/.dotfiles/emacs";
+  home.file.".emacs.d/early-init.el".source = mkOutOfStoreSymlink "/home/elliott/.dotfiles/emacs/early-init.el";
+  home.file.".emacs.d/init.el".source = mkOutOfStoreSymlink "/home/elliott/.dotfiles/emacs/init.el";
+  home.file.".emacs.d/init.org".source = mkOutOfStoreSymlink "/home/elliott/.dotfiles/emacs/init.org";
   xdg.configFile.nvim.source = mkOutOfStoreSymlink "/home/elliott/.dotfiles/.config/nvim";
   xdg.dataFile.password-store.source = mkOutOfStoreSymlink "/home/elliott/.password-store";
 
@@ -70,6 +74,41 @@ in {
   };
 
   programs = {
+    emacs = {
+      enable = true;
+      package = pkgs.emacs;
+      extraPackages = epkgs:
+        with epkgs; [
+          catppuccin-theme
+          cape
+          consult
+          corfu
+          corfu-terminal
+          cargo
+          eldoc-box
+          evil
+          evil-args
+          evil-collection
+          evil-commentary
+          evil-org
+          evil-surround
+          general
+          highlight-numbers
+          marginalia
+          orderless
+          rainbow-delimiters
+          rust-mode
+          toml-mode
+          (treesit-grammars.with-grammars (grammars:
+            with grammars; [
+              tree-sitter-rust
+              tree-sitter-toml
+            ]))
+          undo-tree
+          vertico
+          which-key
+        ];
+    };
     tmux = import ./tmux.nix {inherit pkgs;};
     zsh = import ./zsh.nix {inherit config pkgs lib;};
     starship = import ./starship.nix {inherit config pkgs lib;};
