@@ -84,6 +84,7 @@
         pkgs.dioxus-cli
         pkgs.doctl
         pkgs.doppler
+        pkgs.emacs
         pkgs.fd
         pkgs.ffmpeg
         pkgs.git
