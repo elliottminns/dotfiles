@@ -50,6 +50,279 @@ return {
 				end
 			end
 
+			local file_test_diag_namespace = vim.api.nvim_create_namespace("rust_file_tests")
+			local file_test_marker_namespace = vim.api.nvim_create_namespace("rust_file_test_markers")
+			local active_test_spinners = {}
+			local last_file_test
+
+			local function test_summary(output)
+				return output:match("(test result:.*)")
+			end
+
+			local function test_message(message, hl_group)
+				vim.api.nvim_echo({ { message, hl_group or "None" } }, false, {})
+			end
+
+			local function set_test_quickfix(title, output, open)
+				vim.fn.setqflist({}, " ", {
+					title = title,
+					lines = vim.split(output, "\n"),
+				})
+
+				if open then
+					local current_win = vim.api.nvim_get_current_win()
+					vim.cmd.copen()
+					pcall(vim.api.nvim_set_current_win, current_win)
+				end
+			end
+
+			local function set_test_marker(bufnr, test, label, hl_group)
+				if not test or not test.line or not vim.api.nvim_buf_is_valid(bufnr) then
+					return
+				end
+
+				local line = test.line - 1
+				vim.api.nvim_buf_clear_namespace(bufnr, file_test_marker_namespace, line, line + 1)
+				vim.api.nvim_buf_set_extmark(bufnr, file_test_marker_namespace, line, 0, {
+					sign_text = label,
+					sign_hl_group = hl_group,
+					priority = 20,
+				})
+			end
+
+			local function test_marker_key(bufnr, test)
+				return bufnr .. ":" .. test.line
+			end
+
+			local function stop_test_spinner(bufnr, test)
+				if not test then
+					return
+				end
+
+				local key = test_marker_key(bufnr, test)
+				local spinner = active_test_spinners[key]
+
+				if not spinner then
+					return
+				end
+
+				spinner.timer:stop()
+				spinner.timer:close()
+				active_test_spinners[key] = nil
+			end
+
+			local function start_test_spinner(bufnr, test)
+				if not test or not test.line or not vim.api.nvim_buf_is_valid(bufnr) then
+					return
+				end
+
+				stop_test_spinner(bufnr, test)
+
+				local frames = { "⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏" }
+				local frame = 1
+				local timer = vim.uv.new_timer()
+
+				if not timer then
+					set_test_marker(bufnr, test, "[running]", "DiagnosticWarn")
+					return
+				end
+
+				local key = test_marker_key(bufnr, test)
+				active_test_spinners[key] = { timer = timer }
+
+				local function render()
+					if not active_test_spinners[key] then
+						return
+					end
+
+					if not vim.api.nvim_buf_is_valid(bufnr) then
+						stop_test_spinner(bufnr, test)
+						return
+					end
+
+					set_test_marker(bufnr, test, frames[frame], "DiagnosticWarn")
+					frame = frame % #frames + 1
+				end
+
+				render()
+				timer:start(120, 120, function()
+					vim.schedule(render)
+				end)
+			end
+
+			local function find_cargo_root(bufnr)
+				local file = vim.api.nvim_buf_get_name(bufnr)
+				local dir = vim.fs.dirname(file)
+				local cargo_toml = vim.fs.find("Cargo.toml", { path = dir, upward = true })[1]
+
+				return cargo_toml and vim.fs.dirname(cargo_toml) or vim.fn.getcwd()
+			end
+
+			local function integration_test_target(bufnr, cargo_root)
+				local file = vim.api.nvim_buf_get_name(bufnr)
+				local root = vim.fs.normalize(cargo_root)
+				local normalized = vim.fs.normalize(file)
+				local rel = normalized:sub(#root + 2)
+
+				return rel:match("^tests/([^/]+)%.rs$")
+					or rel:match("^tests/([^/]+)/main%.rs$")
+					or rel:match("^tests/([^/]+)/mod%.rs$")
+			end
+
+			local function is_rust_test_attr(line)
+				return line:match("^%s*#%s*%[%s*test%s*[%]%)]")
+					or line:match("^%s*#%s*%[%s*[%w_]+::test%s*[%]%)]")
+					or line:match("^%s*#%s*%[%s*rstest%s*[%]%)]")
+			end
+
+			local function find_function_end(lines, start_idx)
+				local depth = 0
+				local saw_open_brace = false
+
+				for idx = start_idx, #lines do
+					for char in lines[idx]:gmatch("[{}]") do
+						if char == "{" then
+							depth = depth + 1
+							saw_open_brace = true
+						elseif char == "}" then
+							depth = depth - 1
+						end
+					end
+
+					if saw_open_brace and depth <= 0 then
+						return idx
+					end
+				end
+
+				return start_idx
+			end
+
+			local function rust_tests_in_buffer(bufnr)
+				local lines = vim.api.nvim_buf_get_lines(bufnr, 0, -1, false)
+				local tests = {}
+				local pending_test_attr
+
+				for idx, line in ipairs(lines) do
+					if is_rust_test_attr(line) then
+						pending_test_attr = idx
+					elseif pending_test_attr then
+						local name = line:match("^%s*[%w_%(%):%s]*fn%s+([%w_]+)")
+
+						if name then
+							table.insert(tests, {
+								name = name,
+								line = idx,
+								attr_line = pending_test_attr,
+								end_line = find_function_end(lines, idx),
+							})
+							pending_test_attr = nil
+						elseif not line:match("^%s*#") and not line:match("^%s*$") then
+							pending_test_attr = nil
+						end
+					end
+				end
+
+				return tests
+			end
+
+			local function execute_cargo_test(args, cwd, bufnr, test)
+				vim.diagnostic.reset(file_test_diag_namespace, bufnr)
+				start_test_spinner(bufnr, test)
+
+				local cmd = vim.list_extend({ "cargo" }, args)
+				local title = table.concat(cmd, " ")
+
+				test_message("Running " .. title, "DiagnosticWarn")
+
+				vim.system(cmd, { cwd = cwd }, function(result)
+					local output = table.concat({
+						result.stderr or "",
+						result.stdout or "",
+					}, "\n")
+					local summary = test_summary(result.stdout or "") or test_summary(output)
+
+					vim.schedule(function()
+						stop_test_spinner(bufnr, test)
+						set_test_quickfix(title, output, result.code ~= 0)
+
+						if result.code == 0 then
+							set_test_marker(bufnr, test, "✓", "DiagnosticOk")
+							test_message(summary or "test passed!", "DiagnosticOk")
+							return
+						end
+
+						local diagnostics = require("rustaceanvim.test").parse_cargo_test_diagnostics(output, bufnr)
+						vim.diagnostic.set(file_test_diag_namespace, bufnr, diagnostics)
+						set_test_marker(bufnr, test, "✗", "DiagnosticError")
+						vim.cmd.redraw()
+						test_message(summary or "test failed; opened quickfix with Cargo output.", "DiagnosticError")
+					end)
+				end)
+			end
+
+			local function run_cargo_test(test)
+				local bufnr = vim.api.nvim_get_current_buf()
+				local cwd = find_cargo_root(bufnr)
+				local args = { "test" }
+				local target = integration_test_target(bufnr, cwd)
+
+				if target then
+					vim.list_extend(args, { "--test", target })
+				end
+
+				vim.list_extend(args, { test.name, "--", "--nocapture" })
+				last_file_test = { args = args, bufnr = bufnr, cwd = cwd, test = test }
+
+				execute_cargo_test(args, cwd, bufnr, test)
+			end
+
+			local function run_all_tests()
+				local bufnr = vim.api.nvim_get_current_buf()
+				local cwd = find_cargo_root(bufnr)
+				local cursor_line = vim.api.nvim_win_get_cursor(0)[1]
+
+				execute_cargo_test({ "test", "--", "--nocapture" }, cwd, bufnr, {
+					name = "all tests",
+					line = cursor_line,
+				})
+			end
+
+			local function select_file_test()
+				local bufnr = vim.api.nvim_get_current_buf()
+				local tests = rust_tests_in_buffer(bufnr)
+
+				if #tests == 0 then
+					test_message("No Rust tests found in this file.", "DiagnosticWarn")
+					return
+				end
+
+				vim.ui.select(tests, {
+					prompt = "Rust tests in file",
+					format_item = function(test)
+						return test.name .. "  line " .. test.line
+					end,
+				}, function(test)
+					if test then
+						run_cargo_test(test)
+					end
+				end)
+			end
+
+			local function run_file_test_at_cursor()
+				local bufnr = vim.api.nvim_get_current_buf()
+				local cursor_line = vim.api.nvim_win_get_cursor(0)[1]
+				local tests = rust_tests_in_buffer(bufnr)
+
+				for _, test in ipairs(tests) do
+					if cursor_line >= test.attr_line and cursor_line <= test.end_line then
+						run_cargo_test(test)
+						return
+					end
+				end
+
+				vim.cmd.RustLsp("run")
+			end
+
 			vim.g.rustaceanvim = {
 				tools = {
 					code_actions = {
@@ -66,6 +339,10 @@ return {
 							vim.keymap.set(mode or "n", lhs, rhs, vim.tbl_extend("force", opts, { desc = desc }))
 						end
 
+						vim.api.nvim_buf_create_user_command(bufnr, "RustTestAll", run_all_tests, {
+							desc = "Run all Rust tests",
+						})
+
 						if vim.lsp.inlay_hint then
 							vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
 						end
@@ -78,6 +355,7 @@ return {
 						map("<leader>d", vim.diagnostic.open_float, "Line diagnostics")
 
 						map("<leader>rr", rust_lsp("runnables"), "Rust runnables")
+						map("<leader>ru", rust_lsp("run"), "Rust run at cursor")
 						map("<leader>rh", function()
 							if not vim.lsp.inlay_hint then
 								return
@@ -89,7 +367,22 @@ return {
 						map("<leader>rl", function()
 							vim.cmd.RustLsp({ "runnables", bang = true })
 						end, "Rust rerun last")
-						map("<leader>rt", rust_lsp("testables"), "Rust testables")
+						map("<leader>rta", rust_lsp("testables"), "Rust analyzer testables")
+						map("<leader>rtA", run_all_tests, "Rust test all")
+						map("<leader>rtt", select_file_test, "Rust test in file")
+						map("<leader>rtT", function()
+							if last_file_test then
+								execute_cargo_test(
+									last_file_test.args,
+									last_file_test.cwd,
+									last_file_test.bufnr,
+									last_file_test.test
+								)
+							else
+								vim.cmd.RustLsp({ "testables", bang = true })
+							end
+						end, "Rust rerun last test")
+						map("<leader>rtu", run_file_test_at_cursor, "Rust test at cursor")
 						map("<leader>rd", rust_lsp("debuggables"), "Rust debuggables")
 						map("<leader>re", rust_lsp("explainError"), "Rust explain error")
 						map("<leader>rD", rust_lsp("renderDiagnostic"), "Rust render diagnostic")
