@@ -21,7 +21,11 @@ return {
 				pattern = languages,
 				callback = function()
 					pcall(vim.treesitter.start)
-					vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+					if vim.bo.filetype == "rust" then
+						vim.bo.indentexpr = "v:lua.require'config.rust_indent'.indentexpr()"
+					else
+						vim.bo.indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+					end
 				end,
 			})
 		end,
