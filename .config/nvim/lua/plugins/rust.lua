@@ -343,10 +343,6 @@ return {
 							desc = "Run all Rust tests",
 						})
 
-						if vim.lsp.inlay_hint then
-							vim.lsp.inlay_hint.enable(true, { bufnr = bufnr })
-						end
-
 						map("gd", vim.lsp.buf.definition, "Go to definition")
 						map("gr", vim.lsp.buf.references, "References")
 						map("K", rust_lsp_args({ "hover", "actions" }), "Rust hover actions")
