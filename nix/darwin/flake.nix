@@ -6,6 +6,8 @@
     nix-darwin.url = "github:nix-darwin/nix-darwin/master";
     nix-darwin.inputs.nixpkgs.follows = "nixpkgs";
     codex-cli-nix.url = "github:sadjow/codex-cli-nix";
+    claude-code.url = "github:sadjow/claude-code-nix";
+    claude-code.inputs.nixpkgs.follows = "nixpkgs";
     mac-app-util.url = "github:hraban/mac-app-util";
 
     # Home Manager
@@ -58,7 +60,7 @@
         exec ${pkgs.gnused}/bin/sed "$@"
       '';
     in {
-      nixpkgs.overlays = [overlay];
+      nixpkgs.overlays = [overlay inputs.claude-code.overlays.default];
       disabledModules = ["services/karabiner-elements"];
       imports = [
         ./modules/services/karabiner-elements.nix
@@ -84,9 +86,10 @@
         pkgs.dioxus-cli
         pkgs.doctl
         pkgs.doppler
-        pkgs.emacs
+        pkgs.element-desktop
         pkgs.fd
         pkgs.ffmpeg
+        pkgs.ffmpeg.dev
         pkgs.git
         pkgs.gh
         pkgs.ghostty-bin
@@ -97,10 +100,7 @@
         pkgs.gnupg
         pkgs.gnused
         gsed
-        pkgs.gst_all_1.gstreamer
-        pkgs.gst_all_1.gst-plugins-bad
-        pkgs.gst_all_1.gst-plugins-base
-        pkgs.gst_all_1.gst-plugins-good
+        pkgs.helix
         pkgs.helmfile
         pkgs.harfbuzz
         pkgs.gtk3
@@ -136,12 +136,14 @@
         pkgs.saml2aws
         pkgs.slack
         pkgs.spotify
+        pkgs.sqlx-cli
         pkgs.tailwindcss
         pkgs.tart
         pkgs.tmux
         pkgs.tree-sitter
         pkgs.trunk
         pkgs.utm
+        pkgs.upscayl
         pkgs.uv
         pkgs.wasm-pack
         pkgs.zig
@@ -239,11 +241,15 @@
       homebrew = {
         enable = true;
         onActivation = {
-          autoUpdate = false;
-          upgrade = false;
+          autoUpdate = true;
+          upgrade = true;
           cleanup = "uninstall";
+          # Homebrew Bundle now requires explicit confirmation for --cleanup.
+          extraFlags = ["--force-cleanup"];
         };
-        brews = [];
+        brews = [
+          "neonctl"
+        ];
         casks = [
           "adobe-creative-cloud"
           "cinebench"
@@ -266,12 +272,16 @@
           "praat"
           "session-manager-plugin"
           "sizeup"
+          "sonos"
+          "steam"
           "vlc"
           "figma"
           "google-chrome"
         ];
         masApps = {
           FinalCutPro = 424389933;
+          Numbers = 361304891;
+          Pages = 361309726;
           Xcode = 497799835;
         };
       };
