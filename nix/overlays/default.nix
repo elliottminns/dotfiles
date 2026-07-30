@@ -11,7 +11,7 @@
     # ...
     # });
     opencode = inputs.opencode.packages.${prev.system}.opencode;
-    openldap = prev.openldap.overrideAttrs { doCheck = false; };
+    openldap = prev.openldap.overrideAttrs {doCheck = false;};
   };
 
   # When applied, the unstable nixpkgs set (declared in the flake inputs) will
@@ -24,6 +24,47 @@
   };
 
   kiru = final: _prev: {
-    kiru.kiru = inputs.kiru.packages.${final.system}.kiru;
+    kiru.kiru = let
+      gstPlugins = with final.gst_all_1; [
+        gstreamer
+        gst-plugins-base
+        gst-plugins-good
+        gst-plugins-bad
+        gst-plugins-ugly
+        gst-libav
+        gst-plugins-rs
+      ];
+    in
+      inputs.kiru.packages.${final.system}.kiru.overrideAttrs (_oldAttrs: rec {
+        version = "0.6.0";
+        src = final.fetchurl {
+          url = "https://releases.kiru.app/releases/linux/Kiru-${version}-linux-x86_64.tar.gz";
+          hash = "sha256-goimd41sms5PA/W5HpZnju7e16OKSwZ138SIICWFIao=";
+        };
+        buildInputs = final.lib.subtractLists gstPlugins (_oldAttrs.buildInputs or []);
+        installPhase = ''
+          runHook preInstall
+
+          mkdir -p "$out"
+          cp -R bin lib share "$out/"
+
+          wrapProgram "$out/bin/kiru" \
+            --prefix PATH : ${
+            final.lib.makeBinPath [
+              final.ffmpeg
+              final.xdg-utils
+              final.zenity
+            ]
+          } \
+          --prefix LD_LIBRARY_PATH : "${
+            final.lib.makeLibraryPath [
+              final.libdrm
+              final.libva
+            ]
+          }"
+
+          runHook postInstall
+        '';
+      });
   };
 }
