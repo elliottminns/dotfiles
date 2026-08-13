@@ -256,6 +256,7 @@
           "adobe-creative-cloud"
           "cinebench"
           "discord"
+          "displaylink"
           "docker-desktop"
           "elgato-camera-hub"
           "font-inter"
