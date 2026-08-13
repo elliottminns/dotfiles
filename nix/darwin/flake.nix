@@ -115,6 +115,7 @@
         pkgs.macdylibbundler
         pkgs.mediainfo
         pkgs.micromamba
+        pkgs.mos
         pkgs.nodejs
         pkgs.opencode
         pkgs.opentofu
@@ -234,6 +235,7 @@
         builtins.elem (pkgs.lib.getName pkg) [
           "betterdisplay"
           "claude-code"
+          "mos"
           "slack"
           "spotify"
           "tart"
