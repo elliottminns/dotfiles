@@ -187,7 +187,9 @@ in {
       cp -r ${pkgs.karabiner-elements.driver}/Applications/.Karabiner-VirtualHIDDevice-Manager.app ${parentAppDir}
 
       mkdir -p ${cfg.stableBinaryPath}
-      install -m 0755 ${kanataExec} ${stableKanataExec}
+      if ! cmp -s ${kanataExec} ${stableKanataExec}; then
+        install -m 0755 ${kanataExec} ${stableKanataExec}
+      fi
     '';
 
     # Activate extension
