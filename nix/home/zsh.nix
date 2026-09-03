@@ -7,6 +7,7 @@
   pkgConfigDeps = [
     pkgs.cairo.dev
     pkgs.gdk-pixbuf.dev
+    pkgs.ffmpeg.dev
     pkgs.glib.dev
     pkgs.gst_all_1.gstreamer.dev
     pkgs.gst_all_1.gst-plugins-bad.dev
