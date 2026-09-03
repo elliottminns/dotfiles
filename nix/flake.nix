@@ -41,9 +41,6 @@
     # Zen browser
     zen-browser.url = "github:0xc000022070/zen-browser-flake";
 
-    # Clawdbot
-    nix-clawdbot.url = "github:clawdbot/nix-clawdbot";
-
     # Opencode
     opencode.url = "github:anomalyco/opencode/v1.1.53";
 
@@ -201,9 +198,7 @@
         # Framework Desktop
         hardware = nixos-hardware.nixosModules.framework-desktop-amd-ai-max-300-series;
         gaps = false;
-        hasClawdUser = false;
         hasGaming = false;
-        hasFixer = true;
         monitors = [
           {
             name = "HDMI-A-1"; # Adjust based on actual display
@@ -258,98 +253,10 @@
                   meta = host;
                 };
               }
-              # Zenbot user (only on hosts with hasClawdUser)
-              (nixpkgs.lib.mkIf (host.hasClawdUser or false) {
-                programs.fish.enable = true;
-                users.users.zenbot = {
-                  isNormalUser = true;
-                  description = "Zenbot Service User";
-                  extraGroups = [
-                    "wheel"
-                    "docker"
-                    "dotfiles"
-                  ];
-                  shell = nixpkgs.legacyPackages.x86_64-linux.fish;
-                };
-                security.sudo.extraRules = [
-                  {
-                    users = ["zenbot"];
-                    commands = [
-                      {
-                        command = "ALL";
-                        options = ["NOPASSWD"];
-                      }
-                    ];
-                  }
-                ];
-                home-manager.users.zenbot = import ./home/home-zenbot.nix;
-
-                # Clawdbot gateway system service
-                systemd.services.clawdbot-gateway = let
-                  pkgs = nixpkgs.legacyPackages.x86_64-linux;
-                in {
-                  description = "Clawdbot Gateway";
-                  after = [
-                    "network.target"
-                    "local-fs.target"
-                  ];
-                  wantedBy = ["multi-user.target"];
-                  unitConfig = {
-                    RequiresMountsFor = "/home/zenbot/clawd/dotfiles";
-                  };
-                  path = [
-                    pkgs.nodejs_22
-                    pkgs.coreutils
-                    pkgs.gnused
-                    pkgs.bash
-                  ];
-                  serviceConfig = {
-                    Type = "simple";
-                    User = "zenbot";
-                    Group = "users";
-                    Environment = [
-                      "PNPM_HOME=/home/zenbot/.local/share/pnpm"
-                      "HOME=/home/zenbot"
-                    ];
-                    ExecStart = "/home/zenbot/.local/share/pnpm/clawdbot gateway";
-                    Restart = "on-failure";
-                    RestartSec = 5;
-                    WorkingDirectory = "/home/zenbot";
-                  };
-                };
-              })
             ]
             ++ (
               if host.hardware != null
               then [host.hardware]
-              else []
-            )
-            ++ (
-              if (host.hasFixer or false)
-              then [
-                kiru-agent.nixosModules.fixer
-                (
-                  {
-                    config,
-                    pkgs,
-                    lib,
-                    ...
-                  }: {
-                    services.kiru-fixer.enable = true;
-
-                    systemd.tmpfiles.rules = [
-                      "f /etc/doppler/kiru-fixer.token 0600 kiru-fixer kiru-fixer - -"
-                    ];
-
-                    systemd.services.kiru-fixer.serviceConfig.ExecStart = lib.mkForce "${pkgs.writeShellScript "kiru-fixer-doppler" ''
-                      export DOPPLER_TOKEN="$(cat /etc/doppler/kiru-fixer.token)"
-                      exec ${pkgs.doppler}/bin/doppler run \
-                        -p kiru-agent -c prod \
-                        -- ${config.services.kiru-fixer.package}/bin/fixer
-                    ''}";
-                  }
-                )
-              ]
               else []
             );
         };

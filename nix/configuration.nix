@@ -32,7 +32,6 @@ in {
     ./modules/unfree.nix
     ./modules/video.nix
     ./modules/k3s-worker.nix
-    #./modules/clawdbot.nix
   ];
 
   nix = {
@@ -82,7 +81,6 @@ in {
     loadModels = [
       "glm-4.7-flash"
       "gemma3:27b"
-      #"orieg/gemma3-tools:27b" # removed: no longer on Ollama registry
       "llama4:16x17b"
     ];
   };
@@ -109,8 +107,7 @@ in {
   networking.hostName = meta.hostname; # Hostname is defined by the flake.
 
   networking.extraHosts = "";
-  # Pick only one of the below networking options.
-  #networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
+
   networking.networkmanager.enable = true; # Easiest to use and most distros use this by default.
   networking.networkmanager.insertNameservers = [
     "192.168.0.1"
@@ -142,22 +139,9 @@ in {
   # Define groups
   users.groups.dotfiles = {};
 
-  # Keep dotfiles mounted for Zenbot/Clawdbot on hosts that run the service user.
-  # This is a bind mount, so it survives reboot and doesn't rely on a manual mount.
-  fileSystems = lib.mkIf (meta.hasClawdUser or false) {
-    "/home/zenbot/clawd/dotfiles" = {
-      device = "/home/elliott/.dotfiles";
-      options = ["bind"];
-    };
-  };
-
-  systemd.tmpfiles.rules =
-    [
-      "d /var/lib/soci-snapshotter-grpc 0755 root root -"
-    ]
-    ++ lib.optionals (meta.hasClawdUser or false) [
-      "d /home/zenbot/clawd/dotfiles 0775 zenbot users -"
-    ];
+  systemd.tmpfiles.rules = [
+    "d /var/lib/soci-snapshotter-grpc 0755 root root -"
+  ];
 
   environment.sessionVariables = lib.mkIf (meta.hostname == "zenbox") {
     PKG_CONFIG_PATH = lib.makeSearchPath "lib/pkgconfig" [
@@ -201,10 +185,8 @@ in {
     alejandra
     argocd
     awscli2
-    #banana-cursor
     banana-cursor-dreams
     bubblewrap
-    #calibre
     chromium
     clickgen
     cloud-utils
@@ -303,7 +285,6 @@ in {
     vlc
     mpv
 
-    # Kiru dependencies (video editor)
     ffmpeg
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
@@ -311,7 +292,7 @@ in {
     gst_all_1.gst-plugins-bad
     gst_all_1.gst-plugins-ugly
     gst_all_1.gst-libav
-    rustup # Rust toolchain for Kiru
+    rustup
     kiru.kiru
     cargo-watch
     cargo-edit
