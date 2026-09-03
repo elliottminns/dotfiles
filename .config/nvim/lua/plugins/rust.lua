@@ -323,6 +323,61 @@ return {
 				vim.cmd.RustLsp("run")
 			end
 
+			local function line_comment_start(line)
+				local index = 1
+				local mode = "normal"
+				local escaped = false
+
+				while index <= #line do
+					local char = line:sub(index, index)
+					local pair = line:sub(index, index + 1)
+
+					if mode == "string" then
+						if escaped then
+							escaped = false
+						elseif char == "\\" then
+							escaped = true
+						elseif char == "\"" then
+							mode = "normal"
+						end
+					elseif mode == "char" then
+						if escaped then
+							escaped = false
+						elseif char == "\\" then
+							escaped = true
+						elseif char == "'" then
+							mode = "normal"
+						end
+					elseif pair == "//" then
+						return index
+					elseif char == "\"" then
+						mode = "string"
+					elseif char == "'" then
+						mode = "char"
+					end
+
+					index = index + 1
+				end
+
+				return nil
+			end
+
+			local function add_semicolon_to_line()
+				local bufnr = vim.api.nvim_get_current_buf()
+				local cursor = vim.api.nvim_win_get_cursor(0)
+				local line = vim.api.nvim_get_current_line()
+				local comment_start = line_comment_start(line)
+				local code = comment_start and line:sub(1, comment_start - 1) or line
+				local insert_col = #code:gsub("%s*$", "")
+
+				if insert_col == 0 or line:sub(insert_col, insert_col) == ";" then
+					return
+				end
+
+				vim.api.nvim_buf_set_text(bufnr, cursor[1] - 1, insert_col, cursor[1] - 1, insert_col, { ";" })
+				vim.api.nvim_win_set_cursor(0, cursor)
+			end
+
 			vim.g.rustaceanvim = {
 				tools = {
 					code_actions = {
@@ -348,10 +403,11 @@ return {
 						map("K", rust_lsp_args({ "hover", "actions" }), "Rust hover actions")
 						map("<leader>ca", rust_lsp("codeAction"), "Rust code action")
 						map("<leader>rn", vim.lsp.buf.rename, "Rename")
-						map("<leader>d", vim.diagnostic.open_float, "Line diagnostics")
+						map("<leader>d", require("config.diagnostics").open_float, "Line diagnostics")
 
 						map("<leader>rr", rust_lsp("runnables"), "Rust runnables")
 						map("<leader>ru", rust_lsp("run"), "Rust run at cursor")
+						map("<leader>;", add_semicolon_to_line, "Rust add semicolon")
 						map("<leader>rh", function()
 							if not vim.lsp.inlay_hint then
 								return
@@ -416,6 +472,7 @@ return {
 								},
 							},
 							completion = {
+								addSemicolonToUnit = true,
 								fullFunctionSignatures = {
 									enable = true,
 								},
