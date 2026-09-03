@@ -9,6 +9,7 @@
 in {
   imports = [
     ./ags/default.nix
+    ./zellij.nix
   ];
 
   programs.home-manager.enable = true;
