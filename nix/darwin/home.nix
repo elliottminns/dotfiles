@@ -21,6 +21,17 @@
         ["run-shell \"${pkgs.bash}/bin/bash " "tokyo-night/tokyo-night.tmux\""]
         base.extraConfig;
     };
+  zsh = let
+    base = import ../home/zsh.nix {inherit config pkgs lib;};
+  in
+    base
+    // {
+      shellAliases =
+        base.shellAliases
+        // {
+          codex = "GITHUB_PAT_TOKEN=$(gh auth token) command codex";
+        };
+    };
 in {
   imports = [
     ../home/fastfetch.nix
@@ -86,7 +97,7 @@ in {
     };
     git = import ../home/git.nix {inherit config pkgs lib;};
     inherit tmux;
-    zsh = import ../home/zsh.nix {inherit config pkgs lib;};
+    inherit zsh;
     zoxide = import ../home/zoxide.nix {inherit config pkgs;};
     fzf = import ../home/fzf.nix {inherit pkgs;};
     oh-my-posh = import ../home/oh-my-posh.nix {inherit pkgs;};
