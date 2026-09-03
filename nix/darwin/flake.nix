@@ -32,6 +32,43 @@
           '';
       });
 
+      amaran-desktop = prev.stdenvNoCC.mkDerivation {
+        pname = "amaran-desktop";
+        version = "1.0.41";
+
+        src = prev.fetchurl {
+          url = "https://s3.sidus.link/amaranDesktop/amaran-darwin-arm64-signed.pkg";
+          hash = "sha256-fTj9Z/EaAQkVFByrhrPtg/lkEZ0mMbKtEi8CHXsmohM=";
+        };
+
+        nativeBuildInputs = [
+          prev.cpio
+          prev.gzip
+          prev.xar
+        ];
+
+        dontUnpack = true;
+        dontFixup = true;
+
+        installPhase = ''
+          runHook preInstall
+
+          xar -xf "$src"
+          gzip -dc amaran.pkg/Payload | cpio -idm
+          mkdir -p "$out/Applications"
+          cp -R "Applications/amaran Desktop.app" "$out/Applications/"
+
+          runHook postInstall
+        '';
+
+        meta = {
+          description = "Desktop control app for amaran and Aputure lights";
+          homepage = "https://amarancreators.com/pages/amaran-app-download";
+          license = prev.lib.licenses.unfree;
+          platforms = prev.lib.platforms.darwin;
+        };
+      };
+
       python3Packages = prev.python3Packages.overrideScope (
         pyFinal: pyPrev: {
           mlx-vlm = pyPrev.mlx-vlm.overridePythonAttrs (_: rec {
@@ -72,6 +109,7 @@
       environment.systemPackages = [
         pkgs.neovim
         pkgs.alejandra
+        pkgs.amaran-desktop
         pkgs.awscli2
         pkgs.audacity
         pkgs.bat
@@ -108,7 +146,9 @@
         pkgs.just
         pkgs.kubectl
         pkgs.kubectx
-        pkgs.kubernetes-helm
+        (pkgs.wrapHelm pkgs.kubernetes-helm {
+          plugins = [pkgs.kubernetes-helmPlugins.helm-diff];
+        })
         pkgs.kubeseal
         pkgs.kustomize
         pkgs.macpm
@@ -135,6 +175,7 @@
         pkgs.rust-analyzer
         pkgs.rustup
         pkgs.saml2aws
+        pkgs.signal-desktop
         pkgs.slack
         pkgs.spotify
         pkgs.sqlx-cli
@@ -147,6 +188,7 @@
         pkgs.upscayl
         pkgs.uv
         pkgs.wasm-pack
+        pkgs.yt-dlp
         pkgs.zig
         pkgs.zellij
         pkgs.zoxide
@@ -233,6 +275,7 @@
       };
       nixpkgs.config.allowUnfreePredicate = pkg:
         builtins.elem (pkgs.lib.getName pkg) [
+          "amaran-desktop"
           "betterdisplay"
           "claude-code"
           "mos"
@@ -282,6 +325,8 @@
           "google-chrome"
         ];
         masApps = {
+          Beat = 1549538329;
+          ColorSlurp = 1287239339;
           FinalCutPro = 424389933;
           Numbers = 361304891;
           Pages = 361309726;
