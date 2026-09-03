@@ -34,6 +34,9 @@ vim.api.nvim_create_autocmd({ "BufEnter", "BufNewFile" }, {
 
 vim.opt.rtp:prepend(lazypath)
 
+require("config.html_classes").setup()
+require("config.choreo").setup()
+
 -- Set highlight on search
 vim.o.hlsearch = false
 

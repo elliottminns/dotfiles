@@ -1,9 +1,12 @@
 return {
+	"c",
+	"cpp",
 	"go",
 	"lua",
 	"pkl",
 	"rust",
 	"gleam",
+	"html",
 	"svelte",
 	"typescript",
 	"javascript",
