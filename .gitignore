@@ -2,5 +2,6 @@
 .emacs.d/session.*
 .emacs.d/#*#
 .config/tmux/plugins
+.config/nvim/nvim.log
 .codex
 */.codex
