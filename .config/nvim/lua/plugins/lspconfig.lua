@@ -3,6 +3,19 @@ return {
 		"neovim/nvim-lspconfig",
 		lazy = false,
 		config = function()
+			local diagnostics = require("config.diagnostics")
+			local function toggle_diagnostics()
+				diagnostics.toggle()
+			end
+
+			vim.api.nvim_create_user_command("DiagnosticToggle", toggle_diagnostics, {
+				desc = "Toggle diagnostics in the current buffer",
+			})
+			vim.keymap.set("n", "<leader>td", toggle_diagnostics, {
+				desc = "Toggle diagnostics",
+				silent = true,
+			})
+
 			local function readable_float_opts()
 				local available_width = math.max(vim.o.columns - 6, 20)
 				local width = math.min(
@@ -58,7 +71,7 @@ return {
 			vim.api.nvim_create_autocmd("CursorHold", {
 				group = diagnostic_group,
 				callback = function()
-					vim.diagnostic.open_float(nil, {
+					diagnostics.open_float({
 						focus = false,
 						scope = "cursor",
 						max_width = readable_float_opts().max_width,
@@ -69,19 +82,6 @@ return {
 			})
 
 			vim.api.nvim_create_autocmd({ "BufWritePre" }, { pattern = { "*.templ" }, callback = vim.lsp.buf.format })
-			vim.api.nvim_create_autocmd({ "BufWritePre" }, {
-				pattern = { "*.rs" },
-				callback = function(args)
-					vim.lsp.buf.format({
-						bufnr = args.buf,
-						timeout_ms = 3000,
-						filter = function(client)
-							return client.name == "rust-analyzer" or client.name == "rust_analyzer"
-						end,
-					})
-				end,
-			})
-
 			local on_attach = function(_client, bufnr)
 				local opts = { buffer = bufnr, silent = true }
 				vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
@@ -92,8 +92,7 @@ return {
 				vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, opts)
 				vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts)
 				vim.keymap.set("n", "<leader>d", function()
-					vim.diagnostic.open_float(
-						nil,
+					diagnostics.open_float(
 						vim.tbl_extend("force", readable_float_opts(), {
 							focus = false,
 							scope = "cursor",

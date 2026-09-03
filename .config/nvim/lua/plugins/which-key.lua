@@ -8,6 +8,7 @@ return {
 			wk.setup(opts)
 			wk.add({
 				{ "<leader>f", group = "Find" },
+				{ "<leader>t", group = "Toggle" },
 			})
 		end,
 	},
