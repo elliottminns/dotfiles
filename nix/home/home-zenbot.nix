@@ -1,10 +1,10 @@
 # Home Manager configuration for zenbot user (Zenbot service)
-{ config, pkgs, lib, ... }:
-
 {
-  imports = [
-    ./clawdbot.nix
-  ];
+  config,
+  pkgs,
+  lib,
+  ...
+}: {
   programs.home-manager.enable = true;
 
   home.username = "zenbot";

@@ -65,7 +65,7 @@ in {
 
     bindkey -e
 
-    [[ ! -f ${./p10k.zsh} ]] || source ${./p10k.zsh}
+    [[ ! -f ${config.xdg.configHome}/zsh/plugins/powerlevel10k-config/p10k.zsh ]] || source ${config.xdg.configHome}/zsh/plugins/powerlevel10k-config/p10k.zsh
 
     # disable sort when completing `git checkout`
     zstyle ':completion:*:git-checkout:*' sort false
@@ -239,7 +239,7 @@ in {
     }
     {
       name = "powerlevel10k-config";
-      src = lib.cleanSource ../../.p10k.zsh;
+      src = lib.cleanSource ./p10k.zsh;
       file = "p10k.zsh";
     }
     {

@@ -59,7 +59,6 @@
     nixpkgs-unstable,
     nixos-hardware,
     ags,
-    nix-clawdbot,
     kiru-agent,
     kiru,
     ...
@@ -213,7 +212,14 @@
       }
     ];
 
-    forAllSystems = fn: nixpkgs.lib.genAttrs systems (system: fn {pkgs = import nixpkgs {inherit system;};});
+    forAllSystems = fn:
+      nixpkgs.lib.genAttrs systems (system:
+        fn {
+          pkgs = import nixpkgs {
+            inherit system;
+            config.allowUnfree = true;
+          };
+        });
   in {
     overlays = import ./overlays {inherit inputs;};
 
