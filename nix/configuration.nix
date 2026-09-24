@@ -102,6 +102,7 @@ in {
   # List packages installed in system profile. To search, run:
   # Use the systemd-boot EFI boot loader.
   boot.loader.systemd-boot.enable = true;
+  boot.loader.systemd-boot.configurationLimit = 10;
   boot.loader.efi.canTouchEfiVariables = true;
 
   networking.hostName = meta.hostname; # Hostname is defined by the flake.
