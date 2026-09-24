@@ -251,7 +251,6 @@ in {
     pika-backup
     python3
     pkg-config
-    pop-gtk-theme
     postgresql
     proton-vpn-cli
     proton-vpn

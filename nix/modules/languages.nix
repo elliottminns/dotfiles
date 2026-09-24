@@ -1,7 +1,6 @@
 {pkgs, ...}: {
   environment.systemPackages = with pkgs; [
     air
-    elixir
     gcc
     #    laravel
     htmx-lsp
