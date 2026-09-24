@@ -5,10 +5,6 @@ pkgs: rec {
     postInstall =
       (oldAttrs.postInstall or "")
       + ''
-        mkdir -p $out/lib/blackmagic/DesktopVideo
-        cp $unpacked/usr/lib/blackmagic/DesktopVideo/libc++.so.1 $out/lib/blackmagic/DesktopVideo/
-        cp $unpacked/usr/lib/blackmagic/DesktopVideo/libc++abi.so.1 $out/lib/blackmagic/DesktopVideo/
-        cp $unpacked/usr/lib/blackmagic/DesktopVideo/libgcc_s.so.1 $out/lib/blackmagic/DesktopVideo/
       '';
 
     postFixup =

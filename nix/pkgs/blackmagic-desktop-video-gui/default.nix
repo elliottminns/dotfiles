@@ -1,5 +1,8 @@
 {
   autoPatchelfHook,
+  alsa-lib,
+  avahi,
+  avahi-compat,
   blackmagic-desktop-video-vendor,
   dbus,
   fontconfig,
@@ -9,14 +12,27 @@
   lib,
   libice,
   libGL,
+  libdrm,
   libsm,
   libusb1,
   libx11,
   libxcb,
   libxext,
+  libxi,
+  libxkbfile,
   libxrender,
+  krb5,
+  libxkbcommon,
   makeWrapper,
+  nspr,
+  nss,
   stdenv,
+  xcb-util-cursor,
+  xcbutilimage,
+  xcbutilkeysyms,
+  xcbutilrenderutil,
+  xcbutilwm,
+  zstd,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "blackmagic-desktop-video-gui";
@@ -29,11 +45,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     dbus
+    alsa-lib
+    avahi
+    avahi-compat
     fontconfig
     freetype
     gcc.cc.lib
     glib
     libGL
+    libdrm
     libice
     libsm
     libusb1
@@ -41,6 +61,18 @@ stdenv.mkDerivation (finalAttrs: {
     libxcb
     libxext
     libxrender
+    krb5
+    libxkbcommon
+    nspr
+    nss
+    xcb-util-cursor
+    xcbutilimage
+    xcbutilkeysyms
+    xcbutilrenderutil
+    xcbutilwm
+    libxi
+    libxkbfile
+    zstd
   ];
 
   unpackPhase = ''
@@ -49,12 +81,12 @@ stdenv.mkDerivation (finalAttrs: {
     tar xf $src
     mkdir gui main
 
-    ar x Blackmagic_Desktop_Video_Linux_${finalAttrs.version}/deb/x86_64/desktopvideo-gui_16.0a14_amd64.deb \
-      --output gui
+    guiDeb=(Blackmagic_Desktop_Video_Linux_${finalAttrs.version}/deb/x86_64/desktopvideo-gui_*_amd64.deb)
+    ar x "''${guiDeb[0]}" --output gui
     tar xf gui/data.tar.xz -C gui
 
-    ar x Blackmagic_Desktop_Video_Linux_${finalAttrs.version}/deb/x86_64/desktopvideo_16.0a14_amd64.deb \
-      --output main
+    mainDeb=(Blackmagic_Desktop_Video_Linux_${finalAttrs.version}/deb/x86_64/desktopvideo_*_amd64.deb)
+    ar x "''${mainDeb[0]}" --output main
     tar xf main/data.tar.xz -C main
 
     runHook postUnpack
@@ -68,9 +100,6 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r gui/usr/lib/blackmagic/DesktopVideo/. $out/lib/blackmagic/DesktopVideo/
     cp -r main/usr/lib/blackmagic/DesktopVideo/Firmware $out/lib/blackmagic/DesktopVideo/
     cp main/usr/lib/blackmagic/DesktopVideo/libDVUpdate.so $out/lib/blackmagic/DesktopVideo/
-    cp main/usr/lib/blackmagic/DesktopVideo/libc++.so.1 $out/lib/blackmagic/DesktopVideo/
-    cp main/usr/lib/blackmagic/DesktopVideo/libc++abi.so.1 $out/lib/blackmagic/DesktopVideo/
-    cp main/usr/lib/blackmagic/DesktopVideo/libgcc_s.so.1 $out/lib/blackmagic/DesktopVideo/
     cp main/usr/lib/blackmagic/DesktopVideo/DesktopVideoUpdateTool $out/lib/blackmagic/DesktopVideo/
     cp main/usr/lib/blackmagic/DesktopVideo/DesktopVideoNotifier $out/lib/blackmagic/DesktopVideo/
 
