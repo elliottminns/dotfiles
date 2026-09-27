@@ -1,6 +1,7 @@
 -- Set leader key
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
+vim.keymap.set("n", "<M-u>", "u$", { desc = "Undo and move to end of line" })
 vim.opt.scrolloff = 1
 vim.opt.listchars = {
 	tab = "> ",

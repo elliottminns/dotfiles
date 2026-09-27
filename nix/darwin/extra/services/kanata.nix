@@ -155,8 +155,18 @@ in {
         Directory where the selected kanata binary is copied during activation.
 
         The launchd service runs this stable path instead of the changing
-        `/nix/store` path, which helps macOS Input Monitoring keep its permission
-        grant across package updates.
+        `/nix/store` path. Preserving privacy permissions across binary updates
+        also requires a stable signing identity.
+      '';
+    };
+    signingIdentity = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
+      default = null;
+      description = ''
+        Persistent code-signing certificate name or fingerprint available to
+        root during activation. Its private key must remain in Keychain, never
+        in the Nix store. Null preserves the package's original signature.
+        Changing this identity requires granting macOS privacy permissions again.
       '';
     };
     keyboards = lib.mkOption {
@@ -187,9 +197,21 @@ in {
       cp -r ${pkgs.karabiner-elements.driver}/Applications/.Karabiner-VirtualHIDDevice-Manager.app ${parentAppDir}
 
       mkdir -p ${cfg.stableBinaryPath}
-      if ! cmp -s ${kanataExec} ${stableKanataExec}; then
-        install -m 0755 ${kanataExec} ${stableKanataExec}
-      fi
+      (
+        # Stage on the same filesystem; never overwrite a running executable.
+        kanataStage=$(mktemp ${lib.escapeShellArg "${cfg.stableBinaryPath}/.kanata.XXXXXX"}) || exit 1
+        trap 'rm -f "$kanataStage"' EXIT
+        install -m 0755 ${kanataExec} "$kanataStage" || exit 1
+        ${lib.optionalString (cfg.signingIdentity != null) ''
+        /usr/bin/codesign --force --timestamp=none \
+          --sign ${lib.escapeShellArg cfg.signingIdentity} \
+          --identifier org.nixos.kanata "$kanataStage" || exit 1
+        /usr/bin/codesign --verify --strict "$kanataStage" || exit 1
+      ''}
+        if ! cmp -s "$kanataStage" ${stableKanataExec}; then
+          mv -f "$kanataStage" ${stableKanataExec} || exit 1
+        fi
+      ) || exit 1
     '';
 
     # Activate extension

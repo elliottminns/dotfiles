@@ -32,43 +32,6 @@
           '';
       });
 
-      amaran-desktop = prev.stdenvNoCC.mkDerivation {
-        pname = "amaran-desktop";
-        version = "1.0.41";
-
-        src = prev.fetchurl {
-          url = "https://s3.sidus.link/amaranDesktop/amaran-darwin-arm64-signed.pkg";
-          hash = "sha256-fTj9Z/EaAQkVFByrhrPtg/lkEZ0mMbKtEi8CHXsmohM=";
-        };
-
-        nativeBuildInputs = [
-          prev.cpio
-          prev.gzip
-          prev.xar
-        ];
-
-        dontUnpack = true;
-        dontFixup = true;
-
-        installPhase = ''
-          runHook preInstall
-
-          xar -xf "$src"
-          gzip -dc amaran.pkg/Payload | cpio -idm
-          mkdir -p "$out/Applications"
-          cp -R "Applications/amaran Desktop.app" "$out/Applications/"
-
-          runHook postInstall
-        '';
-
-        meta = {
-          description = "Desktop control app for amaran and Aputure lights";
-          homepage = "https://amarancreators.com/pages/amaran-app-download";
-          license = prev.lib.licenses.unfree;
-          platforms = prev.lib.platforms.darwin;
-        };
-      };
-
       python3Packages = prev.python3Packages.overrideScope (
         pyFinal: pyPrev: {
           mlx-vlm = pyPrev.mlx-vlm.overridePythonAttrs (_: rec {
@@ -109,11 +72,9 @@
       environment.systemPackages = [
         pkgs.neovim
         pkgs.alejandra
-        pkgs.amaran-desktop
         pkgs.awscli2
         pkgs.audacity
         pkgs.bat
-        pkgs.betterdisplay
         pkgs.bun
         pkgs.caffeine
         pkgs.cargo-bundle
@@ -121,6 +82,7 @@
         pkgs.cdrtools
         pkgs.claude-code
         pkgs.cmake
+        pkgs.devenv
         pkgs.dioxus-cli
         pkgs.doctl
         pkgs.doppler
@@ -128,6 +90,7 @@
         pkgs.fd
         pkgs.ffmpeg
         pkgs.ffmpeg.dev
+        pkgs.firefox
         pkgs.git
         pkgs.gh
         pkgs.ghostty-bin
@@ -157,6 +120,7 @@
         pkgs.micromamba
         pkgs.mos
         pkgs.nodejs
+        pkgs.obsidian
         pkgs.opencode
         pkgs.opentofu
         pkgs.openssl
@@ -275,10 +239,9 @@
       };
       nixpkgs.config.allowUnfreePredicate = pkg:
         builtins.elem (pkgs.lib.getName pkg) [
-          "amaran-desktop"
-          "betterdisplay"
           "claude-code"
           "mos"
+          "obsidian"
           "slack"
           "spotify"
           "tart"
@@ -297,6 +260,7 @@
         ];
         casks = [
           "adobe-creative-cloud"
+          "blender"
           "cinebench"
           "discord"
           "displaylink"
@@ -328,6 +292,7 @@
           Beat = 1549538329;
           ColorSlurp = 1287239339;
           FinalCutPro = 424389933;
+          LogicPro = 634148309;
           Numbers = 361304891;
           Pages = 361309726;
           Xcode = 497799835;

@@ -2,6 +2,25 @@ return {
 	{
 		"hrsh7th/nvim-cmp",
 		event = "InsertEnter",
+		keys = {
+			{
+				"<leader>ta",
+				function()
+					local cmp = require("cmp")
+					local enabled = cmp.get_config().completion.autocomplete ~= false
+					cmp.setup({
+						completion = {
+							autocomplete = not enabled and { cmp.TriggerEvent.TextChanged } or false,
+						},
+					})
+					if enabled then
+						cmp.close()
+					end
+					vim.notify("Autocomplete " .. (enabled and "disabled" or "enabled"))
+				end,
+				desc = "Toggle autocomplete",
+			},
+		},
 		dependencies = {
 			{
 				-- snippet plugin
