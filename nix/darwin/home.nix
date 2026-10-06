@@ -26,6 +26,16 @@
   in
     base
     // {
+      plugins = map (plugin:
+        if plugin.name == "powerlevel10k-config"
+        then
+          plugin
+          // {
+            # Home Manager expects plugin sources to be directories.
+            src = pkgs.writeTextDir "p10k.zsh" (builtins.readFile ../home/p10k.zsh);
+          }
+        else plugin)
+      base.plugins;
       shellAliases =
         base.shellAliases
         // {
@@ -49,6 +59,9 @@ in {
   ];
 
   programs.ghostty.settings.font-family = lib.mkForce "JetBrainsMono NFM";
+  # Ghostty's multiline prompt rewriting corrupts Powerlevel10k at startup.
+  programs.ghostty.enableZshIntegration = false;
+  programs.ghostty.settings.shell-integration = "none";
 
   xdg.enable = true;
   xdg.configFile.nvim.source = mkOutOfStoreSymlink "/Users/elliott/.dotfiles/.config/nvim";
@@ -62,6 +75,10 @@ in {
     inherit zsh;
     zoxide = import ../home/zoxide.nix {inherit config pkgs;};
     fzf = import ../home/fzf.nix {inherit pkgs;};
-    oh-my-posh = import ../home/oh-my-posh.nix {inherit pkgs;};
+    oh-my-posh =
+      (import ../home/oh-my-posh.nix {inherit pkgs;})
+      // {
+        enableZshIntegration = false;
+      };
   };
 }
