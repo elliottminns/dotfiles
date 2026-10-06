@@ -3,8 +3,9 @@
   pkgs,
   meta,
   ...
-}: let
-  isZenbox = meta.hostname == "zenbox";
+}:
+let
+  isZenbox = meta.hostname == "zenbox-2";
   k3s_1_30_1 = pkgs.stdenvNoCC.mkDerivation rec {
     pname = "k3s";
     version = "1.30.1+k3s1";
@@ -14,7 +15,7 @@
       hash = "sha256-OaUFf7Sb9XakXDLvPvY7/0SCUtTSXGxBuNzF5I4ni/U=";
     };
 
-    nativeBuildInputs = [pkgs.makeWrapper];
+    nativeBuildInputs = [ pkgs.makeWrapper ];
 
     runtimeDeps = with pkgs; [
       kmod
@@ -48,13 +49,12 @@
       runHook postInstall
     '';
 
-    meta =
-      pkgs.k3s.meta
-      // {
-        sourceProvenance = [lib.sourceTypes.binaryNativeCode];
-      };
+    meta = pkgs.k3s.meta // {
+      sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
+    };
   };
-in {
+in
+{
   config = lib.mkIf isZenbox {
     services.k3s = {
       enable = true;
