@@ -34,6 +34,7 @@
     };
 in {
   imports = [
+    ./firefox
     ../home/fastfetch.nix
     ../home/ghostty.nix
     ../home/zellij.nix

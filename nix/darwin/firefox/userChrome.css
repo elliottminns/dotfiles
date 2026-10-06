@@ -1,0 +1,74 @@
+/* Zen-inspired chrome for amaterasu's Firefox 155.
+ * The toolbar stays in normal layout, reserving space above the page and tabs.
+ * Keep opacity-based hiding so Command-L can still focus the address bar.
+ */
+:root {
+  --zen-toolbar-height: 52px;
+  --zen-motion-duration: 200ms;
+  --tab-border-radius: 10px !important;
+  --toolbarbutton-border-radius: 8px !important;
+}
+#urlbar-background { border-radius: 12px !important; }
+:root:not([inDOMFullscreen]) #tabbrowser-tabbox {
+  border-radius: 12px !important;
+  overflow: hidden !important;
+}
+/* Firefox's native translate animation holds the old page width until its
+ * final frame. Disable that animation in user.js and let the sidebar's width
+ * drive layout continuously instead. Inline widths from dragging still win.
+ * Keep hidden launchers in layout at width zero so closing can animate too.
+ */
+@media -moz-pref("sidebar.verticalTabs") {
+  :root:not([inDOMFullscreen], [customizing]) #sidebar-container {
+    display: flex !important;
+    width: var(--sidebar-expanded-launcher-width, 240px);
+    min-width: 0 !important;
+    flex-shrink: 0 !important;
+    transition: width var(--zen-motion-duration) ease-in-out,
+                visibility var(--zen-motion-duration) allow-discrete !important;
+  }
+  :root:not([inDOMFullscreen], [customizing]) #sidebar-container[hidden] {
+    width: 0 !important;
+    visibility: hidden !important;
+    pointer-events: none !important;
+  }
+}
+/* Control-S toggles the native sidebar; let its visibility toggle the toolbar
+ * too. No pointer-driven reveal, so native macOS controls cannot cause a loop.
+ * Keep the toolbar in normal flow to reserve space when it is shown.
+ * Command-L can temporarily reveal the address bar while the sidebar is hidden.
+ * Extra rows such as bookmarks retain their natural layout height.
+ * Fullscreen and customization retain Firefox's native layout.
+ */
+:root[sessionrestored]:not([customizing], [sizemode="fullscreen"], [chromehidden~="toolbar"]) {
+  #browser {
+    padding: 6px !important;
+  }
+  #nav-bar {
+    min-height: var(--zen-toolbar-height) !important;
+    box-sizing: border-box !important;
+  }
+  #navigator-toolbox {
+    position: relative !important;
+    margin: 0 !important;
+    margin-top: calc(-1 * var(--zen-toolbar-height)) !important;
+    z-index: 10 !important;
+    background-color: var(--toolbox-background-color, Canvas) !important;
+    opacity: 0;
+    transition: margin-top var(--zen-motion-duration) ease-out,
+                opacity var(--zen-motion-duration) ease-out !important;
+    > * { pointer-events: none; }
+    :is(#urlbar, .urlbar):popover-open { opacity: 0; pointer-events: none; }
+  }
+  &:is([window-modal-open], :has(#mainPopupSet [panelopen]), :has(#sidebar-container:not([hidden]))) #navigator-toolbox,
+  #navigator-toolbox:is(:focus-within, [movingtab]),
+  #navigator-toolbox:has(#urlbar[open], .urlbar[open]) {
+    margin-top: 0 !important;
+    opacity: 1;
+    > * { pointer-events: auto; }
+    :is(#urlbar, .urlbar):popover-open { opacity: 1; pointer-events: auto; }
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  :root { --zen-motion-duration: 0ms; }
+}
