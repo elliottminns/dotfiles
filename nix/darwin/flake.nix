@@ -31,26 +31,6 @@
             cp ${./assets/alacritty.icns} $out/Applications/Alacritty.app/Contents/Resources/alacritty.icns
           '';
       });
-
-      python3Packages = prev.python3Packages.overrideScope (
-        pyFinal: pyPrev: {
-          mlx-vlm = pyPrev.mlx-vlm.overridePythonAttrs (_: rec {
-            version = "0.4.3";
-            src = prev.fetchFromGitHub {
-              owner = "Blaizzy";
-              repo = "mlx-vlm";
-              tag = "v${version}";
-              hash = "sha256-8cVJUibEhfAqyRq3ian8pKc2XmCsNRWXjS6iZIojEKk=";
-            };
-            dependencies =
-              pyPrev.mlx-vlm.dependencies
-              ++ [
-                pyPrev.miniaudio
-                pyPrev.sentencepiece
-              ];
-          });
-        }
-      );
     };
 
     # Username
@@ -126,7 +106,6 @@
         pkgs.openssl
         pkgs.postgresql
         pkgs.python3Packages.mlx-lm
-        pkgs.python3Packages.mlx-vlm
         pkgs.ollama
         pkgs.exiftool
         pkgs.pango
