@@ -260,6 +260,7 @@
                 };
               }
             ]
+            ++ nixpkgs.lib.optional (host.name == "zenbox") ./machines/zenbox/builder/host-module.nix
             ++ (
               if host.hardware != null
               then [host.hardware]
