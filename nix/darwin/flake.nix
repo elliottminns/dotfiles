@@ -140,6 +140,8 @@
 
       services.kanata.enable = true;
       services.kanata.package = pkgs.kanata;
+      # Provision once with: sudo /bin/bash extra/services/setup-kanata-signing.sh
+      services.kanata.signingIdentity = "amaterasu Kanata Signing";
       services.kanata.keyboards.internal = {
         devices = ["Apple Internal Keyboard / Trackpad"];
         extraDefCfg = ''
