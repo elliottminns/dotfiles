@@ -12,6 +12,20 @@
     # });
     opencode = inputs.opencode.packages.${prev.system}.opencode;
     openldap = prev.openldap.overrideAttrs {doCheck = false;};
+    # python-gnupg's test_no_such_key races gpg-agent while it deletes the
+    # temporary GnuPG home directory (upstream issue); it is nondeterministic.
+    pythonPackagesExtensions =
+      prev.pythonPackagesExtensions
+      ++ [
+        (_pyfinal: pyprev: {
+          python-gnupg = pyprev.python-gnupg.overridePythonAttrs (old: {
+            disabledTests = final.lib.unique ((old.disabledTests or [])
+              ++ [
+                "test_no_such_key"
+              ]);
+          });
+        })
+      ];
   };
 
   # When applied, the unstable nixpkgs set (declared in the flake inputs) will
