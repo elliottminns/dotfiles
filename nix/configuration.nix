@@ -50,6 +50,7 @@ in {
       outputs.overlays.unstable
       outputs.overlays.kiru
       outputs.overlays.modifications
+      inputs.claude-code.overlays.default
       inputs.templ.overlays.default
       inputs.alacritty-theme.overlays.default
 
@@ -306,8 +307,8 @@ in {
     railway
     asciinema
     jrnl
-    unstable.claude-code
-    unstable.codex
+    claude-code
+    inputs.codex-cli-nix.packages.${pkgs.stdenv.hostPlatform.system}.default
     cosmic-ext-tweaks
     soci-snapshotter
   ];
