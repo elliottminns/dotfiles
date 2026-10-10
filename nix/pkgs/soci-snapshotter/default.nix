@@ -17,16 +17,15 @@ buildGoModule rec {
 
   modRoot = "cmd";
 
-  vendorHash = "sha256-yacNFTSy2vzVH/uakN9zoxgbvAD4oAYQvuETHXXwurg=";
+  vendorHash = "sha256-wPQNp0UV03BWeU0ozZ8fEJeCWShKNMziO9PrK5AYZP0=";
 
   buildInputs = [zlib];
 
-  # Patch CGO directives to use Nix zlib instead of hardcoded relative path.
-  # The vendored Go source has: #cgo LDFLAGS: -L${SRCDIR}/../out -l:libz.a
-  # Must use preBuild because buildGoModule recreates vendor/ after patchPhase.
-  preBuild = ''
-    substituteInPlace vendor/github.com/awslabs/soci-snapshotter/ztoc/compression/gzip_zinfo.go \
-      --replace-fail '-L''${SRCDIR}/../out -l:libz.a' '-L${zlib.static}/lib -lz'
+  # Patch CGO directives before buildGoModule generates its vendor tree.
+  # Upstream hard-codes a relative path to its bundled static zlib.
+  postPatch = ''
+    substituteInPlace ztoc/compression/gzip_zinfo.go \
+      --replace-fail '-L''${SRCDIR}/../out -l:libz.a' '-lz'
   '';
 
   subPackages = ["soci"];
