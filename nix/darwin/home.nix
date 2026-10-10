@@ -56,6 +56,8 @@ in {
   home.homeDirectory = "/Users/elliott";
   home.packages = [
     pkgs.alacritty
+    (import ./zen-yt {inherit pkgs;})
+    (pkgs.writeScriptBin "reject-screencast" (builtins.readFile ./scripts/reject-screencast))
   ];
 
   programs.ghostty.settings.font-family = lib.mkForce "JetBrainsMono NFM";

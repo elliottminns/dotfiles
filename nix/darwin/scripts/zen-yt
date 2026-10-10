@@ -1,0 +1,13 @@
+#!/bin/sh
+set -eu
+
+zen=/Applications/Zen.app/Contents/MacOS/zen
+if [ ! -x "$zen" ]; then
+  /usr/bin/osascript -e 'display alert "ZenYT" message "Install Zen in /Applications/Zen.app first."'
+  exit 1
+fi
+
+# An explicit profile directory keeps YouTube data separate from normal Zen.
+profile="$HOME/Library/Application Support/ZenYT/Profile"
+/bin/mkdir -p "$profile"
+exec "$zen" --profile "$profile" --new-window https://www.youtube.com/

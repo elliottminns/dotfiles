@@ -1,0 +1,27 @@
+#!/bin/zsh -f
+set -eu
+
+directory="$HOME/Movies/Screencast"
+# Regular, non-hidden files only, newest modification time first.
+files=("$directory"/*(.omN))
+if (( ${#files} == 0 )); then
+  print -r -- "No screencasts to reject."
+  exit 0
+fi
+
+source=${files[1]}
+destination="$directory/Rejected"
+/bin/mkdir -p "$destination"
+target="$destination/${source:t}"
+suffix=1
+while [[ -e "$target" || -L "$target" ]]; do
+  target="$destination/${source:t:r} ($suffix).${source:e}"
+  (( suffix += 1 ))
+done
+
+/bin/mv -n "$source" "$target"
+if [[ -e "$source" ]]; then
+  print -u2 -r -- "Could not move screencast: $source"
+  exit 1
+fi
+print -r -- "Rejected: $target"
