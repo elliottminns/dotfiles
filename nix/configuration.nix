@@ -247,7 +247,6 @@ in {
           obs-vaapi
         ];
       })
-    oh-my-posh
     openssl
     pika-backup
     python3
@@ -259,7 +258,6 @@ in {
     qmk
     rclone
     ripgrep
-    sassc
     slurp
     spotify
     sqlc
@@ -304,7 +302,6 @@ in {
     zip
     avahi
     nssmdns
-    railway
     asciinema
     jrnl
     claude-code
