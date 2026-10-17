@@ -1,0 +1,19 @@
+keys:
+  - &elliott C8D26C04DD1E397A6926633080015B87EFAB63A4
+  - &zenbox age1hwls6w6u256nh3ufzy84y0ysmh9qlw5wc4vhagtud0ann7mr8aus2lnnna
+  # Derived from zenvps's existing Ed25519 SSH host public key.
+  - &zenvps age16wedmt559kt0n3pay3zxshnft5shq2s207lcjqkmhaxwvp7knctqj7ym5f
+  - &judge0-backup age1md6qj4jrwluh5c6ptakj09mswhz5qp5pup5jghca63ndrfe3y9xslmfut5
+creation_rules:
+  - path_regex: ^secrets/judge0\.yaml$
+    key_groups:
+      - age:
+          - *zenbox
+          - *zenvps
+          - *judge0-backup
+        pgp:
+          - *elliott
+  - path_regex: ^secrets/dreamsofcode\.env\.json$
+    key_groups:
+      - age:
+          - *zenvps

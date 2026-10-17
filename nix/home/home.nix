@@ -32,6 +32,9 @@ in {
   home.file.".emacs.d/init.org".source = mkOutOfStoreSymlink "/home/elliott/.dotfiles/emacs/init.org";
   xdg.configFile.nvim.source = mkOutOfStoreSymlink "/home/elliott/.dotfiles/.config/nvim";
   xdg.dataFile.password-store.source = mkOutOfStoreSymlink "/home/elliott/.password-store";
+  home.file.".docker/config.json".text = builtins.toJSON {
+    credsStore = "secretservice";
+  };
 
   xdg.portal = {
     enable = true;
@@ -64,6 +67,7 @@ in {
 
   home.packages = with pkgs; [
     bacon
+    docker-credential-helpers
     telegram-desktop
     opencode
     neovim
