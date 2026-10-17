@@ -61,10 +61,6 @@ in {
   ];
 
   programs.ghostty.settings.font-family = lib.mkForce "JetBrainsMono NFM";
-  # Ghostty's multiline prompt rewriting corrupts Powerlevel10k at startup.
-  programs.ghostty.enableZshIntegration = false;
-  programs.ghostty.settings.shell-integration = "none";
-
   xdg.enable = true;
   xdg.configFile.nvim.source = mkOutOfStoreSymlink "/Users/elliott/.dotfiles/.config/nvim";
 

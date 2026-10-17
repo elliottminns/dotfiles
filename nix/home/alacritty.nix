@@ -32,7 +32,7 @@
     font =
       let
         jetbrainsMono = style: {
-          family = "JetBrainsMono Nerd Font";
+          family = "JetBrainsMono Nerd Font Mono";
           inherit style;
         };
       in

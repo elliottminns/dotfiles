@@ -9,6 +9,7 @@
 in {
   imports = [
     ./ags/default.nix
+    ./ghostty.nix
     ./zellij.nix
   ];
 
@@ -58,7 +59,13 @@ in {
 
   dconf = {
     enable = true;
-    settings."org/gnome/desktop/interface".color-scheme = "prefer-dark";
+    settings = {
+      "org/gnome/desktop/interface".color-scheme = "prefer-dark";
+      "org/gnome/shell".enabled-extensions = [
+        "just-perfection-desktop@just-perfection"
+      ];
+      "org/gnome/shell/extensions/just-perfection".panel = false;
+    };
   };
 
   home.stateVersion = "23.11";

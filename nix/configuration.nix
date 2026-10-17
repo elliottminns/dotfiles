@@ -213,7 +213,6 @@ in {
     fastfetch
     hyprpaper
     hyprpicker
-    unstable.ghostty
     inputs.zen-browser.packages."${pkgs.stdenv.hostPlatform.system}".default
     imagemagick
     just
