@@ -131,6 +131,7 @@
         pkgs.slack
         pkgs.spotify
         pkgs.sqlx-cli
+        pkgs.tailscale
         pkgs.tailwindcss
         pkgs.tart
         pkgs.tmux
