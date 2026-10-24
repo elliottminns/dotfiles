@@ -10,7 +10,7 @@
     # example = prev.example.overrideAttrs (oldAttrs: rec {
     # ...
     # });
-    opencode = inputs.opencode.packages.${prev.system}.opencode;
+    opencode = inputs.opencode.packages.${prev.stdenv.hostPlatform.system}.opencode;
     openldap = prev.openldap.overrideAttrs {doCheck = false;};
     # python-gnupg's test_no_such_key races gpg-agent while it deletes the
     # temporary GnuPG home directory (upstream issue); it is nondeterministic.
@@ -32,7 +32,7 @@
   # be accessible through 'pkgs.unstable'
   unstable = final: _prev: {
     unstable = import inputs.nixpkgs-unstable {
-      system = final.system;
+      system = final.stdenv.hostPlatform.system;
       config.allowUnfree = true;
     };
   };
@@ -49,7 +49,7 @@
         gst-plugins-rs
       ];
     in
-      inputs.kiru.packages.${final.system}.kiru.overrideAttrs (_oldAttrs: rec {
+      inputs.kiru.packages.${final.stdenv.hostPlatform.system}.kiru.overrideAttrs (_oldAttrs: rec {
         version = "0.6.0";
         src = final.fetchurl {
           url = "https://releases.kiru.app/releases/linux/Kiru-${version}-linux-x86_64.tar.gz";

@@ -18,6 +18,7 @@ in {
   home.username = "elliott";
   home.homeDirectory = "/home/elliott";
   home.pointerCursor = {
+    enable = true;
     x11.enable = true;
     gtk.enable = true;
     package = pkgs.bibata-cursors;
@@ -130,7 +131,7 @@ in {
     gpg = import ./gpg.nix {inherit config pkgs;};
     zoxide = import ./zoxide.nix {inherit config pkgs;};
     firefox = import ./firefox.nix {inherit pkgs;};
-    password-store = import ./pass.nix {inherit pkgs;};
+    password-store = import ./pass.nix {inherit config;};
     fzf = import ./fzf.nix {inherit pkgs;};
   };
 

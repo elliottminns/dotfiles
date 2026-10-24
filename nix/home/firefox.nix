@@ -1,5 +1,6 @@
 {pkgs, ...}: {
   enable = true;
+  configPath = ".mozilla/firefox";
   package = pkgs.firefox.override {
     cfg = {
       # Gnome shell native connector
