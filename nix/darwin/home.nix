@@ -44,6 +44,7 @@
     };
 in {
   imports = [
+    ../home/ghcr.nix
     ./firefox
     ../home/fastfetch.nix
     ../home/ghostty.nix

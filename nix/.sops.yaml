@@ -1,0 +1,10 @@
+keys:
+  - &elliott C8D26C04DD1E397A6926633080015B87EFAB63A4
+  - &zenbox age1hwls6w6u256nh3ufzy84y0ysmh9qlw5wc4vhagtud0ann7mr8aus2lnnna
+creation_rules:
+  - path_regex: ^secrets/ghcr\.yaml$
+    key_groups:
+      - age:
+          - *zenbox
+        pgp:
+          - *elliott
