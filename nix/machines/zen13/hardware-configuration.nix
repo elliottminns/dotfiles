@@ -7,8 +7,7 @@
   pkgs,
   modulesPath,
   ...
-}:
-{
+}: {
   imports = [
     (modulesPath + "/installer/scan/not-detected.nix")
   ];
@@ -25,8 +24,24 @@
     "dm-snapshot"
     "amdgpu"
   ];
-  boot.kernelModules = [ "kvm-amd" ];
-  boot.extraModulePackages = [ ];
+  boot.kernelModules = ["kvm-amd"];
+  boot.extraModulePackages = [];
+
+  # The package copies the .ko directly, bypassing nixpkgs' module signing.
+  # Generate the certificate required when assembling the kernel module closure.
+  nixpkgs.overlays = [
+    (final: prev: {
+      linuxPackages_latest = prev.linuxPackages_latest.extend (_kernelFinal: kernelPrev: {
+        framework-laptop-kmod = kernelPrev.framework-laptop-kmod.overrideAttrs (old: {
+          postInstall =
+            (old.postInstall or "")
+            + ''
+              ${final.kmodigest}/bin/kmodigest "$out/lib/modules/${kernelPrev.kernel.modDirVersion}/extra/framework_laptop.ko"
+            '';
+        });
+      });
+    })
+  ];
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
   # (the default) this is the recommended approach. When using systemd-networkd it's
