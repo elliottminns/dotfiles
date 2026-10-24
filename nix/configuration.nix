@@ -25,22 +25,13 @@
 in {
   imports = [
     ./modules/languages.nix
-    ./modules/gnome.nix
+    ./modules/workstation-base.nix
     ./modules/gaming.nix
     ./modules/messaging.nix
-    ./modules/yubikey-gpg.nix
     ./modules/unfree.nix
     ./modules/video.nix
     ./modules/k3s-worker.nix
   ];
-
-  nix = {
-    package = pkgs.nixVersions.stable;
-    extraOptions = ''
-      experimental-features = nix-command flakes
-    '';
-    settings.warn-dirty = false;
-  };
 
   # Allows uv-managed Python downloads and other generic Linux binaries to run.
   programs.nix-ld.enable = true;
@@ -50,12 +41,10 @@ in {
     overlays = [
       # Add overlays your own flake exports (from overlays and pkgs dir):
       outputs.overlays.additions
-      outputs.overlays.unstable
       outputs.overlays.kiru
       outputs.overlays.modifications
       inputs.claude-code.overlays.default
       inputs.templ.overlays.default
-      inputs.alacritty-theme.overlays.default
 
       # You can also add overlays exported from other flakes:
       # neovim-nightly-overlay.overlays.default
@@ -76,7 +65,6 @@ in {
     };
   };
 
-  services.tailscale.enable = true;
   services.mullvad-vpn.enable = true;
   services.ollama = {
     enable = true;
@@ -103,17 +91,8 @@ in {
     "amdgpu.gpu_recovery=1"
   ];
 
-  # List packages installed in system profile. To search, run:
-  # Use the systemd-boot EFI boot loader.
-  boot.loader.systemd-boot.enable = true;
-  boot.loader.systemd-boot.configurationLimit = 10;
-  boot.loader.efi.canTouchEfiVariables = true;
-
-  networking.hostName = meta.hostname; # Hostname is defined by the flake.
-
   networking.extraHosts = "";
 
-  networking.networkmanager.enable = true; # Easiest to use and most distros use this by default.
   networking.networkmanager.insertNameservers = [
     "192.168.0.1"
   ];
@@ -121,23 +100,17 @@ in {
     "192.168.0.1"
   ];
 
-  # Set your time zone.
-  time.timeZone = "America/Chicago";
-
   # Configure network proxy if necessary
   # networking.proxy.default = "http://user:password@proxy:port/";
   # networking.proxy.noProxy = "127.0.0.1,localhost,internal.domain";
 
   # Select internationalisation properties.
-  i18n.defaultLocale = "en_US.UTF-8";
   console = {
     font = "Lat2-Terminus16";
-    keyMap = "us";
     #   useXkbConfig = true; # use xkb.options in tty.
   };
 
   fonts.packages = with pkgs; [
-    nerd-fonts.jetbrains-mono
     openmoji-color
   ];
 
@@ -155,31 +128,19 @@ in {
     ];
   };
 
-  # Define a user account. Don't forget to set a password with 'passwd'.
+  # Additional groups and packages for development workstations.
   users.users.elliott = {
-    isNormalUser = true;
     extraGroups = [
-      "wheel" # Enable 'sudo' for the user.
       "docker"
       "containerd"
       "input"
       "uinput"
       "dotfiles"
     ];
-    shell = pkgs.zsh;
     packages = with pkgs; [
       tree
     ];
-    hashedPassword = "$6$026yeBrVd8/z.7CJ$e9Fl5oMabKXM6fRC0V7kG/LCZnCyunekKLY4T3Vi/zQXV7PpOcTchDpxr0opnI3zA4.2V9yyu51h1tF.4UoHT1";
-    openssh.authorizedKeys.keys = [
-      "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDNFZUZg93LySz/1Qdg7WBEBdpnSMjJyJmFwnPikmTHJ/MQWC0Bf5kVyfkLxaU3paeRQnoI4RcG9k8DJGy8hnUdxe2Eg5fWtW0+cJ0zm791WisCTb8bCmTBO9053U59qOA7WTrJAVcTylBsBa7R3CGs6FYlMsu8CXvUWrp4XQ2k83DQlzpgr5r9BNIsfbfswXMSm91i/bRSuxSXu2QpV/9C4wHBUYAGz+hTFw8LJgt/lH6ute2w1ed93/vG4CNI9gv1obecc8rrVGvjZk1Q6sPr8PamBxc7Y4HEYWKPtJPq54UK+b2duUuL2tDYVQmJIvto6how+EZ/oAPxMRK5qHJOn2AJ/z0rcPO6FqyggtKeZATOgFCYSNLLrEwiYvppVNiM/hjFRqpk+BZ+gWE1X+D3xXIDUG1jchMCUQ/2q62CSp/VU/z39IGBxa9eN/k6WsmdlKgeCcx2BtoFKMd0LQqfndduYPcnvn2EzJwLrF0p7LQGIO74jkAQ451IeSoDOvlCe9Y9LAjwH1DG4ve7XwuqpKdJ2LcHirLHxQIONdc906U70TVuQzGOJed5huhKBkbGzDi08VsF8zCO9pMHSJ2ioBWVyNSRUf9wVKtPtUFhmgCHT/l0+xdrCeE8m7sT0Zb8qNjdMDylXQhaPm30f/ievIBe5+81w0Kyoj4kFSzr3Q== cardno:11_070_772"
-    ];
   };
-
-  security.sudo.wheelNeedsPassword = false;
-
-  # Ensure device firmware (incl. GPU firmware) is available.
-  hardware.enableRedistributableFirmware = true;
 
   hardware.keyboard.qmk.enable = true;
 
@@ -201,9 +162,7 @@ in {
     doppler
     emacs
     eza
-    firefox
     fzf
-    git
     glib
     gh
     go-migrate
@@ -233,7 +192,6 @@ in {
     mm-common
     my-helmfile
     my-kubernetes-helm
-    neovim
     nil
     nwg-look
     ((wrapOBS.override (lib.optionalAttrs (meta.hostname == "zenbox") {
@@ -259,7 +217,6 @@ in {
     qemu
     qmk
     rclone
-    ripgrep
     slurp
     spotify
     sqlc
@@ -272,7 +229,6 @@ in {
     tmux
     transmission_4-gtk
     typescript-language-server
-    unzip
     wvkbd
     showmethekey
     wshowkeys
@@ -280,8 +236,6 @@ in {
     wf-recorder
     gpu-screen-recorder
     libva-utils
-    pciutils
-    wl-clipboard
     wofi
     vlc
     mpv
@@ -345,11 +299,6 @@ in {
   # Some programs need SUID wrappers, can be configured further or are
   # started in user sessions.
   # programs.mtr.enable = true;
-  programs.gnupg.agent = {
-    enable = true;
-    enableSSHSupport = true;
-    pinentryPackage = pkgs.pinentry-tty;
-  };
 
   # enable sway window manager
   programs.sway = {
@@ -360,13 +309,6 @@ in {
   security.polkit.enable = true;
 
   programs.hyprland.enable = true;
-
-  programs.zsh.enable = true;
-
-  # List services that you want to enable:
-
-  # Enable the OpenSSH daemon.
-  services.openssh.enable = true;
 
   # Enable Bonjour
   services.avahi.enable = true;
@@ -382,9 +324,7 @@ in {
   };
 
   # gnome
-  services.xserver.enable = true;
   services.displayManager.gdm.enable = false;
-  services.desktopManager.gnome.enable = true;
 
   # COSMIC
   # Enable the COSMIC login manager
@@ -393,12 +333,7 @@ in {
   services.desktopManager.cosmic.enable = true;
 
   # Audio (PipeWire) — explicit config ensures ALSA plugin paths stay consistent
-  services.pipewire = {
-    enable = true;
-    alsa.enable = true;
-    alsa.support32Bit = true;
-    pulse.enable = true;
-  };
+  services.pipewire.alsa.support32Bit = true;
 
   xdg.portal = {
     enable = true;

@@ -80,6 +80,13 @@
 
       hosts = [
         {
+          name = "studiobox";
+          hardware = nixos-hardware.nixosModules.framework-desktop-amd-ai-max-300-series;
+          configuration = ./machines/studiobox/configuration.nix;
+          home = ./home/home-studiobox.nix;
+          cursor = 32;
+        }
+        {
           name = "itachi";
           hardware = null;
           gaps = false;
@@ -222,13 +229,13 @@
               ./machines/${host.name}/hardware-configuration.nix
               ./machines/${host.name}/disko-config.nix
               # General
-              ./configuration.nix
+              (host.configuration or ./configuration.nix)
               # Home Manager
               home-manager.nixosModules.home-manager
               {
                 home-manager.useGlobalPkgs = true;
                 home-manager.useUserPackages = true;
-                home-manager.users.elliott = import ./home/home.nix;
+                home-manager.users.elliott = import (host.home or ./home/home.nix);
                 home-manager.extraSpecialArgs = {
                   inherit inputs;
                   meta = host;
