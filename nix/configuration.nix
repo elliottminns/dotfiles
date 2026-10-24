@@ -42,6 +42,9 @@ in {
     settings.warn-dirty = false;
   };
 
+  # Allows uv-managed Python downloads and other generic Linux binaries to run.
+  programs.nix-ld.enable = true;
+
   nixpkgs = {
     # You can add overlays here
     overlays = [

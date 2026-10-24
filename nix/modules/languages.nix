@@ -11,6 +11,7 @@
     rustup
     taplo
     tree-sitter
+    uv
     valgrind
     yarn
     gofumpt
