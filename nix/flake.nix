@@ -122,7 +122,7 @@
         }
         {
           name = "zen13";
-          hardware = nixos-hardware.nixosModules.framework-13-7040-amd;
+          hardware = nixos-hardware.nixosModules.framework-amd-ai-300-series;
           gaps = false;
           monitors = [
             {

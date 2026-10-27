@@ -324,11 +324,11 @@ in {
   };
 
   # gnome
-  services.displayManager.gdm.enable = false;
+  services.displayManager.gdm.enable = meta.hostname == "zen13";
 
   # COSMIC
-  # Enable the COSMIC login manager
-  services.displayManager.cosmic-greeter.enable = true;
+  # Use GDM on zen13 and the COSMIC login manager on other hosts.
+  services.displayManager.cosmic-greeter.enable = meta.hostname != "zen13";
   # Enable the COSMIC desktop environment
   services.desktopManager.cosmic.enable = true;
 
