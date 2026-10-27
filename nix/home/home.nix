@@ -5,10 +5,12 @@
   lib,
   ...
 }: {
-  imports = [
-    ./common.nix
-    ./ags/default.nix
-  ];
+  imports =
+    [
+      ./common.nix
+      ./ags/default.nix
+    ]
+    ++ lib.optional (meta.name == "zenbox") ../machines/zenbox/recording-display.nix;
 
   xdg.portal = {
     enable = true;
