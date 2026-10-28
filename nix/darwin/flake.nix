@@ -251,6 +251,7 @@
         ];
         casks = [
           "adobe-creative-cloud"
+          "balenaetcher"
           "blender"
           "cinebench"
           "discord"
