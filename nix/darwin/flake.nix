@@ -141,6 +141,7 @@
         pkgs.upscayl
         pkgs.uv
         pkgs.wasm-pack
+        pkgs.whisper-cpp
         pkgs.yt-dlp
         pkgs.zig
         pkgs.zellij
