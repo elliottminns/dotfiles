@@ -1,25 +1,4 @@
-{pkgs, ...}: let
-  catppuccin = pkgs.tmuxPlugins.mkTmuxPlugin {
-    pluginName = "catppuccin";
-    version = "unstable-2023-01-06";
-    src = pkgs.fetchFromGitHub {
-      owner = "dreamsofcode-io";
-      repo = "catppuccin-tmux";
-      rev = "main";
-      sha256 = "sha256-FJHM6LJkiAwxaLd5pnAoF3a7AE1ZqHWoCpUJE0ncCA8=";
-    };
-  };
-  tokyo-night = pkgs.tmuxPlugins.mkTmuxPlugin {
-    pluginName = "tokyo-night";
-    version = "unstable-2023-01-06";
-    src = pkgs.fetchFromGitHub {
-      owner = "janoamaral";
-      repo = "tokyo-night-tmux";
-      rev = "master";
-      sha256 = "sha256-3rMYYzzSS2jaAMLjcQoKreE0oo4VWF9dZgDtABCUOtY=";
-    };
-  };
-in {
+{pkgs, ...}: {
   enable = true;
 
   aggressiveResize = true;
@@ -34,7 +13,6 @@ in {
   terminal = "tmux-256color";
 
   plugins = with pkgs.tmuxPlugins; [
-    tokyo-night
     yank
     sensible
     vim-tmux-navigator
@@ -81,11 +59,28 @@ in {
     bind -n M-H previous-window
     bind -n M-L next-window
 
-    set -g @tokyo-night-tmux_window_id_style hsquare
-    set -g @tokyo-night-tmux_show_datetime 0
-    set -g @tokyo-night-tmux_show_git 0
+    # Tokyo Night: a quiet top bar with rounded session and window tabs.
+    set -g status-position top
+    set -g status-style "bg=#16161e,fg=#a9b1d6"
+    set -g status-justify centre
+    set -g status-left-length 40
+    set -g status-right-length 60
+    set -g status-left "#[fg=#bb9af7,bg=#16161e]#[fg=#16161e,bg=#bb9af7,bold] #S #[fg=#bb9af7,bg=#16161e,nobold] "
+    set -g status-right "#{?window_zoomed_flag,#[fg=#e0af68] ZOOM  ,}#[fg=#565f89]#{b:pane_current_path} "
+    set -g window-status-separator " "
+    set -g window-status-format "#[fg=#565f89,bg=#16161e] #I #W "
+    set -g window-status-current-format "#[fg=#7aa2f7,bg=#16161e]#[fg=#16161e,bg=#7aa2f7,bold] #I #W #[fg=#7aa2f7,bg=#16161e,nobold]"
+    set -g window-status-activity-style "fg=#e0af68"
+    set -g window-status-bell-style "fg=#f7768e,bold"
 
-    run-shell ${tokyo-night}/share/tmux-plugins/tokyo-night/tokyo-night.tmux
+    # Keep split panes legible without drawing attention away from the content.
+    set -g pane-border-style "fg=#292e42"
+    set -g pane-active-border-style "fg=#7aa2f7"
+    set -g pane-border-status "#{?#{>:#{window_panes},1},top,off}"
+    set -g pane-border-format "#[fg=#565f89] #P · #{pane_current_command} · #{b:pane_current_path} "
+    set -g mode-style "bg=#33467c,fg=#c0caf5"
+    set -g message-style "bg=#292e42,fg=#c0caf5"
+    set -g message-command-style "bg=#292e42,fg=#7aa2f7"
 
     # set vi-mode
     set-window-option -g mode-keys vi
