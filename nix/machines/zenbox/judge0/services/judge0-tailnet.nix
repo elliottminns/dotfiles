@@ -3,8 +3,8 @@
     # Keep Docker bound to loopback. Only Tailscale exposes the API remotely.
     systemd.services.judge0-storage-tailnet = lib.mkIf config.services.judge0.storagePorts {
       description = "Expose shared Judge0 storage over Tailscale";
-      wants = ["tailscaled.service" "docker-judge0-db.service" "docker-judge0-redis.service"];
-      after = ["tailscaled.service" "docker-judge0-db.service" "docker-judge0-redis.service"];
+      wants = ["tailscaled.service" "docker-vs-j0-db.service" "docker-vs-j0-redis.service"];
+      after = ["tailscaled.service" "docker-vs-j0-db.service" "docker-vs-j0-redis.service"];
       wantedBy = ["multi-user.target"];
       serviceConfig = { Type = "oneshot"; RemainAfterExit = true; Restart = "on-failure"; RestartSec = "5s"; };
       script = ''
@@ -18,8 +18,8 @@
     };
     systemd.services.judge0-tailnet = {
       description = "Expose Judge0 to the VPS over Tailscale";
-      wants = ["tailscaled.service" "docker-judge0-server.service"];
-      after = ["tailscaled.service" "docker-judge0-server.service"];
+      wants = ["tailscaled.service" "docker-vs-j0-api.service"];
+      after = ["tailscaled.service" "docker-vs-j0-api.service"];
       wantedBy = ["multi-user.target"];
       serviceConfig = {
         Type = "oneshot";

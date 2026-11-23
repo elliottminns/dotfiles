@@ -20,7 +20,14 @@ return {
 			vim.api.nvim_create_autocmd("FileType", {
 				pattern = languages,
 				callback = function()
-					pcall(vim.treesitter.start)
+					if vim.bo.filetype == "nix" then
+						-- Keep parser updates for rainbow delimiters, but use Vim's Nix colors.
+						vim.treesitter.query.set("nix", "highlights", "")
+						pcall(vim.treesitter.start)
+						vim.bo.syntax = "nix"
+					else
+						pcall(vim.treesitter.start)
+					end
 					if vim.bo.filetype == "rust" then
 						vim.bo.indentexpr = "v:lua.require'config.rust_indent'.indentexpr()"
 					else

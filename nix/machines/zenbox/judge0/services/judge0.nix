@@ -2,6 +2,8 @@
   cfg = config.services.judge0;
   secretsFile = cfg.secretsFile;
   names = ["judge0-workers"] ++ lib.optional cfg.api.enable "judge0-server" ++ lib.optionals cfg.localStorage ["judge0-db" "judge0-redis"];
+  appNames = { judge0-workers = "j0-worker"; judge0-server = "j0-api"; judge0-db = "j0-db"; judge0-redis = "j0-redis"; };
+  runtimeName = name: "vs-${appNames.${name}}";
   database = {
     POSTGRES_HOST = cfg.databaseHost;
     POSTGRES_PORT = "5432";
@@ -23,7 +25,7 @@
   };
   common = {
     log-driver = "json-file";
-    extraOptions = ["--network=judge0_network" "--log-opt=max-size=10m" "--log-opt=max-file=3"];
+    extraOptions = ["--log-opt=max-size=10m" "--log-opt=max-file=3"];
   };
   application = common // {
     image = "dreamsofcode/judge0:1.0.1";
@@ -66,7 +68,7 @@ in {
         judge0-database = {
           mode = "0400";
           content = "POSTGRES_PASSWORD=${config.sops.placeholder.judge0-db-password}\nREDIS_PASSWORD=${config.sops.placeholder.judge0-db-password}\n";
-          restartUnits = map (name: "docker-${name}.service") names;
+          restartUnits = map (name: "docker-${runtimeName name}.service") names;
         };
         judge0-auth = {
           mode = "0400";
@@ -74,23 +76,40 @@ in {
             AUTHN_TOKEN=${config.sops.placeholder.judge0-auth-token}
             AUTHZ_TOKEN=${config.sops.placeholder.judge0-authz-token}
           '';
-          restartUnits = lib.optional cfg.api.enable "docker-judge0-server.service";
+          restartUnits = lib.optional cfg.api.enable "docker-vs-j0-api.service";
         };
       };
 
       virtualisation.docker.enable = true;
-      virtualisation.oci-containers = {
-        backend = "docker";
-        containers = {
-          judge0-db = lib.mkIf cfg.localStorage (common // {
+      services.vps.apps = lib.mapAttrs' (name: container: lib.nameValuePair appNames.${name} {
+        enable = true;
+        image = container.image;
+        network = "judge0";
+        port = if name == "judge0-db" then 5432 else if name == "judge0-redis" then 6379 else 2358;
+        environmentVariables = container.environment or {};
+        secretFile = config.sops.templates.judge0-database.path;
+        oci = (builtins.removeAttrs container ["image" "environment" "environmentFiles" "dependsOn"]) // {
+          dependsOn = map runtimeName (container.dependsOn or []);
+          environmentFiles = lib.optional (name == "judge0-server") config.sops.templates.judge0-auth.path;
+        };
+      }) ({
+          judge0-workers = application // {
+            dependsOn = lib.optional cfg.api.enable "judge0-server" ++ lib.optionals cfg.localStorage ["judge0-db" "judge0-redis"];
+            extraOptions = application.extraOptions ++ ["--hostname=judge0-worker-${config.networking.hostName}"];
+            volumes = ["${./judge0-worker-priority.rb}:/api/config/initializers/judge0_worker_priority.rb:ro"];
+            cmd = ["./scripts/workers"];
+            environment = database // limits // { COUNT = "2"; INTERVAL = "0.1"; } // lib.optionalAttrs (cfg.primaryWorkerHost != null) { JUDGE0_PRIMARY_WORKER_HOST = cfg.primaryWorkerHost; };
+          };
+        } // lib.optionalAttrs cfg.localStorage {
+          judge0-db = common // {
             image = "postgres:15-alpine";
             environment = { POSTGRES_DB = "judge0"; POSTGRES_USER = "judge0"; };
             environmentFiles = [config.sops.templates.judge0-database.path];
             volumes = ["${cfg.storageVolumePrefix}_postgres_data:/var/lib/postgresql/data"];
             ports = lib.optionals cfg.storagePorts ["127.0.0.1:5432:5432"];
             extraOptions = common.extraOptions ++ ["--network-alias=db"];
-          });
-          judge0-redis = lib.mkIf cfg.localStorage (common // {
+          };
+          judge0-redis = common // {
             image = "redis:7-alpine";
             environmentFiles = [config.sops.templates.judge0-database.path];
             entrypoint = "/bin/sh";
@@ -98,11 +117,12 @@ in {
             ports = lib.optionals cfg.storagePorts ["127.0.0.1:6379:6379"];
             volumes = ["${cfg.storageVolumePrefix}_redis_data:/data"];
             extraOptions = common.extraOptions ++ ["--network-alias=redis"];
-          });
-          judge0-server = lib.mkIf cfg.api.enable (application // {
+          };
+        } // lib.optionalAttrs cfg.api.enable {
+          judge0-server = application // {
             dependsOn = lib.optionals cfg.localStorage ["judge0-db" "judge0-redis"];
             ports = ["127.0.0.1:2358:2358"];
-            environmentFiles = application.environmentFiles ++ [config.sops.templates.judge0-auth.path];
+
             environment = database // limits // {
               ENABLE_WAIT_RESULT = "true";
               ENABLE_COMPILER_OPTIONS = "true";
@@ -120,39 +140,18 @@ in {
               CALLBACKS_MAX_TRIES = "3";
               CALLBACKS_TIMEOUT = "5";
             };
-          });
-          judge0-workers = application // {
-            dependsOn = lib.optional cfg.api.enable "judge0-server" ++ lib.optionals cfg.localStorage ["judge0-db" "judge0-redis"];
-            extraOptions = application.extraOptions ++ ["--hostname=judge0-worker-${config.networking.hostName}"];
-            volumes = ["${./judge0-worker-priority.rb}:/api/config/initializers/judge0_worker_priority.rb:ro"];
-            cmd = ["./scripts/workers"];
-            environment = database // limits // { COUNT = "2"; INTERVAL = "0.1"; } // lib.optionalAttrs (cfg.primaryWorkerHost != null) { JUDGE0_PRIMARY_WORKER_HOST = cfg.primaryWorkerHost; };
           };
-        };
-      };
+        });
 
-      systemd.services = {
-        judge0-network = {
-          description = "Create the Judge0 Docker network";
-          requires = ["docker.service"];
-          after = ["docker.service"];
-          serviceConfig = { Type = "oneshot"; RemainAfterExit = true; };
-          script = ''
-            ${pkgs.docker}/bin/docker network inspect judge0_network >/dev/null 2>&1 || \
-              ${pkgs.docker}/bin/docker network create judge0_network
-          '';
-        };
-      } // lib.genAttrs (map (name: "docker-${name}") names) (_: {
-        requires = ["judge0-network.service"];
-        after = ["judge0-network.service" "sops-install-secrets.service"];
-      }) // lib.genAttrs (["docker-judge0-workers"] ++ lib.optional cfg.api.enable "docker-judge0-server") (_: {
-        requires = ["judge0-network.service"];
-        after = ["judge0-network.service" "sops-install-secrets.service"];
+      systemd.services = lib.genAttrs (map (name: "docker-${runtimeName name}") names) (_: {
+        after = ["sops-install-secrets.service"];
+      }) // lib.genAttrs (["docker-vs-j0-worker"] ++ lib.optional cfg.api.enable "docker-vs-j0-api") (_: {
+        after = ["sops-install-secrets.service"];
         preStart = lib.mkIf cfg.localStorage (lib.mkBefore ''
           ready=false
           for attempt in $(seq 1 60); do
-            if ${pkgs.docker}/bin/docker exec judge0-db pg_isready -U judge0 -d judge0 >/dev/null 2>&1 && \
-               ${pkgs.docker}/bin/docker exec judge0-redis sh -c 'REDISCLI_AUTH="$REDIS_PASSWORD" redis-cli ping' | ${pkgs.gnugrep}/bin/grep -qx PONG; then
+            if ${pkgs.docker}/bin/docker exec vs-j0-db pg_isready -U judge0 -d judge0 >/dev/null 2>&1 && \
+               ${pkgs.docker}/bin/docker exec vs-j0-redis sh -c 'REDISCLI_AUTH="$REDIS_PASSWORD" redis-cli ping' | ${pkgs.gnugrep}/bin/grep -qx PONG; then
               ready=true
               break
             fi

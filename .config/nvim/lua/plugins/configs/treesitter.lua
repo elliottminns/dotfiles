@@ -3,6 +3,7 @@ return {
 	"cpp",
 	"go",
 	"lua",
+	"nix",
 	"pkl",
 	"rust",
 	"gleam",

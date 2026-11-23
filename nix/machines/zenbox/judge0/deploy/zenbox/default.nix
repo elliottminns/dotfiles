@@ -1,4 +1,5 @@
-# Copy deploy/zenbox, services/judge0*.nix, and secrets/judge0.yaml together.
+# Copy deploy/zenbox, services/judge0*.nix, services/judge0-worker-priority.rb,
+# and secrets/judge0.yaml together.
 {...}: let
   sopsSource = builtins.fetchTree {
     type = "github";
@@ -10,6 +11,7 @@
 in {
   imports = [
     (sopsSource + "/modules/sops")
+    ../../modules/container-services.nix
     ../../services/judge0.nix
     ../../services/judge0-tailnet.nix
   ];

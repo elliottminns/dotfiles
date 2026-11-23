@@ -121,6 +121,24 @@
           cursor = 64;
         }
         {
+          name = "zen16";
+          configuration = ./machines/zen16/configuration.nix;
+          hardware = nixos-hardware.nixosModules.framework-16-7040-amd;
+          gaps = false;
+          monitors = [
+            {
+              name = "eDP-2";
+              dimensions = "2560x1600";
+              position = "0x0";
+              scale = 1.6;
+              internal = true;
+              framerate = 165;
+              transform = 0;
+            }
+          ];
+          cursor = 24;
+        }
+        {
           name = "zen13";
           hardware = nixos-hardware.nixosModules.framework-amd-ai-300-series;
           gaps = false;
