@@ -1,6 +1,6 @@
 # Copy deploy/zenbox, services/judge0*.nix, services/judge0-worker-priority.rb,
 # and secrets/judge0.yaml together.
-{...}: let
+{lib, ...}: let
   sopsSource = builtins.fetchTree {
     type = "github";
     owner = "Mic92";
@@ -15,6 +15,9 @@ in {
     ../../services/judge0.nix
     ../../services/judge0-tailnet.nix
   ];
+  # Override the shared workstation configuration so container isolation is active.
+  networking.firewall.enable = lib.mkForce true;
+
   services.judge0 = {
     enable = true;
     api.enable = false;

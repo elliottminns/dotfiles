@@ -83,7 +83,23 @@ in {
   # off linuxPackages_latest so DeckLink API enumeration works reliably.
   boot.kernelPackages =
     if meta.hostname == "zenbox"
-    then pkgs.linuxPackages
+    then let
+      # The pinned DeckLink/EVDI packages omit the per-module certificates
+      # required by the kernel module aggregator. Sign copies of their outputs.
+      signModules = package:
+        pkgs.runCommand "${package.name}-signed" {passthru = package.passthru or {};} ''
+          cp -a ${package} "$out"
+          chmod -R u+w "$out"
+          find "$out/lib/modules" -type f -name '*.ko.xz' \
+            -exec ${lib.getExe' pkgs.xz "xz"} -d {} \;
+          find "$out/lib/modules" -type f -name '*.ko' \
+            -exec ${lib.getExe pkgs.buildPackages.kmodigest} {} \;
+        '';
+    in
+      pkgs.linuxPackages.extend (_: previous: {
+        decklink = signModules previous.decklink;
+        evdi = signModules previous.evdi;
+      })
     else pkgs.linuxPackages_latest;
 
   # Helps recover from transient GPU/display glitches (e.g. hotplug/input-switch).
