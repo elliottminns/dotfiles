@@ -5,7 +5,7 @@
   ...
 }:
 let
-  isZenbox = meta.hostname == "zenbox-2";
+  isZenbox = meta.hostname == "zenbox";
   k3s_1_30_1 = pkgs.stdenvNoCC.mkDerivation rec {
     pname = "k3s";
     version = "1.30.1+k3s1";
