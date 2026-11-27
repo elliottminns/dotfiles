@@ -3,19 +3,18 @@
   pkgs,
   meta,
   ...
-}:
-let
+}: let
   isZenbox = meta.hostname == "zenbox";
-  k3s_1_30_1 = pkgs.stdenvNoCC.mkDerivation rec {
+  k3s_1_35_8 = pkgs.stdenvNoCC.mkDerivation rec {
     pname = "k3s";
-    version = "1.30.1+k3s1";
+    version = "1.35.8+k3s1";
 
     src = pkgs.fetchurl {
-      url = "https://github.com/k3s-io/k3s/releases/download/v1.30.1%2Bk3s1/k3s";
-      hash = "sha256-OaUFf7Sb9XakXDLvPvY7/0SCUtTSXGxBuNzF5I4ni/U=";
+      url = "https://github.com/k3s-io/k3s/releases/download/v1.35.8%2Bk3s1/k3s";
+      hash = "sha256-Evgcm7W3HgmKT3otGH41CQKpM5psPV5WwgoD96QX4H8=";
     };
 
-    nativeBuildInputs = [ pkgs.makeWrapper ];
+    nativeBuildInputs = [pkgs.makeWrapper];
 
     runtimeDeps = with pkgs; [
       kmod
@@ -49,16 +48,17 @@ let
       runHook postInstall
     '';
 
-    meta = pkgs.k3s.meta // {
-      sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
-    };
+    meta =
+      pkgs.k3s.meta
+      // {
+        sourceProvenance = [lib.sourceTypes.binaryNativeCode];
+      };
   };
-in
-{
+in {
   config = lib.mkIf isZenbox {
     services.k3s = {
       enable = true;
-      package = k3s_1_30_1;
+      package = k3s_1_35_8;
       role = "agent";
       serverAddr = "https://homelab-0:6443";
       tokenFile = "/etc/rancher/k3s/cluster-token";
@@ -75,7 +75,7 @@ in
     };
 
     environment.systemPackages = with pkgs; [
-      k3s_1_30_1
+      k3s_1_35_8
       cifs-utils
       nfs-utils
     ];

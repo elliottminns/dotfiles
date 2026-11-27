@@ -27,7 +27,6 @@ in {
     ./modules/languages.nix
     ./modules/workstation-base.nix
     ./modules/gaming.nix
-    ./modules/messaging.nix
     ./modules/unfree.nix
     ./modules/video.nix
     ./modules/k3s-worker.nix
